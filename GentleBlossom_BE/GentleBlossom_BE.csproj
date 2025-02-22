@@ -24,15 +24,11 @@
 
   <ItemGroup>
     <Folder Include="Controllers\AdminControllers\" />
-    <Folder Include="Controllers\UserControllers\" />
     <Folder Include="Data\DTOs\AdminDTOs\" />
     <Folder Include="Data\DTOs\UserDTOs\" />
     <Folder Include="Data\Models\" />
-    <Folder Include="Data\Repositories\AdminRepositories\" />
-    <Folder Include="Data\Repositories\UserRepositories\" />
     <Folder Include="Helpers\" />
     <Folder Include="Services\AdminServices\" />
-    <Folder Include="Services\UserServices\" />
   </ItemGroup>
 
 </Project>
