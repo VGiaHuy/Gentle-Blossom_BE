@@ -1,4 +1,5 @@
 ﻿using GentleBlossom_BE.Data.Models;
+using GentleBlossom_BE.Data.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace GentleBlossom_BE.Data.Repositories

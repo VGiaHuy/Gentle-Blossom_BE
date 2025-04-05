@@ -1,4 +1,4 @@
-﻿namespace GentleBlossom_BE.Data.Repositories
+﻿namespace GentleBlossom_BE.Data.Repositories.Interface
 {
     public interface IGenericRepository<T> where T : class
     {

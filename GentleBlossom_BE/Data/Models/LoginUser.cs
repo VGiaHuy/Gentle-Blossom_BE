@@ -11,7 +11,7 @@ public partial class LoginUser
 
     public string UserName { get; set; } = null!;
 
-    public byte[] Password { get; set; } = null!;
+    public string Password { get; set; } = null!;
 
     public virtual UserProfile User { get; set; } = null!;
 }

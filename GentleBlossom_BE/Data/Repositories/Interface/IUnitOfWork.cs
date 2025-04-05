@@ -1,6 +1,6 @@
 ﻿using GentleBlossom_BE.Data.Models;
 
-namespace GentleBlossom_BE.Data.Repositories
+namespace GentleBlossom_BE.Data.Repositories.Interface
 {
     public interface IUnitOfWork : IDisposable
     {
@@ -11,7 +11,7 @@ namespace GentleBlossom_BE.Data.Repositories
         IGenericRepository<ConnectionMedical> ConnectionMedical { get; }
         IGenericRepository<Expert> Expert { get; }
         IGenericRepository<HealthJourney> HealthJourney { get; }
-        IGenericRepository<LoginUser> LoginUser { get; }
+        ILoginUserRepository LoginUser { get; }
         IGenericRepository<Message> Message { get; }
         IGenericRepository<MessageAttachment> MessageAttachment { get; }
         IGenericRepository<MonitoringForm> MonitoringForm { get; }
@@ -25,11 +25,10 @@ namespace GentleBlossom_BE.Data.Repositories
         IGenericRepository<ReviewImage> ReviewImage { get; }
         IGenericRepository<RoleAdmin> RoleAdmin { get; }
         IGenericRepository<Treatment> Treatment { get; }
-        IGenericRepository<UserProfile> UserProfile { get; }
+        IUserProfileRepository UserProfile { get; }
         IGenericRepository<UserType> UserType { get; }
 
-
-        Task<int> SaveChangesAsync();
+        Task<int> SaveChangesAsync(bool useTransaction = true);
     }
 
 

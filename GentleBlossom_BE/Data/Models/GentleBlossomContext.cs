@@ -276,7 +276,9 @@ public partial class GentleBlossomContext : DbContext
             entity.HasIndex(e => e.UserId, "UQ__LoginUse__CB9A1CFEDD687F51").IsUnique();
 
             entity.Property(e => e.LoginId).HasColumnName("loginId");
-            entity.Property(e => e.Password).HasColumnName("password");
+            entity.Property(e => e.Password)
+                .HasMaxLength(100)
+                .HasColumnName("password");
             entity.Property(e => e.UserId).HasColumnName("userId");
             entity.Property(e => e.UserName)
                 .HasMaxLength(100)
