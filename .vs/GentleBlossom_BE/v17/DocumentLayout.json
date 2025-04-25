@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "D:\\Code\\.NET\\Gentle-Blossom_BE\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DB3F1DDD-BC3B-4C27-9DDA-AA4DE27CEB22}|GentleBlossom_BE\\GentleBlossom_BE.csproj|d:\\code\\.net\\gentle-blossom_be\\gentleblossom_be\\data\\repositories\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DB3F1DDD-BC3B-4C27-9DDA-AA4DE27CEB22}|GentleBlossom_BE\\GentleBlossom_BE.csproj|solutionrelative:gentleblossom_be\\data\\repositories\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DB3F1DDD-BC3B-4C27-9DDA-AA4DE27CEB22}|GentleBlossom_BE\\GentleBlossom_BE.csproj|d:\\code\\.net\\gentle-blossom_be\\gentleblossom_be\\data\\repositories\\postrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB3F1DDD-BC3B-4C27-9DDA-AA4DE27CEB22}|GentleBlossom_BE\\GentleBlossom_BE.csproj|solutionrelative:gentleblossom_be\\data\\repositories\\postrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DB3F1DDD-BC3B-4C27-9DDA-AA4DE27CEB22}|GentleBlossom_BE\\GentleBlossom_BE.csproj|d:\\code\\.net\\gentle-blossom_be\\gentleblossom_be\\services\\userservices\\userauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DB3F1DDD-BC3B-4C27-9DDA-AA4DE27CEB22}|GentleBlossom_BE\\GentleBlossom_BE.csproj|solutionrelative:gentleblossom_be\\services\\userservices\\userauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DB3F1DDD-BC3B-4C27-9DDA-AA4DE27CEB22}|GentleBlossom_BE\\GentleBlossom_BE.csproj|d:\\code\\.net\\gentle-blossom_be\\gentleblossom_be\\services\\userservices\\postservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB3F1DDD-BC3B-4C27-9DDA-AA4DE27CEB22}|GentleBlossom_BE\\GentleBlossom_BE.csproj|solutionrelative:gentleblossom_be\\services\\userservices\\postservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DB3F1DDD-BC3B-4C27-9DDA-AA4DE27CEB22}|GentleBlossom_BE\\GentleBlossom_BE.csproj|d:\\code\\.net\\gentle-blossom_be\\gentleblossom_be\\controllers\\usercontrollers\\userauthcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DB3F1DDD-BC3B-4C27-9DDA-AA4DE27CEB22}|GentleBlossom_BE\\GentleBlossom_BE.csproj|solutionrelative:gentleblossom_be\\controllers\\usercontrollers\\userauthcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DB3F1DDD-BC3B-4C27-9DDA-AA4DE27CEB22}|GentleBlossom_BE\\GentleBlossom_BE.csproj|d:\\code\\.net\\gentle-blossom_be\\gentleblossom_be\\controllers\\usercontrollers\\postcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB3F1DDD-BC3B-4C27-9DDA-AA4DE27CEB22}|GentleBlossom_BE\\GentleBlossom_BE.csproj|solutionrelative:gentleblossom_be\\controllers\\usercontrollers\\postcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB3F1DDD-BC3B-4C27-9DDA-AA4DE27CEB22}|GentleBlossom_BE\\GentleBlossom_BE.csproj|d:\\code\\.net\\gentle-blossom_be\\gentleblossom_be\\data\\models\\userprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB3F1DDD-BC3B-4C27-9DDA-AA4DE27CEB22}|GentleBlossom_BE\\GentleBlossom_BE.csproj|solutionrelative:gentleblossom_be\\data\\models\\userprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -31,41 +35,52 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "UnitOfWork.cs",
-              "DocumentMoniker": "D:\\Code\\.NET\\Gentle-Blossom_BE\\GentleBlossom_BE\\Data\\Repositories\\UnitOfWork.cs",
-              "RelativeDocumentMoniker": "GentleBlossom_BE\\Data\\Repositories\\UnitOfWork.cs",
-              "ToolTip": "D:\\Code\\.NET\\Gentle-Blossom_BE\\GentleBlossom_BE\\Data\\Repositories\\UnitOfWork.cs",
-              "RelativeToolTip": "GentleBlossom_BE\\Data\\Repositories\\UnitOfWork.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAAAAAA",
+              "Title": "PostRepository.cs",
+              "DocumentMoniker": "D:\\Code\\.NET\\Gentle-Blossom_BE\\GentleBlossom_BE\\Data\\Repositories\\PostRepository.cs",
+              "RelativeDocumentMoniker": "GentleBlossom_BE\\Data\\Repositories\\PostRepository.cs",
+              "ToolTip": "D:\\Code\\.NET\\Gentle-Blossom_BE\\GentleBlossom_BE\\Data\\Repositories\\PostRepository.cs",
+              "RelativeToolTip": "GentleBlossom_BE\\Data\\Repositories\\PostRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-05T17:30:35.943Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "UserAuthController.cs",
-              "DocumentMoniker": "D:\\Code\\.NET\\Gentle-Blossom_BE\\GentleBlossom_BE\\Controllers\\UserControllers\\UserAuthController.cs",
-              "RelativeDocumentMoniker": "GentleBlossom_BE\\Controllers\\UserControllers\\UserAuthController.cs",
-              "ToolTip": "D:\\Code\\.NET\\Gentle-Blossom_BE\\GentleBlossom_BE\\Controllers\\UserControllers\\UserAuthController.cs",
-              "RelativeToolTip": "GentleBlossom_BE\\Controllers\\UserControllers\\UserAuthController.cs",
-              "ViewState": "AQIAACwAAAAAAAAAAAAjwEcAAAAIAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-05T08:48:34.838Z",
+              "WhenOpened": "2025-04-21T16:36:13.983Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "UserAuthService.cs",
-              "DocumentMoniker": "D:\\Code\\.NET\\Gentle-Blossom_BE\\GentleBlossom_BE\\Services\\UserServices\\UserAuthService.cs",
-              "RelativeDocumentMoniker": "GentleBlossom_BE\\Services\\UserServices\\UserAuthService.cs",
-              "ToolTip": "D:\\Code\\.NET\\Gentle-Blossom_BE\\GentleBlossom_BE\\Services\\UserServices\\UserAuthService.cs",
-              "RelativeToolTip": "GentleBlossom_BE\\Services\\UserServices\\UserAuthService.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAD0AAAAQAAAA",
+              "Title": "PostService.cs",
+              "DocumentMoniker": "D:\\Code\\.NET\\Gentle-Blossom_BE\\GentleBlossom_BE\\Services\\UserServices\\PostService.cs",
+              "RelativeDocumentMoniker": "GentleBlossom_BE\\Services\\UserServices\\PostService.cs",
+              "ToolTip": "D:\\Code\\.NET\\Gentle-Blossom_BE\\GentleBlossom_BE\\Services\\UserServices\\PostService.cs",
+              "RelativeToolTip": "GentleBlossom_BE\\Services\\UserServices\\PostService.cs",
+              "ViewState": "AQIAABMAAAAAAAAAAAAQwB4AAAA1AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-05T08:48:30.228Z",
+              "WhenOpened": "2025-04-21T15:57:12.291Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UserProfile.cs",
+              "DocumentMoniker": "D:\\Code\\.NET\\Gentle-Blossom_BE\\GentleBlossom_BE\\Data\\Models\\UserProfile.cs",
+              "RelativeDocumentMoniker": "GentleBlossom_BE\\Data\\Models\\UserProfile.cs",
+              "ToolTip": "D:\\Code\\.NET\\Gentle-Blossom_BE\\GentleBlossom_BE\\Data\\Models\\UserProfile.cs",
+              "RelativeToolTip": "GentleBlossom_BE\\Data\\Models\\UserProfile.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB8AAAAvAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T15:56:47.606Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PostController.cs",
+              "DocumentMoniker": "D:\\Code\\.NET\\Gentle-Blossom_BE\\GentleBlossom_BE\\Controllers\\UserControllers\\PostController.cs",
+              "RelativeDocumentMoniker": "GentleBlossom_BE\\Controllers\\UserControllers\\PostController.cs",
+              "ToolTip": "D:\\Code\\.NET\\Gentle-Blossom_BE\\GentleBlossom_BE\\Controllers\\UserControllers\\PostController.cs",
+              "RelativeToolTip": "GentleBlossom_BE\\Controllers\\UserControllers\\PostController.cs",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAxwBkAAAA1AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T15:52:58.554Z"
             }
           ]
         }

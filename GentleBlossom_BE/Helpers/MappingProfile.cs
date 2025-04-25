@@ -13,6 +13,9 @@ namespace GentleBlossom_BE.Helpers
             CreateMap<LoginUser, RegisterRequestDTO>().ReverseMap();
             CreateMap<UserProfile, RegisterRequestDTO>().ReverseMap();
 
+            CreateMap<Post, PostDTO>().ReverseMap();
+            CreateMap<UserProfile, PostDTO>().ReverseMap();
+
         }
     }
 }

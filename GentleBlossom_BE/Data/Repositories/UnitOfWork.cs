@@ -12,7 +12,7 @@ namespace GentleBlossom_BE.Data.Repositories
         public IGenericRepository<Administrator> Administrator { get; }
         public IGenericRepository<ChatRoom> ChatRoom { get; }
         public IGenericRepository<ChatRoomUser> ChatRoomUser { get; }
-        public IGenericRepository<CommentPost> CommentPost { get; }
+        public ICommentPostRepository CommentPost { get; }
         public IGenericRepository<ConnectionMedical> ConnectionMedical { get; }
         public IGenericRepository<Expert> Expert { get; }
         public IGenericRepository<HealthJourney> HealthJourney { get; }
@@ -22,7 +22,7 @@ namespace GentleBlossom_BE.Data.Repositories
         public IGenericRepository<MonitoringForm> MonitoringForm { get; }
         public IGenericRepository<Notification> Notification { get; }
         public IGenericRepository<PeriodicHealth> PeriodicHealth { get; }
-        public IGenericRepository<Post> Post { get; }
+        public IPostRepository Post { get; }
         public IGenericRepository<PostImage> PostImage { get; }
         public IGenericRepository<PostCategory> PostCategory { get; }
         public IGenericRepository<PsychologyDiary> PsychologyDiary { get; }
@@ -39,7 +39,7 @@ namespace GentleBlossom_BE.Data.Repositories
             Administrator = new GenericRepository<Administrator>(_context);
             ChatRoom = new GenericRepository<ChatRoom>(_context);
             ChatRoomUser = new GenericRepository<ChatRoomUser>(_context);
-            CommentPost = new GenericRepository<CommentPost>(_context);
+            CommentPost = new CommentPostRepository(_context);
             ConnectionMedical = new GenericRepository<ConnectionMedical>(_context);
             Expert = new GenericRepository<Expert>(_context);
             HealthJourney = new GenericRepository<HealthJourney>(_context);
@@ -49,7 +49,7 @@ namespace GentleBlossom_BE.Data.Repositories
             MonitoringForm = new GenericRepository<MonitoringForm>(_context);
             Notification = new GenericRepository<Notification>(_context);
             PeriodicHealth = new GenericRepository<PeriodicHealth>(_context);
-            Post = new GenericRepository<Post>(_context);
+            Post = new PostRepository(_context);
             PostImage = new GenericRepository<PostImage>(_context);
             PostCategory = new GenericRepository<PostCategory>(_context);
             PsychologyDiary = new GenericRepository<PsychologyDiary>(_context);

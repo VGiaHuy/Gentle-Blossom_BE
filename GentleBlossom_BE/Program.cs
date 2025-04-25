@@ -34,7 +34,11 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 
 // Đăng ký các Service
 builder.Services.AddScoped<UserAuthService>();
+builder.Services.AddScoped<PostService>();
+
 builder.Services.AddScoped<ILoginUserRepository, LoginUserRepository>();
+builder.Services.AddScoped<ICommentPostRepository, CommentPostRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
 
 
 var app = builder.Build();

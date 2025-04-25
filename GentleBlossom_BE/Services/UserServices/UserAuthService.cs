@@ -21,12 +21,12 @@ namespace GentleBlossom_BE.Services.UserServices
 
         public async Task<UserProfileDTO> Login(LoginRequestDTO request)
         {
-            var user = await _unitOfWork.LoginUser.getUsnLoginAsync(request.Username);
+            var user = await _unitOfWork.LoginUser.GetUsnLoginAsync(request.Username);
 
             if (user == null)
                 throw new UnauthorizedException("Username không tồn tại!");
 
-            var hashedPassword = await _unitOfWork.LoginUser.getPwLoginAsync(user.LoginId);
+            var hashedPassword = await _unitOfWork.LoginUser.GetPwLoginAsync(user.LoginId);
             if (!BCrypt.Net.BCrypt.Verify(request.Password, hashedPassword))
                 throw new UnauthorizedException("Mật khẩu không chính xác!");
 
@@ -37,19 +37,19 @@ namespace GentleBlossom_BE.Services.UserServices
         public async Task<bool> Register(RegisterRequestDTO register)
         {
             // Check data
-            bool checkExistEmail = await _unitOfWork.UserProfile.checkEmailExistAsync(register.Email);
+            bool checkExistEmail = await _unitOfWork.UserProfile.CheckEmailExistAsync(register.Email);
             if (checkExistEmail)
             {
                 throw new BadRequestException("Email đã được sử dụng!");
             }
 
-            bool checkExistPhoneNumb = await _unitOfWork.UserProfile.checkPhoneNumbExistAsync(register.PhoneNumber);
+            bool checkExistPhoneNumb = await _unitOfWork.UserProfile.CheckPhoneNumbExistAsync(register.PhoneNumber);
             if (checkExistPhoneNumb)
             {
                 throw new BadRequestException("Số điện thoại đã được sử dụng!");
             }
 
-            bool checkExitsUsn = await _unitOfWork.LoginUser.checkUsnExistAsync(register.Username);
+            bool checkExitsUsn = await _unitOfWork.LoginUser.CheckUsnExistAsync(register.Username);
             if (checkExitsUsn)
             {
                 throw new BadRequestException("Tên đăng nhập đã được sử dụng!");

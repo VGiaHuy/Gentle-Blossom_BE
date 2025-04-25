@@ -10,14 +10,22 @@ namespace GentleBlossom_BE.Data.Repositories
         {
         }
 
-        public async Task<bool> checkEmailExistAsync(string email)
+        public async Task<UserProfile?> GetByIdWithUserTypeAndExpertAsync(int id)
+        {
+            return await _context.UserProfiles
+                .Include(u => u.UserType)
+                .Include(u => u.Expert)
+                .FirstOrDefaultAsync(u => u.UserId == id);
+        }
+
+        public async Task<bool> CheckEmailExistAsync(string email)
         {
             var data = await _context.UserProfiles.FirstOrDefaultAsync(a => a.Email == email);
 
             return data != null;
         }
 
-        public async Task<bool> checkPhoneNumbExistAsync(string phoneNumb)
+        public async Task<bool> CheckPhoneNumbExistAsync(string phoneNumb)
         {
             var data = await _context.UserProfiles.FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumb);
 

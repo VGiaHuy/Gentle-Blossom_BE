@@ -7,7 +7,7 @@ namespace GentleBlossom_BE.Data.Repositories.Interface
         IGenericRepository<Administrator> Administrator { get; }
         IGenericRepository<ChatRoom> ChatRoom { get; }
         IGenericRepository<ChatRoomUser> ChatRoomUser { get; }
-        IGenericRepository<CommentPost> CommentPost { get; }
+        ICommentPostRepository CommentPost { get; }
         IGenericRepository<ConnectionMedical> ConnectionMedical { get; }
         IGenericRepository<Expert> Expert { get; }
         IGenericRepository<HealthJourney> HealthJourney { get; }
@@ -17,7 +17,7 @@ namespace GentleBlossom_BE.Data.Repositories.Interface
         IGenericRepository<MonitoringForm> MonitoringForm { get; }
         IGenericRepository<Notification> Notification { get; }
         IGenericRepository<PeriodicHealth> PeriodicHealth { get; }
-        IGenericRepository<Post> Post { get; }
+        IPostRepository Post { get; }
         IGenericRepository<PostImage> PostImage { get; }
         IGenericRepository<PostCategory> PostCategory { get; }
         IGenericRepository<PsychologyDiary> PsychologyDiary { get; }

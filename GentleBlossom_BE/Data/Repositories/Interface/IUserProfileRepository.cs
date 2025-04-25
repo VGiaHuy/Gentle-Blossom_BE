@@ -4,7 +4,9 @@ namespace GentleBlossom_BE.Data.Repositories.Interface
 {
     public interface IUserProfileRepository : IGenericRepository<UserProfile>
     {
-        Task<bool> checkEmailExistAsync(string email);
-        Task<bool> checkPhoneNumbExistAsync(string sđt);
+        Task<UserProfile?> GetByIdWithUserTypeAndExpertAsync(int id);
+
+        Task<bool> CheckEmailExistAsync(string email);
+        Task<bool> CheckPhoneNumbExistAsync(string sđt);
     }
 }

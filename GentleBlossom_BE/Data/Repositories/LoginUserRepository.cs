@@ -11,18 +11,18 @@ namespace GentleBlossom_BE.Data.Repositories
         {
         }
 
-        public async Task<LoginUser?> getUsnLoginAsync(string userName)
+        public async Task<LoginUser?> GetUsnLoginAsync(string userName)
         {
             return await _context.LoginUsers
                 .FirstOrDefaultAsync(u => u.UserName == userName);
         }
 
-        public async Task<string?> getPwLoginAsync(int loginId)
+        public async Task<string?> GetPwLoginAsync(int loginId)
         {
             return (await _context.LoginUsers.FirstOrDefaultAsync(a => a.LoginId == loginId))?.Password;
         }
 
-        public async Task<bool> checkUsnExistAsync(string userName)
+        public async Task<bool> CheckUsnExistAsync(string userName)
         {
             var data = await _context.LoginUsers.FirstOrDefaultAsync(a => a.UserName == userName);
 

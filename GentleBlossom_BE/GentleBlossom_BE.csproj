@@ -27,7 +27,6 @@
   <ItemGroup>
     <Folder Include="Controllers\AdminControllers\" />
     <Folder Include="Data\DTOs\AdminDTOs\" />
-    <Folder Include="Data\Models\" />
     <Folder Include="Services\AdminServices\" />
   </ItemGroup>
 

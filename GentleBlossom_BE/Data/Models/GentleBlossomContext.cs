@@ -111,8 +111,6 @@ public partial class GentleBlossomContext : DbContext
 
             entity.ToTable("ChatRoomUser");
 
-            entity.HasIndex(e => new { e.ParticipantId, e.ChatRoomId }, "uq_ChatRoomUser").IsUnique();
-
             entity.Property(e => e.ChatRoomUserId).HasColumnName("chatRoomUserId");
             entity.Property(e => e.ChatRoomId).HasColumnName("chatRoomId");
             entity.Property(e => e.JoinedAt)
@@ -211,6 +209,8 @@ public partial class GentleBlossomContext : DbContext
 
             entity.ToTable("Expert");
 
+            entity.HasIndex(e => e.UserId, "UQ_Expert_UserId").IsUnique();
+
             entity.Property(e => e.ExpertId).HasColumnName("expertId");
             entity.Property(e => e.AcademicTitle)
                 .HasMaxLength(50)
@@ -226,8 +226,8 @@ public partial class GentleBlossomContext : DbContext
                 .HasColumnName("specialization");
             entity.Property(e => e.UserId).HasColumnName("userId");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Experts)
-                .HasForeignKey(d => d.UserId)
+            entity.HasOne(d => d.User).WithOne(p => p.Expert)
+                .HasForeignKey<Expert>(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Expert__userId__245D67DE");
         });

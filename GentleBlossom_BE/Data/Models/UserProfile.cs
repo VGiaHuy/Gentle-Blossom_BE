@@ -29,7 +29,7 @@ public partial class UserProfile
 
     public virtual ICollection<ConnectionMedical> ConnectionMedicals { get; set; } = new List<ConnectionMedical>();
 
-    public virtual ICollection<Expert> Experts { get; set; } = new List<Expert>();
+    public virtual Expert? Expert { get; set; }
 
     public virtual ICollection<HealthJourney> HealthJourneys { get; set; } = new List<HealthJourney>();
 

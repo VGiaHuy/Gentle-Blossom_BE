@@ -5,9 +5,9 @@ namespace GentleBlossom_BE.Data.Repositories.Interface
 {
     public interface ILoginUserRepository : IGenericRepository<LoginUser>
     {
-        Task<LoginUser?> getUsnLoginAsync(string usn);
-        Task<string?> getPwLoginAsync(int loginId);
-        Task<bool> checkUsnExistAsync(string sđt);
+        Task<LoginUser?> GetUsnLoginAsync(string usn);
+        Task<string?> GetPwLoginAsync(int loginId);
+        Task<bool> CheckUsnExistAsync(string sđt);
 
     }
 }
