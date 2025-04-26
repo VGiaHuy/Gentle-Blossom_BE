@@ -5163,11 +5163,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Code\\.NET\\Gentle-Blossom_BE\\GentleBlossom_BE\\GentleBlossom_BE.csproj",
+      "projectUniqueName": "D:\\Code\\.NET\\GentleBlossom\\Gentle-Blossom_BE\\GentleBlossom_BE.csproj",
       "projectName": "GentleBlossom_BE",
-      "projectPath": "D:\\Code\\.NET\\Gentle-Blossom_BE\\GentleBlossom_BE\\GentleBlossom_BE.csproj",
+      "projectPath": "D:\\Code\\.NET\\GentleBlossom\\Gentle-Blossom_BE\\GentleBlossom_BE.csproj",
       "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-      "outputPath": "D:\\Code\\.NET\\Gentle-Blossom_BE\\GentleBlossom_BE\\obj\\",
+      "outputPath": "D:\\Code\\.NET\\GentleBlossom\\Gentle-Blossom_BE\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
