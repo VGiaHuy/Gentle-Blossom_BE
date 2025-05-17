@@ -45,7 +45,7 @@ public partial class GentleBlossomContext : DbContext
 
     public virtual DbSet<PostCategory> PostCategories { get; set; }
 
-    public virtual DbSet<PostImage> PostImages { get; set; }
+    public virtual DbSet<PostMedium> PostMedia { get; set; }
 
     public virtual DbSet<PsychologyDiary> PsychologyDiaries { get; set; }
 
@@ -487,22 +487,30 @@ public partial class GentleBlossomContext : DbContext
                 .HasColumnName("categoryName");
         });
 
-        modelBuilder.Entity<PostImage>(entity =>
+        modelBuilder.Entity<PostMedium>(entity =>
         {
-            entity.HasKey(e => e.ImageId).HasName("PK__PostImag__336E9B55AF76FDD8");
+            entity.HasKey(e => e.MediaId).HasName("PK__PostMedi__D271B462122A355B");
 
-            entity.ToTable("PostImage");
-
-            entity.Property(e => e.ImageId).HasColumnName("imageId");
-            entity.Property(e => e.Image)
+            entity.Property(e => e.MediaId).HasColumnName("mediaId");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("createdDate");
+            entity.Property(e => e.FileName)
+                .HasMaxLength(255)
+                .HasColumnName("fileName");
+            entity.Property(e => e.MediaType)
+                .HasMaxLength(20)
+                .HasColumnName("mediaType");
+            entity.Property(e => e.MediaUrl)
                 .HasMaxLength(1000)
-                .HasColumnName("image");
+                .HasColumnName("mediaUrl");
             entity.Property(e => e.PostId).HasColumnName("postId");
 
-            entity.HasOne(d => d.Post).WithMany(p => p.PostImages)
+            entity.HasOne(d => d.Post).WithMany(p => p.PostMedia)
                 .HasForeignKey(d => d.PostId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__PostImage__postI__4C6B5938");
+                .HasConstraintName("FK__PostMedia__postI__1C873BEC");
         });
 
         modelBuilder.Entity<PsychologyDiary>(entity =>

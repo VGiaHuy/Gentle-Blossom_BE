@@ -10,7 +10,7 @@ namespace GentleBlossom_BE.Controllers.UserControllers
     [ApiController]
     public class UserAuthController : ControllerBase
     {
-        UserAuthService _userAuthService;
+        private readonly UserAuthService _userAuthService;
 
         public UserAuthController(UserAuthService userAuthService)
         {
