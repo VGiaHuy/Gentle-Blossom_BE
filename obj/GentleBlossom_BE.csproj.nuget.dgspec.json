@@ -54,6 +54,18 @@
               "target": "Package",
               "version": "[4.0.3, )"
             },
+            "Google.Apis.Auth": {
+              "target": "Package",
+              "version": "[1.69.0, )"
+            },
+            "Google.Apis.Drive.v3": {
+              "target": "Package",
+              "version": "[1.69.0.3740, )"
+            },
+            "HtmlSanitizer": {
+              "target": "Package",
+              "version": "[9.0.884, )"
+            },
             "MailKit": {
               "target": "Package",
               "version": "[4.9.0, )"

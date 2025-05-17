@@ -7,8 +7,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\AdminControllers\**" />
+    <Compile Remove="Data\DTOs\AdminDTOs\**" />
+    <Compile Remove="Services\AdminServices\**" />
+    <Content Remove="Controllers\AdminControllers\**" />
+    <Content Remove="Data\DTOs\AdminDTOs\**" />
+    <Content Remove="Services\AdminServices\**" />
+    <EmbeddedResource Remove="Controllers\AdminControllers\**" />
+    <EmbeddedResource Remove="Data\DTOs\AdminDTOs\**" />
+    <EmbeddedResource Remove="Services\AdminServices\**" />
+    <None Remove="Controllers\AdminControllers\**" />
+    <None Remove="Data\DTOs\AdminDTOs\**" />
+    <None Remove="Services\AdminServices\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.69.0" />
+    <PackageReference Include="Google.Apis.Drive.v3" Version="1.69.0.3740" />
+    <PackageReference Include="HtmlSanitizer" Version="9.0.884" />
     <PackageReference Include="MailKit" Version="4.9.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
@@ -22,12 +40,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\AdminControllers\" />
-    <Folder Include="Data\DTOs\AdminDTOs\" />
-    <Folder Include="Services\AdminServices\" />
   </ItemGroup>
 
 </Project>

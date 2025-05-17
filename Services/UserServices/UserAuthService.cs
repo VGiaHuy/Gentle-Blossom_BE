@@ -24,7 +24,7 @@ namespace GentleBlossom_BE.Services.UserServices
             var user = await _unitOfWork.LoginUser.GetUsnLoginAsync(request.Username);
 
             if (user == null)
-                throw new UnauthorizedException("Username không tồn tại!");
+                throw new UnauthorizedException("Tài khoản không tồn tại!");
 
             var hashedPassword = await _unitOfWork.LoginUser.GetPwLoginAsync(user.LoginId);
             if (!BCrypt.Net.BCrypt.Verify(request.Password, hashedPassword))

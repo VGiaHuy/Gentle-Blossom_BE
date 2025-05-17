@@ -15,7 +15,7 @@ namespace GentleBlossom_BE.Data.Repositories
         public ICommentPostRepository CommentPost { get; }
         public IGenericRepository<ConnectionMedical> ConnectionMedical { get; }
         public IGenericRepository<Expert> Expert { get; }
-        public IGenericRepository<HealthJourney> HealthJourney { get; }
+        public IHealthJourneyRepository HealthJourney { get; }
         public ILoginUserRepository LoginUser { get; }
         public IGenericRepository<Message> Message { get; }
         public IGenericRepository<MessageAttachment> MessageAttachment { get; }
@@ -23,7 +23,7 @@ namespace GentleBlossom_BE.Data.Repositories
         public IGenericRepository<Notification> Notification { get; }
         public IGenericRepository<PeriodicHealth> PeriodicHealth { get; }
         public IPostRepository Post { get; }
-        public IGenericRepository<PostImage> PostImage { get; }
+        public IGenericRepository<PostMedium> PostMedia { get; }
         public IGenericRepository<PostCategory> PostCategory { get; }
         public IGenericRepository<PsychologyDiary> PsychologyDiary { get; }
         public IGenericRepository<Review> Review { get; }
@@ -42,7 +42,7 @@ namespace GentleBlossom_BE.Data.Repositories
             CommentPost = new CommentPostRepository(_context);
             ConnectionMedical = new GenericRepository<ConnectionMedical>(_context);
             Expert = new GenericRepository<Expert>(_context);
-            HealthJourney = new GenericRepository<HealthJourney>(_context);
+            HealthJourney = new HealthJourneyRepository(_context);
             LoginUser = new LoginUserRepository(_context);
             Message = new GenericRepository<Message>(_context);
             MessageAttachment = new GenericRepository<MessageAttachment>(_context);
@@ -50,7 +50,7 @@ namespace GentleBlossom_BE.Data.Repositories
             Notification = new GenericRepository<Notification>(_context);
             PeriodicHealth = new GenericRepository<PeriodicHealth>(_context);
             Post = new PostRepository(_context);
-            PostImage = new GenericRepository<PostImage>(_context);
+            PostMedia = new GenericRepository<PostMedium>(_context);
             PostCategory = new GenericRepository<PostCategory>(_context);
             PsychologyDiary = new GenericRepository<PsychologyDiary>(_context);
             Review = new GenericRepository<Review>(_context);

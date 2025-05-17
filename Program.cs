@@ -1,7 +1,10 @@
-﻿using GentleBlossom_BE.Data.Models;
+﻿using Ganss.Xss;
+using GentleBlossom_BE.Data.Models;
 using GentleBlossom_BE.Data.Repositories;
 using GentleBlossom_BE.Data.Repositories.Interface;
 using GentleBlossom_BE.Middleware;
+using GentleBlossom_BE.Services;
+using GentleBlossom_BE.Services.GoogleService;
 using GentleBlossom_BE.Services.UserServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +28,17 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.SuppressModelStateInvalidFilter = true;
 });
 
+// Đăng ký Caching
+builder.Services.AddResponseCaching();
+builder.Services.AddMemoryCache();
+
+// Đăng ký Google Drive
+builder.Services.AddHttpClient(); // dùng để gọi API Google OAuth
+builder.Services.AddScoped<GoogleDriveService>();
+
+// Đăng ký HtmlSanitizer
+builder.Services.AddSingleton<IHtmlSanitizer, HtmlSanitizer>();
+
 // Đăng ký AutoMapper
 builder.Services.AddAutoMapper(typeof(Program));
 
@@ -33,12 +47,16 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 // Đăng ký các Service
+builder.Services.AddScoped<GoogleDriveService>();
 builder.Services.AddScoped<UserAuthService>();
 builder.Services.AddScoped<PostService>();
+builder.Services.AddScoped<UserProfileService>();
+builder.Services.AddScoped<HealthJourneyService>();
 
 builder.Services.AddScoped<ILoginUserRepository, LoginUserRepository>();
 builder.Services.AddScoped<ICommentPostRepository, CommentPostRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<IHealthJourneyRepository, HealthJourneyRepository>();
 
 
 var app = builder.Build();
@@ -49,6 +67,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseResponseCaching();
 
 // Đăng ký ExceptionMiddleware
 app.UseMiddleware<ExceptionMiddleware>();
