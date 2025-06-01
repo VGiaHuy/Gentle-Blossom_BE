@@ -196,23 +196,14 @@ INSERT INTO Post (posterId, categoryId, content, createdDate, numberOfLike) VALU
 (20, 4, N'Trong ba tháng cuối, thai nhi phát triển rất nhanh. Mẹ bầu cần bổ sung đầy đủ dinh dưỡng, ngủ đủ giấc và chuẩn bị tâm lý sẵn sàng cho việc sinh nở.', '2025-02-19', 15);
 
 
--- Bảng hình ảnh bài viết
-INSERT INTO PostImage (postId, image) VALUES
-(1, N'https://example.com/images/post1.jpg'),
-(2, N'https://example.com/images/post2.jpg'),
-(3, N'https://example.com/images/post3.jpg'),
-(4, N'https://example.com/images/post4.jpg'),
-(5, N'https://example.com/images/post5.jpg'),
-(6, N'https://example.com/images/post6.jpg'),
-(7, N'https://example.com/images/post7.jpg'),
-(8, N'https://example.com/images/post8.jpg'),
-(9, N'https://example.com/images/post9.jpg'),
-(10, N'https://example.com/images/post10.jpg'),
-(11, N'https://example.com/images/post11.jpg'),
-(12, N'https://example.com/images/post12.jpg'),
-(13, N'https://example.com/images/post13.jpg'),
-(14, N'https://example.com/images/post14.jpg'),
-(15, N'https://example.com/images/post15.jpg');
+-- Bảng media bài viết
+INSERT INTO PostMedia (postId, mediaUrl, mediaType)
+VALUES 
+(1, 'https://drive.google.com/uc?id=1abcDEFghiJKLmnoPQRsTuvWXyz123456', 'image'),
+(1, 'https://drive.google.com/uc?id=2defGHIjklMNOpqrSTuvWXYzabc789012', 'video'),
+(2, 'https://drive.google.com/uc?id=3ghiJKLmnoPQRsTuvWXyzabcDEF345678', 'image'),
+(2, 'https://drive.google.com/uc?id=4jklMNOpqrSTuvWXYzabcDEFghi901234', 'image');
+
 
 
 -- Bảng bình luận

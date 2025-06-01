@@ -10,6 +10,7 @@ namespace GentleBlossom_BE.Services.GoogleService
     public enum MediaType
     {
         Post,
+        Comment,
         Message,
         Avatar,
         Other
@@ -21,6 +22,7 @@ namespace GentleBlossom_BE.Services.GoogleService
         private readonly IHttpClientFactory _httpClientFactory;
         private string? _gentleBlossomFolderId;
         private string? _postsFolderId;
+        private string? _commentFolderId;
         private string? _messagesFolderId;
         private string? _avatarsFolderId;
         private string? _othersFolderId;
@@ -49,6 +51,7 @@ namespace GentleBlossom_BE.Services.GoogleService
             var targetFolderId = mediaType switch
             {
                 MediaType.Post => _postsFolderId,
+                MediaType.Comment => _commentFolderId,
                 MediaType.Message => _messagesFolderId,
                 MediaType.Avatar => _avatarsFolderId,
                 MediaType.Other => _othersFolderId,
@@ -145,6 +148,7 @@ namespace GentleBlossom_BE.Services.GoogleService
             _messagesFolderId = _config["GoogleAPI:Drive:FolderIds:Messages"];
             _avatarsFolderId = _config["GoogleAPI:Drive:FolderIds:Avatars"];
             _othersFolderId = _config["GoogleAPI:Drive:FolderIds:Others"];
+            _commentFolderId = _config["GoogleAPI:Drive:FolderIds:Comments"];
         }
     }
 }

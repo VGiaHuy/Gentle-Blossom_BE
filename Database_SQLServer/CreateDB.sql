@@ -105,13 +105,47 @@ CREATE TABLE PsychologyDiary (
 );
 GO
 
+-- Bảng chứa các từ khóa lưu ở database như sau:
+CREATE TABLE MentalHealthKeywords (
+    keywordId INT IDENTITY(1,1) PRIMARY KEY,
+    Keyword NVARCHAR(200) NOT NULL,
+    category NVARCHAR(50) NOT NULL,     -- Phân loại theo vấn đề tâm lý: 'depression', 'anxiety', 'suicide', 'stress'
+    weight INT NOT NULL,                -- Trọng số điểm (1-10)
+    severityLevel NVARCHAR(20) NOT NULL,-- Phân loại mức độ nghiêm trọng: 'MILD', 'MODERATE', 'SEVERE'
+    isActive BIT NOT NULL DEFAULT 1,
+    createdAt DATETIME DEFAULT GETDATE(),
+    updatedAt DATETIME,
+    
+    INDEX IX_Keywords_Active (IsActive),
+    INDEX IX_Keywords_Category (Category)
+);
+GO
+
+-- Bảng lưu kết quả phân tích bài viết
+CREATE TABLE PostAnalysis (
+    postAnalysisId BIGINT IDENTITY(1,1) PRIMARY KEY,
+    postId INT NOT NULL,             -- FK đến Post
+    score INT NOT NULL,                 -- Điểm rủi ro từ Rule-based
+    sentimentScore FLOAT,               -- Điểm cảm xúc từ API
+    riskLevel NVARCHAR(20),             -- Mức độ rủi ro tâm lý của bài viết, có thể là LOW hoặc HIGH
+    analysisStatus NVARCHAR(20),        -- PENDING, COMPLETED, FAILED
+    FOREIGN KEY (postId) REFERENCES Post(postId),
+    INDEX IX_PostAnalysis_PostId (PostId)
+);
+GO
+
 -- Bảng thông tin kết nối giữa Người dùng và chuyên gia
 CREATE TABLE ConnectionMedical (
     connectId INT IDENTITY PRIMARY KEY,
     expertId INT NOT NULL FOREIGN KEY REFERENCES Expert(expertId),
     userId INT NOT NULL FOREIGN KEY REFERENCES UserProfiles(userId),
-    journeyId INT NOT NULL FOREIGN KEY REFERENCES HealthJourney(journeyId),
-	status TINYINT NOT NULL		-- 0: Chờ, 1: Đang tư vấn, 2: Hoàn thành, 3: Hủy bỏ
+    journeyId INT FOREIGN KEY REFERENCES HealthJourney(journeyId),
+	postId INT,
+	status TINYINT NOT NULL DEFAULT 0,	-- 0: Chờ, 1: Đang tư vấn, 2: Hoàn thành, 3: Hủy bỏ
+	createdAt DATETIME DEFAULT GETDATE(),
+    updatedAt DATETIME,
+	FOREIGN KEY (PostId) REFERENCES Post(postId),
+    INDEX IX_ExpertConnections_PostId (PostId)
 );
 GO
 
@@ -144,11 +178,14 @@ CREATE TABLE Post (
 );
 GO
 
--- Bảng hình ảnh của bài viết
-CREATE TABLE PostImage (
-    imageId INT PRIMARY KEY IDENTITY,
+-- Bảng Media của bài viết
+CREATE TABLE PostMedia (
+    mediaId INT PRIMARY KEY IDENTITY,
     postId INT NOT NULL FOREIGN KEY REFERENCES Post(postId),
-	image NVARCHAR(1000) NOT NULL
+    mediaUrl NVARCHAR(1000) NOT NULL,         -- Link Google Drive public
+    mediaType NVARCHAR(20) NOT NULL,          -- 'image', 'video', 'audio', 'pdf',...
+    fileName NVARCHAR(255),                   -- Tên gốc của file (tùy chọn)
+    createdDate DATETIME DEFAULT GETDATE()
 );
 GO
 
@@ -159,8 +196,11 @@ CREATE TABLE CommentPost (
 	posterId INT NOT NULL FOREIGN KEY REFERENCES UserProfiles(userId),
     parentCommentId INT NULL FOREIGN KEY REFERENCES CommentPost(commentId),		-- Nếu là một bình luận trả lời 1 bình luận khác
     content NVARCHAR(4000) NOT NULL,
-    image NVARCHAR(1000) NULL,
-    commentDate DATE DEFAULT GETDATE()
+    commentDate DATE DEFAULT GETDATE(),
+
+	mediaUrl NVARCHAR(1000) NOT NULL,         -- Link Google Drive public
+    mediaType NVARCHAR(20) NOT NULL,          -- 'image', 'video', 'audio', 'pdf',...
+    fileName NVARCHAR(255)                   -- Tên gốc của file (tùy chọn)
 );
 GO
 
