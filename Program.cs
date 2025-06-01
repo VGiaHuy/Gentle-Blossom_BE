@@ -2,8 +2,10 @@
 using GentleBlossom_BE.Data.Models;
 using GentleBlossom_BE.Data.Repositories;
 using GentleBlossom_BE.Data.Repositories.Interface;
+using GentleBlossom_BE.Infrastructure;
 using GentleBlossom_BE.Middleware;
 using GentleBlossom_BE.Services;
+using GentleBlossom_BE.Services.AnalysisService;
 using GentleBlossom_BE.Services.GoogleService;
 using GentleBlossom_BE.Services.UserServices;
 using Microsoft.AspNetCore.Mvc;
@@ -47,6 +49,13 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 // Đăng ký các Service
+builder.Services.AddSingleton<InMemoryQueue<ExpertConnectionRequest>>(); // Hàng đợi trong bộ nhớ
+builder.Services.AddHostedService<ExpertConnectionService>(); // Đăng ký Background Service
+builder.Services.AddScoped<KeywordAnalysisService>(); // Dịch vụ phân tích từ khóa
+builder.Services.AddScoped<HuggingFaceNlpService>(); // Dịch vụ Hugging Face API
+builder.Services.AddScoped<PostAnalysisService>(); // Dịch vụ phân tích bài viết
+builder.Services.AddScoped<ExpertConnectionService>(); // Dịch vụ kết nối chuyên gia (cho scope)
+
 builder.Services.AddScoped<GoogleDriveService>();
 builder.Services.AddScoped<UserAuthService>();
 builder.Services.AddScoped<PostService>();

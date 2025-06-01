@@ -15,9 +15,13 @@ public partial class CommentPost
 
     public string Content { get; set; } = null!;
 
-    public string? Image { get; set; }
-
     public DateOnly? CommentDate { get; set; }
+
+    public string? MediaUrl { get; set; }
+
+    public string? MediaType { get; set; }
+
+    public string? FileName { get; set; }
 
     public virtual ICollection<CommentPost> InverseParentComment { get; set; } = new List<CommentPost>();
 

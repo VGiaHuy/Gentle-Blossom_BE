@@ -69,6 +69,61 @@ namespace GentleBlossom_BE.Controllers.UserControllers
             });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateComment([FromForm] CreateCommentDTOs request)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage);
+
+                return BadRequest(new API_Response<object>
+                {
+                    Success = false,
+                    Message = string.Join(" ", errors),
+                    Data = null
+                });
+            }
+
+            // Xử lý logic lưu bình luận
+            await _postService.CreateCommentAsync(request);
+
+            return Ok(new API_Response<object>
+            {
+                Success = true,
+                Message = "Đăng tải thành công!",
+                Data = null
+            });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCommentsByPostId([FromQuery] int postId)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage);
+
+                return BadRequest(new API_Response<object>
+                {
+                    Success = false,
+                    Message = string.Join(" ", errors),
+                    Data = null
+                });
+            }
+
+            var data = await _postService.GetCommentsByPostIdAsync(postId);
+
+            return Ok(new API_Response<List<CommentPostDTOs>>
+            {
+                Success = true,
+                Message = "Lấy bình luận thành công!",
+                Data = data
+            });
+        }
+
         [HttpGet]
         public async Task<IActionResult> ProxyImage(string url)
         {

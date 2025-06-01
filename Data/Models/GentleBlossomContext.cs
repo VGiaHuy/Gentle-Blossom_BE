@@ -31,6 +31,8 @@ public partial class GentleBlossomContext : DbContext
 
     public virtual DbSet<LoginUser> LoginUsers { get; set; }
 
+    public virtual DbSet<MentalHealthKeyword> MentalHealthKeywords { get; set; }
+
     public virtual DbSet<Message> Messages { get; set; }
 
     public virtual DbSet<MessageAttachment> MessageAttachments { get; set; }
@@ -42,6 +44,8 @@ public partial class GentleBlossomContext : DbContext
     public virtual DbSet<PeriodicHealth> PeriodicHealths { get; set; }
 
     public virtual DbSet<Post> Posts { get; set; }
+
+    public virtual DbSet<PostAnalysis> PostAnalyses { get; set; }
 
     public virtual DbSet<PostCategory> PostCategories { get; set; }
 
@@ -149,9 +153,15 @@ public partial class GentleBlossomContext : DbContext
             entity.Property(e => e.Content)
                 .HasMaxLength(4000)
                 .HasColumnName("content");
-            entity.Property(e => e.Image)
+            entity.Property(e => e.FileName)
+                .HasMaxLength(255)
+                .HasColumnName("fileName");
+            entity.Property(e => e.MediaType)
+                .HasMaxLength(20)
+                .HasColumnName("mediaType");
+            entity.Property(e => e.MediaUrl)
                 .HasMaxLength(1000)
-                .HasColumnName("image");
+                .HasColumnName("mediaUrl");
             entity.Property(e => e.ParentCommentId).HasColumnName("parentCommentId");
             entity.Property(e => e.PostId).HasColumnName("postId");
             entity.Property(e => e.PosterId).HasColumnName("posterId");
@@ -173,34 +183,43 @@ public partial class GentleBlossomContext : DbContext
 
         modelBuilder.Entity<ConnectionMedical>(entity =>
         {
-            entity.HasKey(e => e.ConnectId).HasName("PK__Connecti__3B10F3170FC30F83");
+            entity.HasKey(e => e.ConnectId).HasName("PK__Connecti__3B10F317ECDEC7EA");
 
             entity.ToTable("ConnectionMedical");
 
-            entity.HasIndex(e => e.ExpertId, "IDX_ConnectionMedical_Expert");
-
-            entity.HasIndex(e => e.UserId, "IDX_ConnectionMedical_User");
+            entity.HasIndex(e => e.PostId, "IX_ExpertConnections_PostId");
 
             entity.Property(e => e.ConnectId).HasColumnName("connectId");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("createdAt");
             entity.Property(e => e.ExpertId).HasColumnName("expertId");
             entity.Property(e => e.JourneyId).HasColumnName("journeyId");
+            entity.Property(e => e.PostId).HasColumnName("postId");
             entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.UpdatedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("updatedAt");
             entity.Property(e => e.UserId).HasColumnName("userId");
 
             entity.HasOne(d => d.Expert).WithMany(p => p.ConnectionMedicals)
                 .HasForeignKey(d => d.ExpertId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Connectio__exper__3B40CD36");
+                .HasConstraintName("FK__Connectio__exper__603D47BB");
 
             entity.HasOne(d => d.Journey).WithMany(p => p.ConnectionMedicals)
                 .HasForeignKey(d => d.JourneyId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Connectio__journ__3D2915A8");
+                .HasConstraintName("FK__Connectio__journ__6225902D");
+
+            entity.HasOne(d => d.Post).WithMany(p => p.ConnectionMedicals)
+                .HasForeignKey(d => d.PostId)
+                .HasConstraintName("FK__Connectio__postI__640DD89F");
 
             entity.HasOne(d => d.User).WithMany(p => p.ConnectionMedicals)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Connectio__userI__3C34F16F");
+                .HasConstraintName("FK__Connectio__userI__61316BF4");
         });
 
         modelBuilder.Entity<Expert>(entity =>
@@ -288,6 +307,35 @@ public partial class GentleBlossomContext : DbContext
                 .HasForeignKey<LoginUser>(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__LoginUser__userI__2180FB33");
+        });
+
+        modelBuilder.Entity<MentalHealthKeyword>(entity =>
+        {
+            entity.HasKey(e => e.KeywordId).HasName("PK__MentalHe__A6DC9B8AABE67413");
+
+            entity.HasIndex(e => e.IsActive, "IX_Keywords_Active");
+
+            entity.HasIndex(e => e.Category, "IX_Keywords_Category");
+
+            entity.Property(e => e.KeywordId).HasColumnName("keywordId");
+            entity.Property(e => e.Category)
+                .HasMaxLength(50)
+                .HasColumnName("category");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("createdAt");
+            entity.Property(e => e.IsActive)
+                .HasDefaultValue(true)
+                .HasColumnName("isActive");
+            entity.Property(e => e.Keyword).HasMaxLength(200);
+            entity.Property(e => e.SeverityLevel)
+                .HasMaxLength(20)
+                .HasColumnName("severityLevel");
+            entity.Property(e => e.UpdatedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("updatedAt");
+            entity.Property(e => e.Weight).HasColumnName("weight");
         });
 
         modelBuilder.Entity<Message>(entity =>
@@ -475,6 +523,32 @@ public partial class GentleBlossomContext : DbContext
                 .HasForeignKey(d => d.PosterId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Post__posterId__46B27FE2");
+        });
+
+        modelBuilder.Entity<PostAnalysis>(entity =>
+        {
+            entity.HasKey(e => e.PostAnalysisId).HasName("PK__PostAnal__03905F84657DDA1D");
+
+            entity.ToTable("PostAnalysis");
+
+            entity.HasIndex(e => e.PostId, "IX_PostAnalysis_PostId");
+
+            entity.Property(e => e.PostAnalysisId).HasColumnName("postAnalysisId");
+            entity.Property(e => e.AnalysisStatus)
+                .HasMaxLength(20)
+                .HasColumnName("analysisStatus");
+            entity.Property(e => e.PostId).HasColumnName("postId");
+            entity.Property(e => e.RiskLevel)
+                .HasMaxLength(20)
+                .HasColumnName("riskLevel");
+            entity.Property(e => e.Score).HasColumnName("score");
+            entity.Property(e => e.SentimentMagnitude).HasColumnName("sentimentMagnitude");
+            entity.Property(e => e.SentimentScore).HasColumnName("sentimentScore");
+
+            entity.HasOne(d => d.Post).WithMany(p => p.PostAnalyses)
+                .HasForeignKey(d => d.PostId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__PostAnaly__postI__4589517F");
         });
 
         modelBuilder.Entity<PostCategory>(entity =>

@@ -21,6 +21,10 @@ public partial class Post
 
     public virtual ICollection<CommentPost> CommentPosts { get; set; } = new List<CommentPost>();
 
+    public virtual ICollection<ConnectionMedical> ConnectionMedicals { get; set; } = new List<ConnectionMedical>();
+
+    public virtual ICollection<PostAnalysis> PostAnalyses { get; set; } = new List<PostAnalysis>();
+
     public virtual ICollection<PostMedium> PostMedia { get; set; } = new List<PostMedium>();
 
     public virtual UserProfile Poster { get; set; } = null!;

@@ -15,6 +15,7 @@ namespace GentleBlossom_BE.Helpers
 
             CreateMap<Post, PostDTO>().ForMember(dest => dest.MediaList, opt => opt.MapFrom(src => src.PostMedia));
             CreateMap<PostMedium, PostMediaDTO>();
+            CreateMap<CommentPost, CommentPostDTOs>().ReverseMap();
 
             CreateMap<UserProfile, PostDTO>().ReverseMap();
 
