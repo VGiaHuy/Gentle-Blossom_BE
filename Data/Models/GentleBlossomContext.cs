@@ -49,6 +49,8 @@ public partial class GentleBlossomContext : DbContext
 
     public virtual DbSet<PostCategory> PostCategories { get; set; }
 
+    public virtual DbSet<PostLike> PostLikes { get; set; }
+
     public virtual DbSet<PostMedium> PostMedia { get; set; }
 
     public virtual DbSet<PsychologyDiary> PsychologyDiaries { get; set; }
@@ -183,7 +185,7 @@ public partial class GentleBlossomContext : DbContext
 
         modelBuilder.Entity<ConnectionMedical>(entity =>
         {
-            entity.HasKey(e => e.ConnectId).HasName("PK__Connecti__3B10F317ECDEC7EA");
+            entity.HasKey(e => e.ConnectId).HasName("PK__Connecti__3B10F317481405FA");
 
             entity.ToTable("ConnectionMedical");
 
@@ -206,20 +208,20 @@ public partial class GentleBlossomContext : DbContext
             entity.HasOne(d => d.Expert).WithMany(p => p.ConnectionMedicals)
                 .HasForeignKey(d => d.ExpertId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Connectio__exper__603D47BB");
+                .HasConstraintName("FK__Connectio__exper__66EA454A");
 
             entity.HasOne(d => d.Journey).WithMany(p => p.ConnectionMedicals)
                 .HasForeignKey(d => d.JourneyId)
-                .HasConstraintName("FK__Connectio__journ__6225902D");
+                .HasConstraintName("FK__Connectio__journ__68D28DBC");
 
             entity.HasOne(d => d.Post).WithMany(p => p.ConnectionMedicals)
                 .HasForeignKey(d => d.PostId)
-                .HasConstraintName("FK__Connectio__postI__640DD89F");
+                .HasConstraintName("FK__Connectio__postI__6BAEFA67");
 
             entity.HasOne(d => d.User).WithMany(p => p.ConnectionMedicals)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Connectio__userI__61316BF4");
+                .HasConstraintName("FK__Connectio__userI__67DE6983");
         });
 
         modelBuilder.Entity<Expert>(entity =>
@@ -311,7 +313,7 @@ public partial class GentleBlossomContext : DbContext
 
         modelBuilder.Entity<MentalHealthKeyword>(entity =>
         {
-            entity.HasKey(e => e.KeywordId).HasName("PK__MentalHe__A6DC9B8AABE67413");
+            entity.HasKey(e => e.KeywordId).HasName("PK__MentalHe__A6DC9B8A3DD9BF35");
 
             entity.HasIndex(e => e.IsActive, "IX_Keywords_Active");
 
@@ -527,7 +529,7 @@ public partial class GentleBlossomContext : DbContext
 
         modelBuilder.Entity<PostAnalysis>(entity =>
         {
-            entity.HasKey(e => e.PostAnalysisId).HasName("PK__PostAnal__03905F84657DDA1D");
+            entity.HasKey(e => e.PostAnalysisId).HasName("PK__PostAnal__03905F8419AC32E0");
 
             entity.ToTable("PostAnalysis");
 
@@ -542,13 +544,12 @@ public partial class GentleBlossomContext : DbContext
                 .HasMaxLength(20)
                 .HasColumnName("riskLevel");
             entity.Property(e => e.Score).HasColumnName("score");
-            entity.Property(e => e.SentimentMagnitude).HasColumnName("sentimentMagnitude");
             entity.Property(e => e.SentimentScore).HasColumnName("sentimentScore");
 
             entity.HasOne(d => d.Post).WithMany(p => p.PostAnalyses)
                 .HasForeignKey(d => d.PostId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__PostAnaly__postI__4589517F");
+                .HasConstraintName("FK__PostAnaly__postI__7AF13DF7");
         });
 
         modelBuilder.Entity<PostCategory>(entity =>
@@ -559,6 +560,30 @@ public partial class GentleBlossomContext : DbContext
             entity.Property(e => e.CategoryName)
                 .HasMaxLength(100)
                 .HasColumnName("categoryName");
+        });
+
+        modelBuilder.Entity<PostLike>(entity =>
+        {
+            entity.HasKey(e => new { e.UserId, e.PostId }).HasName("PK_post_likes");
+
+            entity.ToTable("PostLike");
+
+            entity.Property(e => e.UserId).HasColumnName("userId");
+            entity.Property(e => e.PostId).HasColumnName("postId");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("created_at");
+
+            entity.HasOne(d => d.Post).WithMany(p => p.PostLikes)
+                .HasForeignKey(d => d.PostId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_post_likes_post");
+
+            entity.HasOne(d => d.User).WithMany(p => p.PostLikes)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_post_likes_user");
         });
 
         modelBuilder.Entity<PostMedium>(entity =>

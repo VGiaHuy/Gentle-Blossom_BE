@@ -7,6 +7,7 @@ using GentleBlossom_BE.Data.Repositories.Interface;
 using GentleBlossom_BE.Exceptions;
 using GentleBlossom_BE.Services.AnalysisService;
 using GentleBlossom_BE.Services.GoogleService;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GentleBlossom_BE.Services.UserServices
 {
@@ -27,28 +28,13 @@ namespace GentleBlossom_BE.Services.UserServices
             _postAnalysisService = postAnalysisService;
         }
 
-        public async Task<List<PostDTO>> GetAllPost(int page = 1, int pageSize = 5)
+        public async Task<List<PostDTO>> GetAllPost(int userId, int page = 1, int pageSize = 5)
         {
             try
             {
-                var posts = await _unitOfWork.Post.GetAllAsync(page, pageSize);
-                var allPost = new List<PostDTO>();
+                var posts = await _unitOfWork.Post.GetAllAsync(userId, page, pageSize);
 
-                foreach (var post in posts)
-                {
-                    var postDto = _mapper.Map<PostDTO>(post);
-
-                    postDto.PosterName = post.Poster.FullName;
-                    postDto.PosterAvatar = post.Poster.Avatar;
-                    postDto.PosterType = post.Poster.UserType.TypeName;
-                    postDto.CategoryName = post.Category.CategoryName;
-                    postDto.AcademicTitle = post.Poster.UserType.UsertypeId == UserTypeName.Expert ? post.Poster.Expert.AcademicTitle : null!;
-                    postDto.NumberOfComment = post.CommentPosts?.Count ?? 0;
-
-                    allPost.Add(postDto);
-                }
-
-                return allPost;
+                return posts;
             }
             catch (Exception ex)
             {
@@ -61,27 +47,7 @@ namespace GentleBlossom_BE.Services.UserServices
             try
             {
                 var posts = await _unitOfWork.Post.GetPostsOfUserById(id, page, pageSize);
-                var allPost = new List<PostDTO>();
-
-                foreach (var post in posts)
-                {
-                    var postDto = _mapper.Map<PostDTO>(post);
-
-                    postDto.PosterName = post.Poster.FullName;
-                    postDto.PosterAvatar = post.Poster.Avatar;
-                    postDto.PosterType = post.Poster.UserType.TypeName;
-                    postDto.CategoryName = post.Category.CategoryName;
-
-                    postDto.AcademicTitle = post.Poster.UserType.UsertypeId == UserTypeName.Expert
-                        ? post.Poster.Expert.AcademicTitle
-                        : null!;
-
-                    postDto.NumberOfComment = post.CommentPosts?.Count ?? 0;
-
-                    allPost.Add(postDto);
-                }
-
-                return allPost;
+                return posts;
             }
             catch (Exception ex)
             {
@@ -197,11 +163,11 @@ namespace GentleBlossom_BE.Services.UserServices
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<List<CommentPostDTOs>> GetCommentsByPostIdAsync(int postId)
+        public async Task<CommentPostResponseDTO> GetCommentsByPostIdAsync(int postId, int page, int pageSize)
         {
             try
             {
-                var comments = await _unitOfWork.CommentPost.GetCommentsByPostIdAsync(postId);
+                var (comments, hasMore) = await _unitOfWork.CommentPost.GetCommentsByPostIdAsync(postId, page, pageSize);
                 var commentDtos = new List<CommentPostDTOs>();
 
                 foreach (var comment in comments)
@@ -214,11 +180,45 @@ namespace GentleBlossom_BE.Services.UserServices
                     commentDtos.Add(commentDto);
                 }
 
-                return commentDtos;
+                return new CommentPostResponseDTO
+                {
+                    Comments = commentDtos,
+                    HasMore = hasMore
+                };
             }
             catch (Exception ex)
             {
                 throw new NotFoundException(ex.ToString());
+            }
+        }
+
+        public async Task<bool> ToggleLikePost(int postId, int userId)
+        {
+            try
+            {
+                bool checkLikePost = await _unitOfWork.PostLike.CheckLikePost(postId, userId);
+
+                // nếu đã thích thì handle = -1 (bỏ thích), nếu chưa thích thì handle = 1 (thích)
+                int handle = checkLikePost ? -1 : 1;
+
+                if (checkLikePost)
+                {
+                    await _unitOfWork.PostLike.UnLikePost(postId, userId);
+                }
+                else
+                {
+                    await _unitOfWork.PostLike.LikePost(postId, userId);
+                }
+
+                bool likePost = await _unitOfWork.Post.ToggleLikePost(postId, handle);
+
+                await _unitOfWork.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new InternalServerException($"Error toggling like for post {postId} by user {userId}: {ex.Message}");
             }
         }
     }

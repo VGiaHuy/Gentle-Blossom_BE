@@ -17,9 +17,9 @@ namespace GentleBlossom_BE.Controllers.UserControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllPost([FromQuery] int page = 1, [FromQuery] int pageSize = 5)
+        public async Task<IActionResult> GetAllPost([FromQuery] int userId, [FromQuery] int page = 1, [FromQuery] int pageSize = 5)
         {
-            var data = await _postService.GetAllPost(page, pageSize);
+            var data = await _postService.GetAllPost(userId, page, pageSize);
 
             return Ok(new API_Response<List<PostDTO>>
             {
@@ -98,7 +98,7 @@ namespace GentleBlossom_BE.Controllers.UserControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCommentsByPostId([FromQuery] int postId)
+        public async Task<IActionResult> GetCommentsByPostId([FromQuery] int postId, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             if (!ModelState.IsValid)
             {
@@ -114,13 +114,43 @@ namespace GentleBlossom_BE.Controllers.UserControllers
                 });
             }
 
-            var data = await _postService.GetCommentsByPostIdAsync(postId);
+            var data = await _postService.GetCommentsByPostIdAsync(postId, page, pageSize);
 
-            return Ok(new API_Response<List<CommentPostDTOs>>
+            return Ok(new API_Response<CommentPostResponseDTO>
             {
                 Success = true,
                 Message = "Lấy bình luận thành công!",
                 Data = data
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ToggleLikePost([FromBody] ToggleLikePostDto request)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage);
+
+                return BadRequest(new API_Response<object>
+                {
+                    Success = false,
+                    Message = string.Join(" ", errors),
+                    Data = null
+                });
+            }
+
+            int postId = request.PostId;
+            int userId = request.UserId;
+
+            var data = await _postService.ToggleLikePost(postId, userId);
+
+            return Ok(new API_Response<object>
+            {
+                Success = true,
+                Message = "Like bài viết thành công!",
+                Data = null
             });
         }
 

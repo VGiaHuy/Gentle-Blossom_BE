@@ -173,8 +173,22 @@ CREATE TABLE Post (
     posterId INT NOT NULL FOREIGN KEY REFERENCES UserProfiles(userId),
     categoryId INT NOT NULL FOREIGN KEY REFERENCES PostCategories(categoryId),
     content NVARCHAR(4000) NOT NULL,
-    createdDate DATE DEFAULT GETDATE(),
+    createdDate DATETIME DEFAULT GETDATE(),
 	numberOfLike INT NOT NULL DEFAULT 0
+);
+GO
+
+--ALTER TABLE Post
+--ALTER COLUMN createdDate DATETIME;
+
+-- Bảng like bài viết
+CREATE TABLE PostLike (
+    userId INT NOT NULL,
+    postId INT NOT NULL,
+	created_at DATETIME DEFAULT GETDATE(),
+    CONSTRAINT PK_post_likes PRIMARY KEY (userId, postId),
+    CONSTRAINT FK_post_likes_user FOREIGN KEY (userId) REFERENCES UserProfiles(userId),
+    CONSTRAINT FK_post_likes_post FOREIGN KEY (postId) REFERENCES Post(postId)
 );
 GO
 

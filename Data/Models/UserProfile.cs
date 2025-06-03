@@ -39,6 +39,8 @@ public partial class UserProfile
 
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
+    public virtual ICollection<PostLike> PostLikes { get; set; } = new List<PostLike>();
+
     public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
