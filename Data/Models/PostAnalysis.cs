@@ -13,8 +13,6 @@ public partial class PostAnalysis
 
     public double? SentimentScore { get; set; }
 
-    public double? SentimentMagnitude { get; set; }
-
     public string? RiskLevel { get; set; }
 
     public string? AnalysisStatus { get; set; }

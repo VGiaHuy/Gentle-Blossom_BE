@@ -10,18 +10,28 @@ namespace GentleBlossom_BE.Data.Repositories
         {
         }
 
-        public async Task<List<CommentPost>> GetCommentsByPostIdAsync(int postId)
+        public async Task<(List<CommentPost>, bool)> GetCommentsByPostIdAsync(int postId, int page, int pageSize)
         {
-
-            return await _context.CommentPosts
+            var query = _context.CommentPosts
                 .Where(p => p.PostId == postId)
                 .OrderByDescending(p => p.CommentDate)
                 .Include(p => p.Poster)
                     .ThenInclude(u => u.UserType)
                 .Include(p => p.Poster)
                     .ThenInclude(u => u.Expert)
-                .AsNoTracking() // Tăng hiệu suất
+                .AsNoTracking();
+
+            // Tính tổng số bình luận để kiểm tra hasMore
+            var totalComments = await query.CountAsync();
+            var hasMore = totalComments > (page * pageSize);
+
+            // Áp dụng phân trang
+            var comments = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+
+            return (comments, hasMore);
         }
     }
 }

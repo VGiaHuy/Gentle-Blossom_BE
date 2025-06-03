@@ -21,6 +21,9 @@
         public int NumberOfLike { get; set; }
 
         public int NumberOfComment { get; set; }
+
+        public bool Liked { get; set; }
+
         public List<PostMediaDTO> MediaList { get; set; } = new();
     }
 

@@ -25,6 +25,8 @@ public partial class Post
 
     public virtual ICollection<PostAnalysis> PostAnalyses { get; set; } = new List<PostAnalysis>();
 
+    public virtual ICollection<PostLike> PostLikes { get; set; } = new List<PostLike>();
+
     public virtual ICollection<PostMedium> PostMedia { get; set; } = new List<PostMedium>();
 
     public virtual UserProfile Poster { get; set; } = null!;
