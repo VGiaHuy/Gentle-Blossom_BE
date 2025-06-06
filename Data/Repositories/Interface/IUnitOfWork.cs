@@ -15,7 +15,7 @@ namespace GentleBlossom_BE.Data.Repositories.Interface
         IGenericRepository<Message> Message { get; }
         IGenericRepository<MessageAttachment> MessageAttachment { get; }
         IGenericRepository<MonitoringForm> MonitoringForm { get; }
-        IGenericRepository<Notification> Notification { get; }
+        INotificationRepository Notification { get; }
         IGenericRepository<PeriodicHealth> PeriodicHealth { get; }
         IPostRepository Post { get; }
         IGenericRepository<PostMedium> PostMedia { get; }

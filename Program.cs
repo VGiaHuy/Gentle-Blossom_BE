@@ -61,11 +61,13 @@ builder.Services.AddScoped<UserAuthService>();
 builder.Services.AddScoped<PostService>();
 builder.Services.AddScoped<UserProfileService>();
 builder.Services.AddScoped<HealthJourneyService>();
+builder.Services.AddScoped<NotificationService>();
 
 builder.Services.AddScoped<ILoginUserRepository, LoginUserRepository>();
 builder.Services.AddScoped<ICommentPostRepository, CommentPostRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IHealthJourneyRepository, HealthJourneyRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
 
 var app = builder.Build();

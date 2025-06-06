@@ -9,6 +9,7 @@ namespace GentleBlossom_BE.Services.AnalysisService
     public class ExpertConnectionRequest
     {
         public int PostId { get; set; }
+        public int PosterId { get; set; }
     }
 
     public class ExpertConnectionService : BackgroundService
@@ -23,10 +24,10 @@ namespace GentleBlossom_BE.Services.AnalysisService
         }
 
         // Hàm để đẩy yêu cầu kết nối vào hàng đợi
-        public async Task QueueExpertConnection(int postId)
+        public async Task QueueExpertConnection(int postId, int posterId)
         {
             // Tạo yêu cầu mới với PostId
-            var request = new ExpertConnectionRequest { PostId = postId };
+            var request = new ExpertConnectionRequest { PostId = postId, PosterId = posterId };
             // Đẩy yêu cầu vào queue
             await _queue.EnqueueAsync(request);
         }
@@ -55,12 +56,29 @@ namespace GentleBlossom_BE.Services.AnalysisService
                     var connection = new ConnectionMedical
                     {
                         PostId = request.PostId,
+                        UserId = request.PosterId,
                         ExpertId = expert.ExpertId,
                         CreatedAt = DateTime.UtcNow
                     };
 
+                    var notificationUser = new Notification
+                    {
+                        UserId = request.PosterId,
+                        Content = $"Chuyên gia {expert.User.FullName} đã được kết nối với bài viết của bạn.",
+                        CreateAt = DateTime.UtcNow
+                    };
+
+                    var notificationExpert = new Notification
+                    {
+                        UserId = expert.UserId,
+                        Content = $"Bạn đã được kết nối với bài viết {request.PostId} của người dùng {request.PosterId}.",
+                        CreateAt = DateTime.UtcNow
+                    };
+
                     // Lưu vào database
                     dbContext.ConnectionMedicals.Add(connection);
+                    dbContext.Notifications.Add(notificationUser);
+                    dbContext.Notifications.Add(notificationExpert);
                     await dbContext.SaveChangesAsync();
 
                     // Gửi thông báo đến chuyên gia (giả lập hoặc tích hợp email/SMS)

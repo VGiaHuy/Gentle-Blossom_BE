@@ -58,7 +58,7 @@ namespace GentleBlossom_BE.Services.AnalysisService
                         analysis.AnalysisStatus = AnalyzePost.AnalysisStatus_Complete;
 
                         // Đẩy yêu cầu kết nối vào queue để Background Service xử lý
-                        await _expertService.QueueExpertConnection(post.PostId);
+                        await _expertService.QueueExpertConnection(post.PostId, post.PosterId);
                     }
                     else
                     {

@@ -720,9 +720,15 @@ public partial class GentleBlossomContext : DbContext
             entity.HasIndex(e => e.Email, "UQ__UserProf__AB6E6164F4132049").IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("userId");
-            entity.Property(e => e.Avatar)
+            entity.Property(e => e.AvatarFileName)
+                .HasMaxLength(255)
+                .HasColumnName("avatarFileName");
+            entity.Property(e => e.AvatarType)
+                .HasMaxLength(20)
+                .HasColumnName("avatarType");
+            entity.Property(e => e.AvatarUrl)
                 .HasMaxLength(1000)
-                .HasColumnName("avatar");
+                .HasColumnName("avatarUrl");
             entity.Property(e => e.BirthDate).HasColumnName("birthDate");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
