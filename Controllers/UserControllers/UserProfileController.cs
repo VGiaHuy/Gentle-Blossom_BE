@@ -2,7 +2,6 @@
 using GentleBlossom_BE.Data.DTOs.UserDTOs;
 using GentleBlossom_BE.Data.Responses;
 using GentleBlossom_BE.Services.UserServices;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GentleBlossom_BE.Controllers.UserControllers
@@ -42,6 +41,46 @@ namespace GentleBlossom_BE.Controllers.UserControllers
                 Message = "Lấy thông tin người dùng thành công!",
                 Data = userProfile
             });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateUserProfile([FromForm] UpdateUserProfileDTO userProfile)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage);
+
+                return BadRequest(new API_Response<object>
+                {
+                    Success = false,
+                    Message = string.Join(" ", errors),
+                    Data = null
+                });
+            }
+
+            var updatedUserProfile = await _userProfileService.UpdateUserProfile(userProfile);
+
+            if (updatedUserProfile == true)
+            {
+
+                return Ok(new API_Response<object>
+                {
+                    Success = true,
+                    Message = "Cập nhật thông tin người dùng thành công!",
+                    Data = null
+                });
+            }
+            else
+            {
+                return BadRequest(new API_Response<object>
+                {
+                    Success = false,
+                    Message = "Cập nhật thông tin người dùng thất bại!",
+                    Data = null
+                });
+            }
         }
     }
 }

@@ -15,11 +15,15 @@ public partial class UserProfile
 
     public string Email { get; set; } = null!;
 
-    public string? Avatar { get; set; }
-
     public bool Gender { get; set; }
 
     public byte UserTypeId { get; set; }
+
+    public string? AvatarUrl { get; set; }
+
+    public string? AvatarType { get; set; }
+
+    public string? AvatarFileName { get; set; }
 
     public virtual ICollection<Administrator> Administrators { get; set; } = new List<Administrator>();
 

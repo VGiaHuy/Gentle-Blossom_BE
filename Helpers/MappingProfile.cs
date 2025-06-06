@@ -21,6 +21,10 @@ namespace GentleBlossom_BE.Helpers
 
             CreateMap<HealthJourney, PsychologyDiaryDTO>().ReverseMap();
             CreateMap<HealthJourney, PeriodicHealthDTO>().ReverseMap();
+
+            CreateMap<Notification, NotificationDTO>()
+                //.ForMember(dest => dest.UserProfile, opt => opt.MapFrom(src => src.User))
+                .ReverseMap();
         }
     }
 }

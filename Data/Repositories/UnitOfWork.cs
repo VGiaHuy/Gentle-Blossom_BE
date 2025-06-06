@@ -20,7 +20,7 @@ namespace GentleBlossom_BE.Data.Repositories
         public IGenericRepository<Message> Message { get; }
         public IGenericRepository<MessageAttachment> MessageAttachment { get; }
         public IGenericRepository<MonitoringForm> MonitoringForm { get; }
-        public IGenericRepository<Notification> Notification { get; }
+        public INotificationRepository Notification { get; }
         public IGenericRepository<PeriodicHealth> PeriodicHealth { get; }
         public IPostRepository Post { get; }
         public IGenericRepository<PostMedium> PostMedia { get; }
@@ -48,7 +48,7 @@ namespace GentleBlossom_BE.Data.Repositories
             Message = new GenericRepository<Message>(_context);
             MessageAttachment = new GenericRepository<MessageAttachment>(_context);
             MonitoringForm = new GenericRepository<MonitoringForm>(_context);
-            Notification = new GenericRepository<Notification>(_context);
+            Notification = new NotificationRepository(_context);
             PeriodicHealth = new GenericRepository<PeriodicHealth>(_context);
             Post = new PostRepository(_context);
             PostMedia = new GenericRepository<PostMedium>(_context);

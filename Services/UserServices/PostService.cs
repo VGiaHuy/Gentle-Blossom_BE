@@ -174,7 +174,9 @@ namespace GentleBlossom_BE.Services.UserServices
                 {
                     var commentDto = _mapper.Map<CommentPostDTOs>(comment);
                     commentDto.FullName = comment.Poster.FullName;
-                    commentDto.PosterAvatar = comment.Poster.Avatar;
+                    commentDto.PosterAvatarUrl = comment.Poster.AvatarUrl;
+                    commentDto.PosterAvatarType = comment.Poster.AvatarType;
+                    commentDto.PosterAvatarFileName = comment.Poster.AvatarFileName;
                     commentDto.PosterType = comment.Poster.UserType.TypeName;
 
                     commentDtos.Add(commentDto);

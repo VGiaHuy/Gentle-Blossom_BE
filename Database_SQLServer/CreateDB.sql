@@ -21,6 +21,9 @@ CREATE TABLE UserProfiles (
     phoneNumber NVARCHAR(10) UNIQUE NOT NULL CHECK (LEN(phoneNumber) = 10),
     email NVARCHAR(100) UNIQUE NOT NULL,
     avatar NVARCHAR(1000) NULL,
+	mediaUrl NVARCHAR(1000),				-- Link Google Drive public
+    mediaType NVARCHAR(20),					-- 'image', 'video', 'audio', 'pdf',...
+    fileName NVARCHAR(255),                 -- Tên gốc của file (tùy chọn)
 	gender BIT NOT NULL,	-- 0 là nữ, 1 là nam
 	userTypeId TINYINT NOT NULL FOREIGN KEY REFERENCES UserTypes(usertypeId),
 );
@@ -212,8 +215,8 @@ CREATE TABLE CommentPost (
     content NVARCHAR(4000) NOT NULL,
     commentDate DATE DEFAULT GETDATE(),
 
-	mediaUrl NVARCHAR(1000) NOT NULL,         -- Link Google Drive public
-    mediaType NVARCHAR(20) NOT NULL,          -- 'image', 'video', 'audio', 'pdf',...
+	mediaUrl NVARCHAR(1000),         -- Link Google Drive public
+    mediaType NVARCHAR(20),          -- 'image', 'video', 'audio', 'pdf',...
     fileName NVARCHAR(255)                   -- Tên gốc của file (tùy chọn)
 );
 GO
