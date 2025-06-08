@@ -117,6 +117,10 @@ public partial class GentleBlossomContext : DbContext
 
             entity.ToTable("ChatRoomUser");
 
+            entity.HasIndex(e => e.ChatRoomId, "IX_ChatRoomUser_ChatRoomId");
+
+            entity.HasIndex(e => e.ParticipantId, "IX_ChatRoomUser_ParticipantId");
+
             entity.Property(e => e.ChatRoomUserId).HasColumnName("chatRoomUserId");
             entity.Property(e => e.ChatRoomId).HasColumnName("chatRoomId");
             entity.Property(e => e.JoinedAt)
@@ -342,11 +346,11 @@ public partial class GentleBlossomContext : DbContext
 
         modelBuilder.Entity<Message>(entity =>
         {
-            entity.HasKey(e => e.MessageId).HasName("PK__Message__4808B9936DCF394E");
+            entity.HasKey(e => e.MessageId).HasName("PK__Message__4808B99364BFA2CE");
 
             entity.ToTable("Message");
 
-            entity.HasIndex(e => e.SenderId, "IDX_Message_Sender");
+            entity.HasIndex(e => e.ChatRoomId, "IX_Message_ChatRoomId");
 
             entity.Property(e => e.MessageId).HasColumnName("messageId");
             entity.Property(e => e.ChatRoomId).HasColumnName("chatRoomId");
@@ -356,9 +360,9 @@ public partial class GentleBlossomContext : DbContext
             entity.Property(e => e.HasAttachment)
                 .HasDefaultValue(false)
                 .HasColumnName("hasAttachment");
-            entity.Property(e => e.IsRead)
+            entity.Property(e => e.IsDeleted)
                 .HasDefaultValue(false)
-                .HasColumnName("isRead");
+                .HasColumnName("isDeleted");
             entity.Property(e => e.SenderId).HasColumnName("senderId");
             entity.Property(e => e.SentAt)
                 .HasDefaultValueSql("(getdate())")
@@ -368,37 +372,41 @@ public partial class GentleBlossomContext : DbContext
             entity.HasOne(d => d.ChatRoom).WithMany(p => p.Messages)
                 .HasForeignKey(d => d.ChatRoomId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Message__chatRoo__69FBBC1F");
+                .HasConstraintName("FK__Message__chatRoo__2116E6DF");
 
             entity.HasOne(d => d.Sender).WithMany(p => p.Messages)
                 .HasForeignKey(d => d.SenderId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Message__senderI__6AEFE058");
+                .HasConstraintName("FK__Message__senderI__220B0B18");
         });
 
         modelBuilder.Entity<MessageAttachment>(entity =>
         {
-            entity.HasKey(e => e.AttachmentId).HasName("PK__MessageA__C417BD81EC712037");
+            entity.HasKey(e => e.AttachmentId).HasName("PK__MessageA__C417BD81475B1BEE");
 
             entity.ToTable("MessageAttachment");
 
             entity.Property(e => e.AttachmentId).HasColumnName("attachmentId");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("createdAt");
             entity.Property(e => e.FileName)
                 .HasMaxLength(255)
                 .HasColumnName("fileName");
-            entity.Property(e => e.FilePath)
-                .HasMaxLength(1000)
-                .HasColumnName("filePath");
             entity.Property(e => e.FileSize).HasColumnName("fileSize");
             entity.Property(e => e.FileType)
                 .HasMaxLength(20)
                 .HasColumnName("fileType");
+            entity.Property(e => e.FileUrl)
+                .HasMaxLength(1000)
+                .HasColumnName("fileUrl");
             entity.Property(e => e.MessageId).HasColumnName("messageId");
 
             entity.HasOne(d => d.Message).WithMany(p => p.MessageAttachments)
                 .HasForeignKey(d => d.MessageId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__MessageAt__messa__70A8B9AE");
+                .HasConstraintName("FK__MessageAt__messa__27C3E46E");
         });
 
         modelBuilder.Entity<MonitoringForm>(entity =>
@@ -448,6 +456,9 @@ public partial class GentleBlossomContext : DbContext
             entity.Property(e => e.IsSeen)
                 .HasDefaultValue(false)
                 .HasColumnName("isSeen");
+            entity.Property(e => e.Url)
+                .HasMaxLength(100)
+                .HasColumnName("url");
             entity.Property(e => e.UserId).HasColumnName("userId");
 
             entity.HasOne(d => d.User).WithMany(p => p.Notifications)

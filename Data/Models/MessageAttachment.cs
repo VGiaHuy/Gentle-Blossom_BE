@@ -11,11 +11,13 @@ public partial class MessageAttachment
 
     public string? FileName { get; set; }
 
-    public string? FilePath { get; set; }
+    public string? FileUrl { get; set; }
 
     public string? FileType { get; set; }
 
-    public int? FileSize { get; set; }
+    public long? FileSize { get; set; }
+
+    public DateTime? CreatedAt { get; set; }
 
     public virtual Message Message { get; set; } = null!;
 }

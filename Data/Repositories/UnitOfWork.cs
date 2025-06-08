@@ -10,14 +10,14 @@ namespace GentleBlossom_BE.Data.Repositories
         private readonly GentleBlossomContext _context;
 
         public IGenericRepository<Administrator> Administrator { get; }
-        public IGenericRepository<ChatRoom> ChatRoom { get; }
-        public IGenericRepository<ChatRoomUser> ChatRoomUser { get; }
+        public IChatRoomRepository ChatRoom { get; }
+        public IChatRoomUserRepository ChatRoomUser { get; }
         public ICommentPostRepository CommentPost { get; }
         public IGenericRepository<ConnectionMedical> ConnectionMedical { get; }
         public IGenericRepository<Expert> Expert { get; }
         public IHealthJourneyRepository HealthJourney { get; }
         public ILoginUserRepository LoginUser { get; }
-        public IGenericRepository<Message> Message { get; }
+        public IMessageRepository Message { get; }
         public IGenericRepository<MessageAttachment> MessageAttachment { get; }
         public IGenericRepository<MonitoringForm> MonitoringForm { get; }
         public INotificationRepository Notification { get; }
@@ -38,14 +38,14 @@ namespace GentleBlossom_BE.Data.Repositories
         {
             _context = context;
             Administrator = new GenericRepository<Administrator>(_context);
-            ChatRoom = new GenericRepository<ChatRoom>(_context);
-            ChatRoomUser = new GenericRepository<ChatRoomUser>(_context);
+            ChatRoom = new ChatRoomRepository(_context);
+            ChatRoomUser = new ChatRoomUserRepository(_context);
             CommentPost = new CommentPostRepository(_context);
             ConnectionMedical = new GenericRepository<ConnectionMedical>(_context);
             Expert = new GenericRepository<Expert>(_context);
             HealthJourney = new HealthJourneyRepository(_context);
             LoginUser = new LoginUserRepository(_context);
-            Message = new GenericRepository<Message>(_context);
+            Message = new MessageRepository(_context);
             MessageAttachment = new GenericRepository<MessageAttachment>(_context);
             MonitoringForm = new GenericRepository<MonitoringForm>(_context);
             Notification = new NotificationRepository(_context);

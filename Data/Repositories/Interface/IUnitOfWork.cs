@@ -5,14 +5,14 @@ namespace GentleBlossom_BE.Data.Repositories.Interface
     public interface IUnitOfWork : IDisposable
     {
         IGenericRepository<Administrator> Administrator { get; }
-        IGenericRepository<ChatRoom> ChatRoom { get; }
-        IGenericRepository<ChatRoomUser> ChatRoomUser { get; }
+        IChatRoomRepository ChatRoom { get; }
+        IChatRoomUserRepository ChatRoomUser { get; }
         ICommentPostRepository CommentPost { get; }
         IGenericRepository<ConnectionMedical> ConnectionMedical { get; }
         IGenericRepository<Expert> Expert { get; }
         IHealthJourneyRepository HealthJourney { get; }
         ILoginUserRepository LoginUser { get; }
-        IGenericRepository<Message> Message { get; }
+        IMessageRepository Message { get; }
         IGenericRepository<MessageAttachment> MessageAttachment { get; }
         IGenericRepository<MonitoringForm> MonitoringForm { get; }
         INotificationRepository Notification { get; }

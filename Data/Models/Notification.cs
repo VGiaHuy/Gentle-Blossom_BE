@@ -15,5 +15,7 @@ public partial class Notification
 
     public bool? IsSeen { get; set; }
 
+    public string? Url { get; set; }
+
     public virtual UserProfile User { get; set; } = null!;
 }

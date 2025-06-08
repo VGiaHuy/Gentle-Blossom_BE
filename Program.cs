@@ -4,9 +4,9 @@ using GentleBlossom_BE.Data.Repositories;
 using GentleBlossom_BE.Data.Repositories.Interface;
 using GentleBlossom_BE.Infrastructure;
 using GentleBlossom_BE.Middleware;
-using GentleBlossom_BE.Services;
 using GentleBlossom_BE.Services.AnalysisService;
 using GentleBlossom_BE.Services.GoogleService;
+using GentleBlossom_BE.Services.Hubs;
 using GentleBlossom_BE.Services.UserServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,8 +35,11 @@ builder.Services.AddResponseCaching();
 builder.Services.AddMemoryCache();
 
 // Đăng ký Google Drive
-builder.Services.AddHttpClient(); // dùng để gọi API Google OAuth
+builder.Services.AddHttpClient();
 builder.Services.AddScoped<GoogleDriveService>();
+
+// Thêm SignalR
+builder.Services.AddSignalR();
 
 // Đăng ký HtmlSanitizer
 builder.Services.AddSingleton<IHtmlSanitizer, HtmlSanitizer>();
@@ -62,12 +65,16 @@ builder.Services.AddScoped<PostService>();
 builder.Services.AddScoped<UserProfileService>();
 builder.Services.AddScoped<HealthJourneyService>();
 builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<ChatService>();
 
 builder.Services.AddScoped<ILoginUserRepository, LoginUserRepository>();
 builder.Services.AddScoped<ICommentPostRepository, CommentPostRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IHealthJourneyRepository, HealthJourneyRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IChatRoomRepository, ChatRoomRepository>();
+builder.Services.AddScoped<IChatRoomUserRepository, ChatRoomUserRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 
 var app = builder.Build();
@@ -80,6 +87,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseResponseCaching();
+
+// Đăng ký SignalR Hub
+app.MapHub<ChatHub>("/chatHub");
 
 // Đăng ký ExceptionMiddleware
 app.UseMiddleware<ExceptionMiddleware>();

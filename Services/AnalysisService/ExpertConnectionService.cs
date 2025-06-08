@@ -52,6 +52,16 @@ namespace GentleBlossom_BE.Services.AnalysisService
 
                 if (expert != null)
                 {
+                    var expertInfo = await dbContext.UserProfiles
+                        .Where(u => u.UserId == expert.UserId)
+                        .Select(e => e.FullName)
+                        .FirstOrDefaultAsync(stoppingToken);
+
+                    var userInfo = await dbContext.UserProfiles
+                        .Where(u => u.UserId == request.PosterId)
+                        .Select(u => u.FullName)
+                        .FirstOrDefaultAsync(stoppingToken);
+
                     // Tạo bản ghi kết nối trong bảng ExpertConnections
                     var connection = new ConnectionMedical
                     {
@@ -64,15 +74,17 @@ namespace GentleBlossom_BE.Services.AnalysisService
                     var notificationUser = new Notification
                     {
                         UserId = request.PosterId,
-                        Content = $"Chuyên gia {expert.User.FullName} đã được kết nối với bài viết của bạn.",
+                        Content = $"Chúng tôi nhận thấy bạn đang có vấn đề về tâm lý. Chuyên gia {expert.Specialization} {expert.AcademicTitle} {expertInfo} sẽ được kết nối đến bạn.",
                         CreateAt = DateTime.UtcNow
                     };
 
                     var notificationExpert = new Notification
                     {
                         UserId = expert.UserId,
-                        Content = $"Bạn đã được kết nối với bài viết {request.PostId} của người dùng {request.PosterId}.",
-                        CreateAt = DateTime.UtcNow
+                        Content = $"PHÁT HIỆN BỆNH NHÂN!!! Bạn đang được kết nối với người dùng {userInfo} đang có dâu hiệu tâm lý không ổn định",
+                        CreateAt = DateTime.UtcNow,
+                        Url = $"/Post/ConnectPost/{request.PostId}" // Đường dẫn đến bài viết
+                        
                     };
 
                     // Lưu vào database

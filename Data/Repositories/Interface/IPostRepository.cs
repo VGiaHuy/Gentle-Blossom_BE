@@ -8,5 +8,6 @@ namespace GentleBlossom_BE.Data.Repositories.Interface
         Task<List<PostDTO>> GetAllAsync(int userId, int page, int pageSize);
         Task<List<PostDTO>> GetPostsOfUserById(int id, int page, int pageSize);
         Task<bool> ToggleLikePost(int posId, int handle);
+        Task<PostDTO> GetPostByIdAsync(int id);
     }
 }

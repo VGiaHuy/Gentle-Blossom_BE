@@ -26,3 +26,7 @@ CREATE INDEX IDX_Message_Sender ON Message(senderId);
 
 CREATE INDEX IDX_Notifications_User ON Notifications(userId);
 CREATE INDEX IDX_Notifications_Status ON Notifications(isSeen);
+
+CREATE INDEX IX_Message_ChatRoomId ON Message(chatRoomId);
+CREATE INDEX IX_ChatRoomUser_ChatRoomId ON ChatRoomUser(chatRoomId);
+CREATE INDEX IX_ChatRoomUser_ParticipantId ON ChatRoomUser(participantId);
