@@ -42,6 +42,19 @@ namespace GentleBlossom_BE.Controllers.UserControllers
             });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetPostById([FromQuery] int postId)
+        {
+            var data = await _postService.GetPostById(postId);
+
+            return Ok(new API_Response<PostDTO>
+            {
+                Success = true,
+                Message = "Lấy bài viết thành công!",
+                Data = data
+            });
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreatePost([FromForm] CreatePostDTO request)
         {

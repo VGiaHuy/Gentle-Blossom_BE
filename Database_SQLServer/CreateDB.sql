@@ -227,7 +227,8 @@ CREATE TABLE Notifications (
 	userId INT NOT NULL FOREIGN KEY REFERENCES UserProfiles(userId),
 	content NVARCHAR(200) NOT NULL,
 	createAt DATETIME DEFAULT GETDATE(),		-- Thời gian tạo thông báo
-	isSeen BIT DEFAULT 0				-- Thông báo đã được xem hay chưa (TRUE/FALSE)
+	isSeen BIT DEFAULT 0,				-- Thông báo đã được xem hay chưa (TRUE/FALSE)
+	url NVARCHAR(100)
 );
 GO
 
@@ -276,7 +277,7 @@ CREATE TABLE Message (
     content NVARCHAR(2000) NULL,			-- Nội dung tin nhắn
 	hasAttachment BIT DEFAULT 0,			-- Tin nhắn có chứa tệp đính kèm hay không
     sentAt DATETIME DEFAULT GETDATE(),      -- Thời gian gửi tin nhắn
-    isRead BIT DEFAULT 0                    -- Trạng thái đã đọc (0: chưa đọc, 1: đã đọc)
+	isDeleted BIT DEFAULT 0
 );
 GO
 
@@ -284,9 +285,10 @@ GO
 CREATE TABLE MessageAttachment (
     attachmentId INT IDENTITY PRIMARY KEY,
     messageId INT NOT NULL FOREIGN KEY REFERENCES Message(messageId),
-    fileName NVARCHAR(255),
-    filePath NVARCHAR(1000),		-- Đường dẫn lưu file
-    fileType NVARCHAR(20),		 -- Loại tệp (vd: image/png, video/mp4)
-	fileSize INT NULL  -- Kích thước file (tính bằng KB)
+    fileName NVARCHAR(255),		-- Tên gốc của file (tùy chọn)
+    fileUrl NVARCHAR(1000),		-- Đường dẫn lưu file
+    fileType NVARCHAR(20),		-- Loại tệp (vd: image/png, video/mp4)
+	fileSize BIGINT,				-- Kích thước file (tính bằng KB)
+	createdAt DATETIME DEFAULT GETDATE()
 );
 GO

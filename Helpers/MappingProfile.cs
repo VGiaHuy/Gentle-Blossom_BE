@@ -25,6 +25,9 @@ namespace GentleBlossom_BE.Helpers
             CreateMap<Notification, NotificationDTO>()
                 //.ForMember(dest => dest.UserProfile, opt => opt.MapFrom(src => src.User))
                 .ReverseMap();
+
+            CreateMap<ChatRoom, ChatRoomDTO>().ReverseMap();
+            CreateMap<Message, MessageDTO>().ReverseMap();
         }
     }
 }

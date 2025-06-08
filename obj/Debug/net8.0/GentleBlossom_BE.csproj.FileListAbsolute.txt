@@ -363,3 +363,6 @@ D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\bin\Debug\net8.0\AngleSharp.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\bin\Debug\net8.0\AngleSharp.Css.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\bin\Debug\net8.0\HtmlSanitizer.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\bin\Debug\net8.0\AhoCorasick.dll
+D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\bin\Debug\net8.0\Microsoft.AspNetCore.Connections.Abstractions.dll
+D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Common.dll
+D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\bin\Debug\net8.0\Microsoft.Extensions.Features.dll

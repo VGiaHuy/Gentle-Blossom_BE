@@ -55,6 +55,27 @@ namespace GentleBlossom_BE.Services.UserServices
             }
         }
 
+        public async Task<PostDTO> GetPostById(int id)
+        {
+            try
+            {
+                var post = await _unitOfWork.Post.GetPostByIdAsync(id);
+                
+                if (post == null)
+                {
+                    throw new NotFoundException("Không tìm thấy bài viết");
+                }
+
+                var postDto = _mapper.Map<PostDTO>(post);
+
+                return postDto;
+            }
+            catch (Exception ex)
+            {
+                throw new NotFoundException(ex.ToString());
+            }
+        }
+
         public async Task CreatePostAsync(CreatePostDTO request)
         {
             var sanitizer = new HtmlSanitizer();
