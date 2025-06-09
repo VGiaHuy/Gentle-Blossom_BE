@@ -38,6 +38,18 @@ builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<GoogleDriveService>();
 
+// Thêm CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", builder =>
+    {
+        builder.WithOrigins("https://localhost:7271")
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials();
+    });
+});
+
 // Thêm SignalR
 builder.Services.AddSignalR();
 
@@ -88,8 +100,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseResponseCaching();
 
-// Đăng ký SignalR Hub
-app.MapHub<ChatHub>("/chatHub");
+// Sử dụng CORS
+app.UseCors("AllowFrontend");
 
 // Đăng ký ExceptionMiddleware
 app.UseMiddleware<ExceptionMiddleware>();
@@ -97,6 +109,9 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+// Đăng ký SignalR Hub
+app.MapHub<ChatHub>("/chatHub");
 
 app.MapControllers();
 
