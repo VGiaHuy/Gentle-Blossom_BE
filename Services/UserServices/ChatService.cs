@@ -1,20 +1,22 @@
-﻿using GentleBlossom_BE.Data.Repositories.Interface;
-using GentleBlossom_BE.Services.Hubs;
-using Microsoft.AspNetCore.SignalR;
+﻿using AutoMapper;
 using GentleBlossom_BE.Data.DTOs.UserDTOs;
 using GentleBlossom_BE.Data.Models;
-using AutoMapper;
+using GentleBlossom_BE.Data.Repositories.Interface;
 using GentleBlossom_BE.Exceptions;
+using GentleBlossom_BE.Services.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace GentleBlossom_BE.Services.UserServices
 {
     public class ChatService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IHubContext<ChatHub> _hubContext;
-        private readonly IWebHostEnvironment _environment;
-        private readonly IMapper _mapper;
 
+        private readonly IHubContext<ChatHub> _hubContext;
+
+        private readonly IWebHostEnvironment _environment;
+
+        private readonly IMapper _mapper;
 
         public ChatService(IHubContext<ChatHub> hubContext, IWebHostEnvironment environment, IUnitOfWork unitOfWork, IMapper mapper)
         {
@@ -25,13 +27,13 @@ namespace GentleBlossom_BE.Services.UserServices
         }
 
         // Tạo phòng chat
-        public async Task<ChatRoomDTO> CreateChatRoomAsync(string? chatRoomName, bool isGroup, List<int> participantIds)
+        public async Task<ChatRoomDTO> CreateChatRoomAsync(string? chatRoomName, bool isGroup, int userCreate)
         {
             try
             {
                 var chatRoom = new ChatRoom
                 {
-                    ChatRoomName = isGroup ? chatRoomName : null,
+                    ChatRoomName = chatRoomName,
                     IsGroup = isGroup,
                     CreatedAt = DateTime.UtcNow
                 };
@@ -40,15 +42,12 @@ namespace GentleBlossom_BE.Services.UserServices
                 var createdRoom = await _unitOfWork.ChatRoom.CreateChatRoomAsync(chatRoom);
 
                 // Thêm người dùng vào phòng
-                foreach (var participantId in participantIds)
+                await _unitOfWork.ChatRoomUser.AddAsync(new ChatRoomUser
                 {
-                    await _unitOfWork.ChatRoomUser.AddAsync(new ChatRoomUser
-                    {
-                        ChatRoomId = createdRoom.ChatRoomId,
-                        ParticipantId = participantId,
-                        JoinedAt = DateTime.UtcNow
-                    });
-                }
+                    ChatRoomId = createdRoom.ChatRoomId,
+                    ParticipantId = userCreate,
+                    JoinedAt = DateTime.UtcNow
+                });
 
                 var createdRoomDto = new ChatRoomDTO
                 {
@@ -62,7 +61,7 @@ namespace GentleBlossom_BE.Services.UserServices
 
                 return createdRoomDto;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 // Xử lý lỗi nếu cần
                 throw new InternalServerException("Error creating chat room: " + ex.Message);
@@ -83,7 +82,7 @@ namespace GentleBlossom_BE.Services.UserServices
 
                 return chatRoomDto;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 // Xử lý lỗi nếu cần
                 throw new InternalServerException("Error retrieving chat room: " + ex.Message);

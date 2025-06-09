@@ -21,7 +21,7 @@ namespace GentleBlossom_BE.Controllers.UserControllers
         [HttpPost]
         public async Task<IActionResult> CreateChatRoom([FromBody] CreateChatRoomRequestDTO request)
         {
-            var chatRoom = await _chatService.CreateChatRoomAsync(request.ChatRoomName, request.IsGroup, request.ParticipantIds);
+            var chatRoom = await _chatService.CreateChatRoomAsync(request.ChatRoomName, request.IsGroup, request.userCreate);
 
             return Ok(new API_Response<ChatRoomDTO>
             {
