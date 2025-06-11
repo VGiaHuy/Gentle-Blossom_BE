@@ -1,12 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using GentleBlossom_BE.Data.DTOs;
+﻿using AutoMapper;
 using GentleBlossom_BE.Data.DTOs.UserDTOs;
-using AutoMapper;
 using GentleBlossom_BE.Data.Repositories.Interface;
-using GentleBlossom_BE.Services.AnalysisService;
-using GentleBlossom_BE.Services.GoogleService;
-using GentleBlossom_BE.Data.Models;
-using GentleBlossom_BE.Models;
 using GentleBlossom_BE.Exceptions;
 
 namespace GentleBlossom_BE.Services.UserServices
@@ -14,7 +8,9 @@ namespace GentleBlossom_BE.Services.UserServices
     public class NotificationService
     {
         private readonly IUnitOfWork _unitOfWork;
+
         private readonly IMapper _mapper;
+
         private readonly ILogger<PostService> _logger;
 
         public NotificationService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<PostService> logger)
@@ -41,10 +37,36 @@ namespace GentleBlossom_BE.Services.UserServices
 
                 return notification;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while getting notifications for user {UserId}", userId);
                 throw new InternalServerException("An error occurred while retrieving notifications.");
+            }
+        }
+
+        public async Task<bool> ReadNotice(string notificationId)
+        {
+            try
+            {
+                var id = int.Parse(notificationId);
+
+                var notice = await _unitOfWork.Notification.GetByIdAsync(id);
+
+                if (notice == null)
+                {
+                    throw new BadRequestException("Thông báo không tồn tại");
+                }
+
+                notice.IsSeen = true;
+
+                _unitOfWork.Notification.Update(notice);
+                await _unitOfWork.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new InternalServerException("An error occurred while retrieving notifications: " + ex.Message);
             }
         }
     }
