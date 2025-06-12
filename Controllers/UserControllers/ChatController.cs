@@ -107,7 +107,7 @@ namespace GentleBlossom_BE.Controllers.UserControllers
         [HttpPost]
         public async Task<IActionResult> SendMessage(SendMessageRequestDTO request)
         {
-            await _chatService.SendMessageAsync(request.ChatRoomId, request.SenderId, request.Content, request.Attachment);
+            await _chatService.SendMessageAsync(request.ChatRoomId, request.SenderId, request.Content, request.Attachments);
 
             return Ok(new API_Response<object>
             {
