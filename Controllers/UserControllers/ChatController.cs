@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using GentleBlossom_BE.Data.DTOs.UserDTOs;
 using GentleBlossom_BE.Data.Responses;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using GentleBlossom_BE.Helpers;
 
 namespace GentleBlossom_BE.Controllers.UserControllers
 {
@@ -155,5 +155,34 @@ namespace GentleBlossom_BE.Controllers.UserControllers
                 Data = chatRooms
             });
         }
+
+        //[HttpGet]
+        //public IActionResult GetChatCode(string chatroomname, int chatroomid)
+        //{
+        //    return Ok(new API_Response<object>
+        //    {
+        //        Success = true,
+        //        Message = "Lấy danh sách phòng chat thành công!",
+        //        Data = RoomCodeHelper.GenerateChatCode(chatroomname, chatroomid)
+        //    });
+        //}
+
+        //[HttpGet]
+        //public IActionResult DecodeChatRoom(string code)
+        //{
+        //    var decode = RoomCodeHelper.DecodeChatCode(code);
+        //    var data = new
+        //    {
+        //        chatroomname = decode.chatRoomName,
+        //        chatroomid = decode.chatRoomId
+        //    };
+
+        //    return Ok(new API_Response<object>
+        //    {
+        //        Success = true,
+        //        Message = "Lấy danh sách phòng chat thành công!",
+        //        Data = data
+        //    });
+        //}
     }
 }

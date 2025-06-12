@@ -83,7 +83,7 @@ namespace GentleBlossom_BE.Services.AnalysisService
                         UserId = expert.UserId,
                         Content = $"PHÁT HIỆN BỆNH NHÂN!!! Bạn đang được kết nối với người dùng {userInfo} đang có dâu hiệu tâm lý không ổn định",
                         CreateAt = DateTime.UtcNow,
-                        Url = $"/Post/ConnectPost/{request.PostId}" // Đường dẫn đến bài viết
+                        Url = $"/PregnancyCare/ConnectPost/{request.PostId}" // Đường dẫn đến bài viết
                         
                     };
 
