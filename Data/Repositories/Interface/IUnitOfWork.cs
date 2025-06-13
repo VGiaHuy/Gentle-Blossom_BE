@@ -13,7 +13,7 @@ namespace GentleBlossom_BE.Data.Repositories.Interface
         IHealthJourneyRepository HealthJourney { get; }
         ILoginUserRepository LoginUser { get; }
         IMessageRepository Message { get; }
-        IGenericRepository<MessageAttachment> MessageAttachment { get; }
+        IMessageAttachmentRepository MessageAttachment { get; }
         IGenericRepository<MonitoringForm> MonitoringForm { get; }
         INotificationRepository Notification { get; }
         IGenericRepository<PeriodicHealth> PeriodicHealth { get; }
