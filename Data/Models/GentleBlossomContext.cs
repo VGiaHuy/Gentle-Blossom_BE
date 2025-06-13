@@ -101,6 +101,9 @@ public partial class GentleBlossomContext : DbContext
             entity.ToTable("ChatRoom");
 
             entity.Property(e => e.ChatRoomId).HasColumnName("chatRoomId");
+            entity.Property(e => e.ChatCode)
+                .HasMaxLength(200)
+                .HasColumnName("chatCode");
             entity.Property(e => e.ChatRoomName)
                 .HasMaxLength(100)
                 .HasColumnName("chatRoomName");
