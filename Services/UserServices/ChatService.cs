@@ -6,16 +6,19 @@ using GentleBlossom_BE.Exceptions;
 using GentleBlossom_BE.Services.GoogleService;
 using GentleBlossom_BE.Services.Hubs;
 using Microsoft.AspNetCore.SignalR;
-using System.Net.Mail;
 
 namespace GentleBlossom_BE.Services.UserServices
 {
     public class ChatService
     {
         private readonly IUnitOfWork _unitOfWork;
+
         private readonly IHubContext<ChatHub> _hubContext;
+
         private readonly IWebHostEnvironment _environment;
+
         private readonly IMapper _mapper;
+
         private readonly GoogleDriveService _googleDriveService;
 
         public ChatService(IHubContext<ChatHub> hubContext, IWebHostEnvironment environment, IUnitOfWork unitOfWork, IMapper mapper, GoogleDriveService googleDriveService)
@@ -155,122 +158,143 @@ namespace GentleBlossom_BE.Services.UserServices
         // Gửi tin nhắn
         public async Task SendMessageAsync(int chatRoomId, int senderId, string? content, List<IFormFile>? attachments)
         {
-            var message = new Message
+            try
             {
-                ChatRoomId = chatRoomId,
-                SenderId = senderId,
-                Content = content,
-                HasAttachment = attachments != null && attachments.Any(file => file.Length > 0),
-                SentAt = DateTime.UtcNow
-            };
-
-            // Lưu tin nhắn
-            var createdMessage = await _unitOfWork.Message.CreateMessageAsync(message);
-
-            var mediaItems = new List<MessageAttachment>();
-
-            // Xử lý file đính kèm
-            if (attachments != null && attachments.Any(file => file.Length > 0))
-            {
-                const long maxFileSize = 100 * 1024 * 1024; // Giới hạn 100MB
-                var uploadTasks = attachments.Select(async file =>
+                var message = new Message
                 {
-                    try
+                    ChatRoomId = chatRoomId,
+                    SenderId = senderId,
+                    Content = content,
+                    HasAttachment = attachments != null && attachments.Any(file => file.Length > 0),
+                    SentAt = DateTime.UtcNow
+                };
+
+                // Lưu tin nhắn
+                var createdMessage = await _unitOfWork.Message.CreateMessageAsync(message);
+                await _unitOfWork.SaveChangesAsync();
+
+                var mediaItems = new List<MessageAttachment>();
+
+                // Xử lý file đính kèm
+                if (attachments != null && attachments.Any(file => file.Length > 0))
+                {
+                    const long maxFileSize = 100 * 1024 * 1024; // Giới hạn 100MB
+                    var uploadTasks = attachments.Select(async file =>
                     {
-                        // Kiểm tra kích thước file
-                        if (file.Length > maxFileSize)
+                        try
                         {
-                            throw new BadRequestException($"File {file.FileName} vượt quá kích thước cho phép (100MB)");
+                            // Kiểm tra kích thước file
+                            if (file.Length > maxFileSize)
+                            {
+                                throw new BadRequestException($"File {file.FileName} vượt quá kích thước cho phép (100MB)");
+                            }
+
+                            // Kiểm tra ContentType
+                            if (string.IsNullOrEmpty(file.ContentType))
+                            {
+                                throw new BadRequestException($"File {file.FileName} thiếu ContentType");
+                            }
+
+                            // Xác định loại media
+                            string mediaType = file.ContentType switch
+                            {
+                                string ct when ct.StartsWith("image/") => "Image",
+                                string ct when ct.StartsWith("video/") => "Video",
+                                string ct when ct == "application/pdf" => "PDF",
+                                _ => throw new BadRequestException($"Loại file không được hỗ trợ: {file.ContentType}")
+                            };
+
+                            // Upload file lên Google Drive
+                            var fileUrl = await _googleDriveService.UploadFileAsync(file, MediaType.Message);
+
+                            return new MessageAttachment
+                            {
+                                MessageId = createdMessage.MessageId,
+                                FileName = file.FileName,
+                                FileUrl = fileUrl,
+                                FileType = mediaType,
+                                FileSize = file.Length // Lấy kích thước file
+                            };
                         }
-
-                        // Kiểm tra ContentType
-                        if (string.IsNullOrEmpty(file.ContentType))
+                        catch (Exception ex)
                         {
-                            throw new BadRequestException($"File {file.FileName} thiếu ContentType");
+                            // Log lỗi nhưng không làm gián đoạn các file khác
+                            Console.WriteLine($"Lỗi upload file {file.FileName}: {ex.Message}");
+                            return null; // Trả về null để lọc sau
                         }
+                    }).ToList();
 
-                        // Xác định loại media
-                        string mediaType = file.ContentType switch
-                        {
-                            string ct when ct.StartsWith("image/") => "Image",
-                            string ct when ct.StartsWith("video/") => "Video",
-                            string ct when ct == "application/pdf" => "PDF",
-                            _ => throw new BadRequestException($"Loại file không được hỗ trợ: {file.ContentType}")
-                        };
+                    // Chờ tất cả upload hoàn tất
+                    mediaItems = (await Task.WhenAll(uploadTasks))
+                        .Where(m => m != null)
+                        .ToList();
 
-                        // Upload file lên Google Drive
-                        var fileUrl = await _googleDriveService.UploadFileAsync(file, MediaType.Message);
-
-                        return new MessageAttachment
-                        {
-                            MessageId = createdMessage.MessageId,
-                            FileName = file.FileName,
-                            FileUrl = fileUrl,
-                            FileType = mediaType,
-                            FileSize = file.Length // Lấy kích thước file
-                        };
-                    }
-                    catch (Exception ex)
+                    // Lưu các attachment vào DB
+                    foreach (var media in mediaItems)
                     {
-                        // Log lỗi nhưng không làm gián đoạn các file khác
-                        Console.WriteLine($"Lỗi upload file {file.FileName}: {ex.Message}");
-                        return null; // Trả về null để lọc sau
+                        await _unitOfWork.MessageAttachment.AddAsync(media);
                     }
+                    // Lưu tất cả thay đổi trong một lần
+                    await _unitOfWork.SaveChangesAsync();
+                }
+
+                var user = await _unitOfWork.UserProfile.GetByIdAsync(senderId);
+
+                if (user == null)
+                {
+                    throw new InternalServerException("Đã xảy ra lỗi ở Server");
+                }
+                // Chuẩn bị dữ liệu cho SignalR
+                var senderAvatarUrl = user.AvatarUrl; // Lấy từ DB hoặc dịch vụ user
+                var senderName = user.FullName; // Lấy từ DB hoặc dịch vụ user
+                var messageId = createdMessage.MessageId;
+                var mediaList = mediaItems.Select(m => new
+                {
+                    m.FileUrl,
+                    MediaType = m.FileType,
+                    m.FileName
                 }).ToList();
 
-                // Chờ tất cả upload hoàn tất
-                mediaItems = (await Task.WhenAll(uploadTasks))
-                    .Where(m => m != null)
-                    .ToList();
-
-                // Lưu các attachment vào DB
-                foreach (var media in mediaItems)
-                {
-                    await _unitOfWork.MessageAttachment.AddAsync(media);
-                }
+                // Gửi tin nhắn qua SignalR
+                await _hubContext.Clients.Group($"Room_{chatRoomId}")
+                    .SendAsync("ReceiveMessage", messageId, senderId, content, mediaList, createdMessage.SentAt, senderAvatarUrl, senderName);
             }
-
-            // Lưu tất cả thay đổi trong một lần
-            await _unitOfWork.SaveChangesAsync();
-
-            var user = await _unitOfWork.UserProfile.GetByIdAsync(senderId);
-
-            if (user == null)
+            catch (Exception e)
             {
-                throw new InternalServerException("Đã xảy ra lỗi ở Server");
+                throw new InternalServerException("Lỗi: " + e.Message);
             }
-            // Chuẩn bị dữ liệu cho SignalR
-            var senderAvatarUrl = user.AvatarUrl; // Lấy từ DB hoặc dịch vụ user
-            var senderName = user.FullName; // Lấy từ DB hoặc dịch vụ user
-            var mediaList = mediaItems.Select(m => new
-            {
-                m.FileUrl,
-                MediaType = m.FileType,
-                m.FileName
-            }).ToList();
-
-            // Gửi tin nhắn qua SignalR
-            await _hubContext.Clients.Group($"Room_{chatRoomId}")
-                .SendAsync("ReceiveMessage", senderId, content, mediaList, createdMessage.SentAt, senderAvatarUrl, senderName);
         }
 
         // Xóa tin nhắn
-        public async Task DeleteMessageAsync(int messageId)
+        public async Task DeleteMessageAsync(int messageId, int chatRoomId)
         {
-            var message = await _unitOfWork.Message.GetByIdAsync(messageId);
+            try
+            {
+                var message = await _unitOfWork.Message.GetByIdAsync(messageId);
 
-            if (message == null)
-                throw new NotFoundException("Message not found.");
+                if (message == null)
+                    throw new NotFoundException("Message not found.");
 
-            _unitOfWork.Message.Delete(message);
+                _unitOfWork.Message.Delete(message);
 
-            // Xóa tệp đính kèm nếu có
+                // Xóa tệp đính kèm nếu có
+                bool attachments = await _unitOfWork.MessageAttachment.DeleteByMessageId(messageId);
 
-            await _unitOfWork.SaveChangesAsync();
+                if (!attachments)
+                {
+                    throw new InternalServerException("Đã xảy ra lỗi xóa tệp đính kèm");
+                }
 
-            // Thông báo qua SignalR
-            await _hubContext.Clients.Group($"Room_{message.ChatRoomId}")
-                    .SendAsync("MessageDeleted", messageId);
+                await _unitOfWork.SaveChangesAsync();
+
+                // Thông báo qua SignalR
+                await _hubContext.Clients.Group($"Room_{chatRoomId}")
+                        .SendAsync("MessageDeleted", messageId);
+            }
+            catch (Exception e)
+            {
+                throw new InternalServerException("Lỗi: " + e.Message);
+            }
         }
 
         // Lấy danh sách tin nhắn

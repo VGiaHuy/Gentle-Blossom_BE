@@ -118,9 +118,9 @@ namespace GentleBlossom_BE.Controllers.UserControllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteMessage(int messageId)
+        public async Task<IActionResult> DeleteMessage([FromQuery] int messageId, [FromQuery] int chatRoomId)
         {
-            await _chatService.DeleteMessageAsync(messageId);
+            await _chatService.DeleteMessageAsync(messageId, chatRoomId);
 
             return Ok(new API_Response<object>
             {

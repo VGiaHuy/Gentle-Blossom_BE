@@ -18,7 +18,7 @@ namespace GentleBlossom_BE.Data.Repositories
         public IHealthJourneyRepository HealthJourney { get; }
         public ILoginUserRepository LoginUser { get; }
         public IMessageRepository Message { get; }
-        public IGenericRepository<MessageAttachment> MessageAttachment { get; }
+        public IMessageAttachmentRepository MessageAttachment { get; }
         public IGenericRepository<MonitoringForm> MonitoringForm { get; }
         public INotificationRepository Notification { get; }
         public IGenericRepository<PeriodicHealth> PeriodicHealth { get; }
@@ -46,7 +46,7 @@ namespace GentleBlossom_BE.Data.Repositories
             HealthJourney = new HealthJourneyRepository(_context);
             LoginUser = new LoginUserRepository(_context);
             Message = new MessageRepository(_context);
-            MessageAttachment = new GenericRepository<MessageAttachment>(_context);
+            MessageAttachment = new MessageAttachmentRepository(_context);
             MonitoringForm = new GenericRepository<MonitoringForm>(_context);
             Notification = new NotificationRepository(_context);
             PeriodicHealth = new GenericRepository<PeriodicHealth>(_context);
