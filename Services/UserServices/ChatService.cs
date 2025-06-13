@@ -3,6 +3,7 @@ using GentleBlossom_BE.Data.DTOs.UserDTOs;
 using GentleBlossom_BE.Data.Models;
 using GentleBlossom_BE.Data.Repositories.Interface;
 using GentleBlossom_BE.Exceptions;
+using GentleBlossom_BE.Helpers;
 using GentleBlossom_BE.Services.GoogleService;
 using GentleBlossom_BE.Services.Hubs;
 using Microsoft.AspNetCore.SignalR;
@@ -44,6 +45,11 @@ namespace GentleBlossom_BE.Services.UserServices
 
                 // Lưu phòng chat
                 var createdRoom = await _unitOfWork.ChatRoom.CreateChatRoomAsync(chatRoom);
+                //await _unitOfWork.SaveChangesAsync();
+
+                // Tạo chatcode
+                createdRoom.ChatCode = RoomCodeHelper.GenerateChatCode(createdRoom.ChatRoomName, createdRoom.ChatRoomId);
+                _unitOfWork.ChatRoom.Update(createdRoom);
 
                 // Thêm người dùng vào phòng
                 await _unitOfWork.ChatRoomUser.AddAsync(new ChatRoomUser
@@ -138,10 +144,6 @@ namespace GentleBlossom_BE.Services.UserServices
             });
 
             await _unitOfWork.SaveChangesAsync();
-
-            // Thông báo qua SignalR
-            await _hubContext.Clients.Group($"Room_{chatRoomId}")
-                .SendAsync("UserJoined", participantId);
         }
 
         // Xóa người dùng khỏi phòng chat
@@ -312,6 +314,33 @@ namespace GentleBlossom_BE.Services.UserServices
             var chatRoomDTO = _mapper.Map<List<ChatRoomDTO>>(chatRooms);
 
             return chatRoomDTO;
+        }
+
+        public async Task JoinChatRoom(string chatCode, int userId)
+        {
+            try
+            {
+                var data = RoomCodeHelper.DecodeChatCode(chatCode);
+                var checkChatRoom = await _unitOfWork.ChatRoom.GetByIdAsync(data.chatRoomId);
+                var checkUserExist = await _unitOfWork.ChatRoomUser.CheckUserExistInChatRoom(data.chatRoomId ,userId);
+
+                if (checkChatRoom == null || data.chatRoomName != checkChatRoom.ChatRoomName)
+                {
+                    throw new BadRequestException("Phòng chat không tồn tại! Vui lòng kiểm tra lại Chat Code");
+                }
+
+                if (checkUserExist == true)
+                {
+                    throw new BadRequestException("Bạn đã tham gia phòng chat này trước đó!");
+                }
+
+                await AddUserToChatRoomAsync(data.chatRoomId, userId);
+            }
+            catch (Exception e)
+            {
+                throw new InternalServerException(e.Message);
+            }
+
         }
     }
 }

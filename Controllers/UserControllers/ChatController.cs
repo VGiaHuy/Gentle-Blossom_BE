@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using GentleBlossom_BE.Data.DTOs.UserDTOs;
 using GentleBlossom_BE.Data.Responses;
 using GentleBlossom_BE.Helpers;
+using Google.Apis.Drive.v3.Data;
 
 namespace GentleBlossom_BE.Controllers.UserControllers
 {
@@ -32,7 +33,7 @@ namespace GentleBlossom_BE.Controllers.UserControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetChatRoom(int chatRoomId)
+        public async Task<IActionResult> GetChatRoom([FromQuery] int chatRoomId)
         {
             var chatRoom = await _chatService.GetChatRoomAsync(chatRoomId);
 
@@ -153,6 +154,19 @@ namespace GentleBlossom_BE.Controllers.UserControllers
                 Success = true,
                 Message = "Lấy danh sách phòng chat thành công!",
                 Data = chatRooms
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> JoinChatRoom([FromBody] JoinChatRoomDTO data)
+        {
+            await _chatService.JoinChatRoom(data.ChatCode, data.UserId);
+
+            return Ok(new API_Response<object>
+            {
+                Success = true,
+                Message = "Tham gia phòng chat thành công!",
+                Data = null
             });
         }
 

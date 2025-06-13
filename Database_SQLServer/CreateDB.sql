@@ -6,6 +6,9 @@ GO
 USE GentleBlossom;
 GO
 
+--ALTER TABLE Post
+--ALTER COLUMN createdDate DATETIME;
+
 -- Bảng danh mục loại người dùng
 CREATE TABLE UserTypes (
 	usertypeId TINYINT PRIMARY KEY IDENTITY,
@@ -181,9 +184,6 @@ CREATE TABLE Post (
 );
 GO
 
---ALTER TABLE Post
---ALTER COLUMN createdDate DATETIME;
-
 -- Bảng like bài viết
 CREATE TABLE PostLike (
     userId INT NOT NULL,
@@ -256,7 +256,8 @@ CREATE TABLE ChatRoom (
     chatRoomId INT IDENTITY PRIMARY KEY,	-- Mã phòng chat
     chatRoomName NVARCHAR(100) NULL,		-- Tên phòng chat (chỉ dùng cho nhóm)
     isGroup BIT NOT NULL,					-- 0: Nhắn tin riêng, 1: Nhắn tin nhóm
-    createdAt DATETIME DEFAULT GETDATE()	-- Thời gian tạo phòng
+    createdAt DATETIME DEFAULT GETDATE(),	-- Thời gian tạo phòng
+	chatCode NVARCHAR(200)
 );
 GO
 

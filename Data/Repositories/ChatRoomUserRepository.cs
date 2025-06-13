@@ -1,5 +1,4 @@
-﻿using GentleBlossom_BE.Data.DTOs.UserDTOs;
-using GentleBlossom_BE.Data.Models;
+﻿using GentleBlossom_BE.Data.Models;
 using GentleBlossom_BE.Data.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +26,11 @@ namespace GentleBlossom_BE.Data.Repositories
             return await _context.ChatRoomUsers
                 .Where(cru => cru.ParticipantId == userId)
                 .ToListAsync();
+        }
+
+        public Task<bool> CheckUserExistInChatRoom(int chatRoomId, int userId)
+        {
+            return _context.ChatRoomUsers.Where(a => a.ParticipantId == userId && a.ChatRoomId == chatRoomId).AnyAsync();
         }
     }
 }

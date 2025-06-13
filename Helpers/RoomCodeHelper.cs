@@ -44,17 +44,14 @@ namespace GentleBlossom_BE.Helpers
                 string chatRoomName = decodedString.Substring(0, lastSeparatorIndex);
                 string chatRoomIdStr = decodedString.Substring(lastSeparatorIndex + 1);
 
-                if (string.IsNullOrWhiteSpace(chatRoomName))
-                    throw new InvalidOperationException("Tên phòng chat không hợp lệ");
-
-                if (!int.TryParse(chatRoomIdStr, out int chatRoomId) || chatRoomId <= 0)
-                    throw new InvalidOperationException("ID phòng chat không hợp lệ");
+                if (!int.TryParse(chatRoomIdStr, out int chatRoomId) || chatRoomId <= 0 && string.IsNullOrWhiteSpace(chatRoomName))
+                    throw new InvalidOperationException("Chat code không hợp lệ");
 
                 return (chatRoomName, chatRoomId);
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Không thể giải mã chatCode: {ex.Message}", ex);
+                throw new InvalidOperationException($"{ex.Message}", ex);
             }
         }
 
