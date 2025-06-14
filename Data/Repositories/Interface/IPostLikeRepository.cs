@@ -7,6 +7,6 @@ namespace GentleBlossom_BE.Data.Repositories.Interface
         Task<bool> CheckLikePost(int postId, int userId);
         Task LikePost(int postId, int userId);
         Task UnLikePost(int postId, int userId);
-
+        Task DeleteRangeByPostIdAsync(int postId);
     }
 }

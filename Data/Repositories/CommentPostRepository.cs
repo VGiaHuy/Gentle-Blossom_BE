@@ -10,6 +10,18 @@ namespace GentleBlossom_BE.Data.Repositories
         {
         }
 
+        public async Task DeleteRangeByPostIdAsync(int postId)
+        {
+            var commentPosts = await _context.CommentPosts
+                .Where(pm => pm.PostId == postId)
+                .ToListAsync();
+
+            if (commentPosts.Any())
+            {
+                _context.CommentPosts.RemoveRange(commentPosts);
+            }
+        }
+
         public async Task<(List<CommentPost>, bool)> GetCommentsByPostIdAsync(int postId, int page, int pageSize)
         {
             var query = _context.CommentPosts

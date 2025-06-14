@@ -244,5 +244,35 @@ namespace GentleBlossom_BE.Services.UserServices
                 throw new InternalServerException($"Error toggling like for post {postId} by user {userId}: {ex.Message}");
             }
         }
+
+        public async Task<bool> DeletePost(int postId, int userId)
+        {
+            try
+            {   
+                var post = await _unitOfWork.Post.GetByIdAsync(postId);
+                if (post == null)
+                {
+                    throw new NotFoundException("Bài viết không tồn tại.");
+                }
+                if (post.PosterId != userId)
+                {
+                    throw new UnauthorizedException("Bạn không có quyền xóa bài viết này.");
+                }
+
+                await _unitOfWork.PostMedia.DeleteRangeByPostIdAsync(postId);
+                await _unitOfWork.PostAnalysis.DeleteByPostId(postId);
+                await _unitOfWork.PostLike.DeleteRangeByPostIdAsync(postId);
+                await _unitOfWork.CommentPost.DeleteRangeByPostIdAsync(postId);
+                _unitOfWork.Post.Delete(post);
+
+                await _unitOfWork.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new InternalServerException(ex.Message);
+            }
+        }
     }
 }

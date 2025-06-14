@@ -23,7 +23,7 @@ namespace GentleBlossom_BE.Data.Repositories
         public INotificationRepository Notification { get; }
         public IGenericRepository<PeriodicHealth> PeriodicHealth { get; }
         public IPostRepository Post { get; }
-        public IGenericRepository<PostMedium> PostMedia { get; }
+        public IPostMediaRepository PostMedia { get; }
         public IGenericRepository<PostCategory> PostCategory { get; }
         public IGenericRepository<PsychologyDiary> PsychologyDiary { get; }
         public IGenericRepository<Review> Review { get; }
@@ -33,6 +33,7 @@ namespace GentleBlossom_BE.Data.Repositories
         public IUserProfileRepository UserProfile { get; }
         public IGenericRepository<UserType> UserType { get; }
         public IPostLikeRepository PostLike { get;}
+        public IPostAnalysisRepository PostAnalysis { get; }
 
         public UnitOfWork(GentleBlossomContext context)
         {
@@ -51,7 +52,7 @@ namespace GentleBlossom_BE.Data.Repositories
             Notification = new NotificationRepository(_context);
             PeriodicHealth = new GenericRepository<PeriodicHealth>(_context);
             Post = new PostRepository(_context);
-            PostMedia = new GenericRepository<PostMedium>(_context);
+            PostMedia = new PostMediaRepository(_context);
             PostCategory = new GenericRepository<PostCategory>(_context);
             PsychologyDiary = new GenericRepository<PsychologyDiary>(_context);
             Review = new GenericRepository<Review>(_context);
@@ -61,6 +62,7 @@ namespace GentleBlossom_BE.Data.Repositories
             UserProfile = new UserProfileRepository(_context);
             UserType = new GenericRepository<UserType>(_context);
             PostLike = new PostLikeRepository(_context);
+            PostAnalysis = new PostAnalysisRepository(_context);
         }
 
         public async Task<int> SaveChangesAsync(bool useTransaction = true)

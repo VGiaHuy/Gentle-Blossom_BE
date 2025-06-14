@@ -18,7 +18,7 @@ namespace GentleBlossom_BE.Data.Repositories.Interface
         INotificationRepository Notification { get; }
         IGenericRepository<PeriodicHealth> PeriodicHealth { get; }
         IPostRepository Post { get; }
-        IGenericRepository<PostMedium> PostMedia { get; }
+        IPostMediaRepository PostMedia { get; }
         IGenericRepository<PostCategory> PostCategory { get; }
         IGenericRepository<PsychologyDiary> PsychologyDiary { get; }
         IGenericRepository<Review> Review { get; }
@@ -28,6 +28,8 @@ namespace GentleBlossom_BE.Data.Repositories.Interface
         IUserProfileRepository UserProfile { get; }
         IGenericRepository<UserType> UserType { get; }
         IPostLikeRepository PostLike { get; }
+        IPostAnalysisRepository PostAnalysis { get; }
+
 
         Task<int> SaveChangesAsync(bool useTransaction = true);
     }

@@ -196,5 +196,32 @@ namespace GentleBlossom_BE.Controllers.UserControllers
                 return StatusCode(500, $"Error fetching image: {ex.Message}");
             }
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeletePost(int postId, int userId)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage);
+
+                return BadRequest(new API_Response<object>
+                {
+                    Success = false,
+                    Message = string.Join(" ", errors),
+                    Data = null
+                });
+            }
+
+            await _postService.DeletePost(postId, userId);
+
+            return Ok(new API_Response<object>
+            {
+                Success = true,
+                Message = "Xoá bài viết thành công!",
+                Data = null
+            });
+        }
     }
 }

@@ -32,5 +32,17 @@ namespace GentleBlossom_BE.Data.Repositories
 
             _context.PostLikes.Remove(postLike);
         }
+
+        public async Task DeleteRangeByPostIdAsync(int postId)
+        {
+            var postLikes = await _context.PostLikes
+                .Where(pm => pm.PostId == postId)
+                .ToListAsync();
+
+            if (postLikes.Any())
+            {
+                _context.PostLikes.RemoveRange(postLikes);
+            }
+        }
     }
 }

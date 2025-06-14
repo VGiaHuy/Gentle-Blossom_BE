@@ -88,6 +88,8 @@ builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IChatRoomRepository, ChatRoomRepository>();
 builder.Services.AddScoped<IChatRoomUserRepository, ChatRoomUserRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<IPostMediaRepository, PostMediaRepository>();
+builder.Services.AddScoped<IPostAnalysisRepository, PostAnalysisRepository>();
 
 
 var app = builder.Build();
