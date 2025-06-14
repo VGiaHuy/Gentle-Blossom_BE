@@ -78,6 +78,7 @@ builder.Services.AddScoped<UserProfileService>();
 builder.Services.AddScoped<HealthJourneyService>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<ChatService>();
+builder.Services.AddScoped<PregnancyCareService>();
 
 builder.Services.AddScoped<ILoginUserRepository, LoginUserRepository>();
 builder.Services.AddScoped<ICommentPostRepository, CommentPostRepository>();

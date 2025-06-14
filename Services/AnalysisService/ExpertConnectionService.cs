@@ -75,7 +75,8 @@ namespace GentleBlossom_BE.Services.AnalysisService
                     {
                         UserId = request.PosterId,
                         Content = $"Chúng tôi nhận thấy bạn đang có vấn đề về tâm lý. Chuyên gia {expert.Specialization} {expert.AcademicTitle} {expertInfo} sẽ được kết nối đến bạn.",
-                        CreateAt = DateTime.UtcNow
+                        CreateAt = DateTime.UtcNow,
+                        Url = $"/PregnancyCare/ConnectPost/{request.PostId}" // Đường dẫn đến bài viết
                     };
 
                     var notificationExpert = new Notification
