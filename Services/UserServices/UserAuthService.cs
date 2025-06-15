@@ -34,7 +34,7 @@ namespace GentleBlossom_BE.Services.UserServices
             return _mapper.Map<UserProfileDTO>(userInfo);
         }
 
-        public async Task<bool> Register(RegisterRequestDTO register)
+        public async Task<bool> Register(RegisterViewModel register)
         {
             // Check data
             bool checkExistEmail = await _unitOfWork.UserProfile.CheckEmailExistAsync(register.Email);

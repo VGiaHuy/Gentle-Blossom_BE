@@ -13,7 +13,7 @@ namespace GentleBlossom_BE.Data.Repositories
         public IChatRoomRepository ChatRoom { get; }
         public IChatRoomUserRepository ChatRoomUser { get; }
         public ICommentPostRepository CommentPost { get; }
-        public IGenericRepository<ConnectionMedical> ConnectionMedical { get; }
+        public IConnectionMedicalRepository ConnectionMedical { get; }
         public IGenericRepository<Expert> Expert { get; }
         public IHealthJourneyRepository HealthJourney { get; }
         public ILoginUserRepository LoginUser { get; }
@@ -42,7 +42,7 @@ namespace GentleBlossom_BE.Data.Repositories
             ChatRoom = new ChatRoomRepository(_context);
             ChatRoomUser = new ChatRoomUserRepository(_context);
             CommentPost = new CommentPostRepository(_context);
-            ConnectionMedical = new GenericRepository<ConnectionMedical>(_context);
+            ConnectionMedical = new ConnectionMedicalRepository(_context);
             Expert = new GenericRepository<Expert>(_context);
             HealthJourney = new HealthJourneyRepository(_context);
             LoginUser = new LoginUserRepository(_context);

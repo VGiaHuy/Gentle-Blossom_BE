@@ -1,6 +1,7 @@
 ﻿using GentleBlossom_BE.Data.DTOs.UserDTOs;
 using GentleBlossom_BE.Data.Responses;
 using GentleBlossom_BE.Services.UserServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GentleBlossom_BE.Controllers.UserControllers
@@ -55,6 +56,7 @@ namespace GentleBlossom_BE.Controllers.UserControllers
             });
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreatePost([FromForm] CreatePostDTO request)
         {
@@ -82,6 +84,7 @@ namespace GentleBlossom_BE.Controllers.UserControllers
             });
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateComment([FromForm] CreateCommentDTOs request)
         {
@@ -137,6 +140,7 @@ namespace GentleBlossom_BE.Controllers.UserControllers
             });
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> ToggleLikePost([FromBody] ToggleLikePostDto request)
         {
@@ -197,6 +201,7 @@ namespace GentleBlossom_BE.Controllers.UserControllers
             }
         }
 
+        [Authorize]
         [HttpDelete]
         public async Task<IActionResult> DeletePost(int postId, int userId)
         {

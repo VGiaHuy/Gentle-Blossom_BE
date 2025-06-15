@@ -263,6 +263,7 @@ namespace GentleBlossom_BE.Services.UserServices
                 await _unitOfWork.PostAnalysis.DeleteByPostId(postId);
                 await _unitOfWork.PostLike.DeleteRangeByPostIdAsync(postId);
                 await _unitOfWork.CommentPost.DeleteRangeByPostIdAsync(postId);
+                await _unitOfWork.ConnectionMedical.DeleteByPostId(postId);
                 _unitOfWork.Post.Delete(post);
 
                 await _unitOfWork.SaveChangesAsync();

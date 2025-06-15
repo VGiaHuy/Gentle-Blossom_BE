@@ -8,7 +8,7 @@ namespace GentleBlossom_BE.Data.Repositories.Interface
         IChatRoomRepository ChatRoom { get; }
         IChatRoomUserRepository ChatRoomUser { get; }
         ICommentPostRepository CommentPost { get; }
-        IGenericRepository<ConnectionMedical> ConnectionMedical { get; }
+        IConnectionMedicalRepository ConnectionMedical { get; }
         IGenericRepository<Expert> Expert { get; }
         IHealthJourneyRepository HealthJourney { get; }
         ILoginUserRepository LoginUser { get; }

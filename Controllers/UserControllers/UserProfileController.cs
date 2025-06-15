@@ -2,6 +2,7 @@
 using GentleBlossom_BE.Data.DTOs.UserDTOs;
 using GentleBlossom_BE.Data.Responses;
 using GentleBlossom_BE.Services.UserServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GentleBlossom_BE.Controllers.UserControllers
@@ -17,6 +18,7 @@ namespace GentleBlossom_BE.Controllers.UserControllers
             _userProfileService = userProfileService;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetUserProfile([FromQuery] int id)
         {
@@ -43,6 +45,7 @@ namespace GentleBlossom_BE.Controllers.UserControllers
             });
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> UpdateUserProfile([FromForm] UpdateUserProfileDTO userProfile)
         {

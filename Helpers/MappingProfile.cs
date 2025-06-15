@@ -10,8 +10,8 @@ namespace GentleBlossom_BE.Helpers
         {
             CreateMap<UserProfile, UserProfileDTO>().ReverseMap();
 
-            CreateMap<LoginUser, RegisterRequestDTO>().ReverseMap();
-            CreateMap<UserProfile, RegisterRequestDTO>().ReverseMap();
+            CreateMap<LoginUser, RegisterViewModel>().ReverseMap();
+            CreateMap<UserProfile, RegisterViewModel>().ReverseMap();
 
             CreateMap<Post, PostDTO>().ForMember(dest => dest.MediaList, opt => opt.MapFrom(src => src.PostMedia));
             CreateMap<PostMedium, PostMediaDTO>();

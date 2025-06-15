@@ -3,18 +3,23 @@ using GentleBlossom_BE.Data.Models;
 using GentleBlossom_BE.Data.Responses;
 using GentleBlossom_BE.Services.UserServices;
 using Microsoft.AspNetCore.Mvc;
+using GentleBlossom_BE.Services.JWTService;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GentleBlossom_BE.Controllers.UserControllers
 {
+    [AllowAnonymous]
     [Route("api/user/[controller]/[action]")]
     [ApiController]
     public class UserAuthController : ControllerBase
     {
         private readonly UserAuthService _userAuthService;
+        private readonly JwtService _jwtService;
 
-        public UserAuthController(UserAuthService userAuthService)
+        public UserAuthController(UserAuthService userAuthService, JwtService jwtService)
         {
             _userAuthService = userAuthService;
+            _jwtService = jwtService;
         }
 
         [HttpPost]
@@ -35,16 +40,24 @@ namespace GentleBlossom_BE.Controllers.UserControllers
             }
 
             var userProfile = await _userAuthService.Login(request);
-            return Ok(new API_Response<UserProfileDTO>
+            var JwtResponse = await _jwtService.CreateTokenUser(userProfile.FullName);
+
+            var response = new LoginResponse
+            {
+                userProfileDTO = userProfile,
+                AccessToken = JwtResponse.AccessToken,
+                ExpiresIn = JwtResponse.ExpiresIn
+            };
+            return Ok(new API_Response<LoginResponse>
             {
                 Success = true,
                 Message = "Đăng nhập thành công!",
-                Data = userProfile
+                Data = response
             });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterRequestDTO request)
+        public async Task<IActionResult> Register([FromBody] RegisterViewModel request)
         {
             if (!ModelState.IsValid)
             {
@@ -53,7 +66,7 @@ namespace GentleBlossom_BE.Controllers.UserControllers
                     .Select(e => e.ErrorMessage)
                     .ToList();
 
-                return BadRequest(new API_Response<UserProfileDTO>()
+                return BadRequest(new API_Response<object>()
                 {
                     Success = false,
                     Message = string.Join(" ", errors),

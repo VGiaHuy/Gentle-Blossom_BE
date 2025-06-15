@@ -7,9 +7,13 @@ using GentleBlossom_BE.Middleware;
 using GentleBlossom_BE.Services.AnalysisService;
 using GentleBlossom_BE.Services.GoogleService;
 using GentleBlossom_BE.Services.Hubs;
+using GentleBlossom_BE.Services.JWTService;
 using GentleBlossom_BE.Services.UserServices;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +54,44 @@ builder.Services.AddCors(options =>
     });
 });
 
+// đăng ký dịch vụ JWT
+builder.Services.AddAuthentication(option =>
+{
+    // Đặt mặc định schema xác thực là JwtBearer.Điều này đảm bảo mọi yêu cầu sẽ sử dụng JWT để xác thực.
+    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    // Đặt mặc định schema thách thức là JwtBearer. Điều này được sử dụng khi xác thực thất bại(ví dụ: token không hợp lệ hoặc không được cung cấp).Hệ thống sẽ thách thức client bằng cách trả về mã 401 Unauthorized.
+    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    // Đặt mặc định schema chính, áp dụng cho cả xác thực và thách thức.
+    option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(option =>
+{
+    // Cho phép API hoạt động qua HTTP(không yêu cầu HTTPS).Điều này hữu ích khi phát triển hoặc debug, nhưng bạn nên bật HTTPS trong môi trường sản xuất.
+    option.RequireHttpsMetadata = builder.Configuration.GetValue<bool>("JwtConfig:RequireHttps");
+    // Lưu token đã xác thực vào HttpContext. Điều này có thể hữu ích nếu bạn cần sử dụng lại token trong quá trình xử lý.
+    option.SaveToken = true;
+    option.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = builder.Configuration["JwtConfig:Issuer"],
+        ValidAudience = builder.Configuration["JwtConfig:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtConfig:Key"]!)),
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+    };
+    option.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+            {
+                context.Response.Headers["Token-Expired"] = "true";
+            }
+            return Task.CompletedTask;
+        },
+    };
+});
+
 // Thêm SignalR
 builder.Services.AddSignalR();
 
@@ -71,6 +113,7 @@ builder.Services.AddScoped<HuggingFaceNlpService>(); // Dịch vụ Hugging Face
 builder.Services.AddScoped<PostAnalysisService>(); // Dịch vụ phân tích bài viết
 builder.Services.AddScoped<ExpertConnectionService>(); // Dịch vụ kết nối chuyên gia (cho scope)
 
+builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<GoogleDriveService>();
 builder.Services.AddScoped<UserAuthService>();
 builder.Services.AddScoped<PostService>();
@@ -90,6 +133,7 @@ builder.Services.AddScoped<IChatRoomUserRepository, ChatRoomUserRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IPostMediaRepository, PostMediaRepository>();
 builder.Services.AddScoped<IPostAnalysisRepository, PostAnalysisRepository>();
+builder.Services.AddScoped<IConnectionMedicalRepository, ConnectionMedicalRepository>();
 
 
 var app = builder.Build();
@@ -111,6 +155,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 // Đăng ký SignalR Hub

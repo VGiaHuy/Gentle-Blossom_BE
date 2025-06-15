@@ -5,9 +5,11 @@ using GentleBlossom_BE.Data.DTOs.UserDTOs;
 using GentleBlossom_BE.Data.Responses;
 using GentleBlossom_BE.Helpers;
 using Google.Apis.Drive.v3.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GentleBlossom_BE.Controllers.UserControllers
 {
+    [Authorize]
     [Route("api/user/[controller]/[action]")]
     [ApiController]
     public class ChatController : ControllerBase
