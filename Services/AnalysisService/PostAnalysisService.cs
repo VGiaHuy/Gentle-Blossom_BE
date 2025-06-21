@@ -29,30 +29,26 @@ namespace GentleBlossom_BE.Services.AnalysisService
             // Bước 1: Phân tích Rule-based sử dụng Aho-Corasick
             var (score, matchedKeywords) = _keywordService.Analyze(post.Content);
 
-            // Tạo bản ghi phân tích ban đầu
-            var analysis = new PostAnalysis
-            {
-                PostId = post.PostId,
-                Score = score, // Điểm từ Rule-based
-                RiskLevel = score >= 15 ? AnalyzePost.RiskLevel_High : AnalyzePost.RiskLevel_Low, // Xác định mức rủi ro ban đầu
-                AnalysisStatus = AnalyzePost.AnalysisStatus_Pending, // Trạng thái ban đầu
-            };
-
-            // Lưu kết quả phân tích vào database
-            _dbContext.PostAnalyses.Add(analysis);
-            await _dbContext.SaveChangesAsync();
-
             // Bước 2: Nếu điểm >= 15, gọi Hugging Face API để xác nhận
             if (score >= 15)
             {
+                // Tạo bản ghi phân tích ban đầu
+                var analysis = new PostAnalysis
+                {
+                    PostId = post.PostId,
+                    Score = score, // Điểm từ Rule-based
+                    RiskLevel = AnalyzePost.RiskLevel_High, // Xác định mức rủi ro ban đầu
+                    AnalysisStatus = AnalyzePost.AnalysisStatus_Pending, // Trạng thái ban đầu
+                };
+
                 var nlpResult = await _nlpService.AnalyzeSentiment(post.Content);
                 if (nlpResult.HasValue)
                 {
                     // Cập nhật kết quả từ Hugging Face
                     analysis.SentimentScore = nlpResult.Value.Score; // Lưu điểm số của nhãn
 
-                    // Nếu nhãn là Negative và điểm số > 0.7, đánh dấu HIGH RISK
-                    if (nlpResult.Value.Label == "negative" && nlpResult.Value.Score > 0.7)
+                    // Nếu nhãn là Negative và điểm số > 0.65, đánh dấu HIGH RISK
+                    if (nlpResult.Value.Label == "negative" && nlpResult.Value.Score > 0.65)
                     {
                         analysis.RiskLevel = AnalyzePost.RiskLevel_High;
                         analysis.AnalysisStatus = AnalyzePost.AnalysisStatus_Complete;
@@ -72,13 +68,8 @@ namespace GentleBlossom_BE.Services.AnalysisService
                     analysis.AnalysisStatus = AnalyzePost.AnalysisStatus_Failed;
                 }
 
-                // Cập nhật kết quả vào database
-                await _dbContext.SaveChangesAsync();
-            }
-            else
-            {
-                // Nếu điểm < 15, hoàn thành phân tích mà không gọi API
-                analysis.AnalysisStatus = AnalyzePost.AnalysisStatus_Complete;
+                // Lưu kết quả phân tích vào database
+                _dbContext.PostAnalyses.Add(analysis);
                 await _dbContext.SaveChangesAsync();
             }
         }

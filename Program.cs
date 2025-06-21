@@ -134,6 +134,10 @@ builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IPostMediaRepository, PostMediaRepository>();
 builder.Services.AddScoped<IPostAnalysisRepository, PostAnalysisRepository>();
 builder.Services.AddScoped<IConnectionMedicalRepository, ConnectionMedicalRepository>();
+builder.Services.AddScoped<IPsychologyDiaryRepository, PsychologyDiaryRepository>();
+builder.Services.AddScoped<IPeriodicHealthRepository, PeriodicHealthRepository>();
+builder.Services.AddScoped<IMonitoringFormRepository, MonitoringFormRepository>();
+builder.Services.AddScoped<IExpertRepository, ExpertRepository>();
 
 
 var app = builder.Build();

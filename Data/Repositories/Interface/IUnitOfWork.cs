@@ -9,18 +9,18 @@ namespace GentleBlossom_BE.Data.Repositories.Interface
         IChatRoomUserRepository ChatRoomUser { get; }
         ICommentPostRepository CommentPost { get; }
         IConnectionMedicalRepository ConnectionMedical { get; }
-        IGenericRepository<Expert> Expert { get; }
+        IExpertRepository Expert { get; }
         IHealthJourneyRepository HealthJourney { get; }
         ILoginUserRepository LoginUser { get; }
         IMessageRepository Message { get; }
         IMessageAttachmentRepository MessageAttachment { get; }
-        IGenericRepository<MonitoringForm> MonitoringForm { get; }
+        IMonitoringFormRepository MonitoringForm { get; }
         INotificationRepository Notification { get; }
-        IGenericRepository<PeriodicHealth> PeriodicHealth { get; }
+        IPeriodicHealthRepository PeriodicHealth { get; }
         IPostRepository Post { get; }
         IPostMediaRepository PostMedia { get; }
         IGenericRepository<PostCategory> PostCategory { get; }
-        IGenericRepository<PsychologyDiary> PsychologyDiary { get; }
+        IPsychologyDiaryRepository PsychologyDiary { get; }
         IGenericRepository<Review> Review { get; }
         IGenericRepository<ReviewImage> ReviewImage { get; }
         IGenericRepository<RoleAdmin> RoleAdmin { get; }

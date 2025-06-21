@@ -23,10 +23,9 @@ CREATE TABLE UserProfiles (
     birthDate DATE NOT NULL CHECK (birthDate < GETDATE()),
     phoneNumber NVARCHAR(10) UNIQUE NOT NULL CHECK (LEN(phoneNumber) = 10),
     email NVARCHAR(100) UNIQUE NOT NULL,
-    avatar NVARCHAR(1000) NULL,
-	mediaUrl NVARCHAR(1000),				-- Link Google Drive public
-    mediaType NVARCHAR(20),					-- 'image', 'video', 'audio', 'pdf',...
-    fileName NVARCHAR(255),                 -- Tên gốc của file (tùy chọn)
+	avatarUrl NVARCHAR(1000),				-- Link Google Drive public
+    avatarType NVARCHAR(20),				-- 'image', 'video', 'audio', 'pdf',...
+    avatarFileName NVARCHAR(255),           -- Tên gốc của file (tùy chọn)
 	gender BIT NOT NULL,	-- 0 là nữ, 1 là nam
 	userTypeId TINYINT NOT NULL FOREIGN KEY REFERENCES UserTypes(usertypeId),
 );
@@ -180,7 +179,8 @@ CREATE TABLE Post (
     categoryId INT NOT NULL FOREIGN KEY REFERENCES PostCategories(categoryId),
     content NVARCHAR(4000) NOT NULL,
     createdDate DATETIME DEFAULT GETDATE(),
-	numberOfLike INT NOT NULL DEFAULT 0
+	numberOfLike INT NOT NULL DEFAULT 0,
+	hidden BIT DEFAULT 0
 );
 GO
 
@@ -229,25 +229,6 @@ CREATE TABLE Notifications (
 	createAt DATETIME DEFAULT GETDATE(),		-- Thời gian tạo thông báo
 	isSeen BIT DEFAULT 0,				-- Thông báo đã được xem hay chưa (TRUE/FALSE)
 	url NVARCHAR(100)
-);
-GO
-
--- Bảng đánh giá chuyên gia
-CREATE TABLE Review (
-    reviewId INT IDENTITY PRIMARY KEY,
-    expertId INT NOT NULL FOREIGN KEY REFERENCES Expert(expertId),
-    userId INT NOT NULL FOREIGN KEY REFERENCES UserProfiles(userId),
-    rating INT NOT NULL CHECK (Rating BETWEEN 1 AND 5),
-    feedback NVARCHAR(4000) NULL,
-    createdDate DATETIME DEFAULT GETDATE()
-);
-GO
-
--- Bảng hình ảnh của các đánh giá
-CREATE TABLE ReviewImage (
-    imageId INT PRIMARY KEY IDENTITY,
-    reviewId INT NOT NULL FOREIGN KEY REFERENCES Review(reviewId),
-	image NVARCHAR(1000) NOT NULL
 );
 GO
 

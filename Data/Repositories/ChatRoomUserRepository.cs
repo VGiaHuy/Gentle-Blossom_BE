@@ -32,5 +32,13 @@ namespace GentleBlossom_BE.Data.Repositories
         {
             return _context.ChatRoomUsers.Where(a => a.ParticipantId == userId && a.ChatRoomId == chatRoomId).AnyAsync();
         }
+
+        public Task<int> GetUseIdByChatRoomIdAsync(int chatRoomId, int expertId)
+        {
+            return _context.ChatRoomUsers
+                .Where(cru => cru.ChatRoomId == chatRoomId && cru.ParticipantId != expertId)
+                .Select(cru => cru.ParticipantId)
+                .FirstAsync();
+        }
     }
 }

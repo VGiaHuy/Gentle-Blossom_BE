@@ -14,18 +14,18 @@ namespace GentleBlossom_BE.Data.Repositories
         public IChatRoomUserRepository ChatRoomUser { get; }
         public ICommentPostRepository CommentPost { get; }
         public IConnectionMedicalRepository ConnectionMedical { get; }
-        public IGenericRepository<Expert> Expert { get; }
+        public IExpertRepository Expert { get; }
         public IHealthJourneyRepository HealthJourney { get; }
         public ILoginUserRepository LoginUser { get; }
         public IMessageRepository Message { get; }
         public IMessageAttachmentRepository MessageAttachment { get; }
-        public IGenericRepository<MonitoringForm> MonitoringForm { get; }
+        public IMonitoringFormRepository MonitoringForm { get; }
         public INotificationRepository Notification { get; }
-        public IGenericRepository<PeriodicHealth> PeriodicHealth { get; }
+        public IPeriodicHealthRepository PeriodicHealth { get; }
         public IPostRepository Post { get; }
         public IPostMediaRepository PostMedia { get; }
         public IGenericRepository<PostCategory> PostCategory { get; }
-        public IGenericRepository<PsychologyDiary> PsychologyDiary { get; }
+        public IPsychologyDiaryRepository PsychologyDiary { get; }
         public IGenericRepository<Review> Review { get; }
         public IGenericRepository<ReviewImage> ReviewImage { get; }
         public IGenericRepository<RoleAdmin> RoleAdmin { get; }
@@ -43,18 +43,18 @@ namespace GentleBlossom_BE.Data.Repositories
             ChatRoomUser = new ChatRoomUserRepository(_context);
             CommentPost = new CommentPostRepository(_context);
             ConnectionMedical = new ConnectionMedicalRepository(_context);
-            Expert = new GenericRepository<Expert>(_context);
+            Expert = new ExpertRepository(_context);
             HealthJourney = new HealthJourneyRepository(_context);
             LoginUser = new LoginUserRepository(_context);
             Message = new MessageRepository(_context);
             MessageAttachment = new MessageAttachmentRepository(_context);
-            MonitoringForm = new GenericRepository<MonitoringForm>(_context);
+            MonitoringForm = new MonitoringFormRepository(_context);
             Notification = new NotificationRepository(_context);
-            PeriodicHealth = new GenericRepository<PeriodicHealth>(_context);
+            PeriodicHealth = new PeriodicHealthRepository(_context);
             Post = new PostRepository(_context);
             PostMedia = new PostMediaRepository(_context);
             PostCategory = new GenericRepository<PostCategory>(_context);
-            PsychologyDiary = new GenericRepository<PsychologyDiary>(_context);
+            PsychologyDiary = new PsychologyDiaryRepository(_context);
             Review = new GenericRepository<Review>(_context);
             ReviewImage = new GenericRepository<ReviewImage>(_context);
             RoleAdmin = new GenericRepository<RoleAdmin>(_context);

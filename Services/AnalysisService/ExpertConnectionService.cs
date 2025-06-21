@@ -45,6 +45,13 @@ namespace GentleBlossom_BE.Services.AnalysisService
                 using var scope = _serviceProvider.CreateScope();
                 var dbContext = scope.ServiceProvider.GetRequiredService<GentleBlossomContext>();
 
+                // Ẩn bài viết
+                var post = await dbContext.Posts.FindAsync(request.PostId);
+                if (post != null)
+                {
+                    post.Hidden = true;
+                }
+
                 // Tìm chuyên gia khả dụng (Chuyên môn là Tâm lý học)
                 var expert = await dbContext.Experts
                     .Where(e => e.Specialization == SpecializationExpert.Psychology)

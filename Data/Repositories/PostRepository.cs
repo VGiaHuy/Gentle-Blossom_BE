@@ -16,6 +16,7 @@ namespace GentleBlossom_BE.Data.Repositories
         public async Task<List<PostDTO>> GetAllAsync(int userId, int page = 1, int pageSize = 5)
         {
             return await _context.Posts
+                .Where(p => p.Hidden == false)
                 .OrderByDescending(p => p.CreatedDate)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)

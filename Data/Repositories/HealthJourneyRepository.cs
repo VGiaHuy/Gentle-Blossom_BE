@@ -29,5 +29,13 @@ namespace GentleBlossom_BE.Data.Repositories
                 .Include(p => p.Treatment)
                 .ToListAsync();
         }
+
+        public async Task<List<HealthJourney>> GetAllByUserId(int id)
+        {
+            return await _context.HealthJourneys
+                .Where(u => u.UserId == id)
+                .Include(p => p.Treatment)
+                .ToListAsync();
+        }
     }
 }

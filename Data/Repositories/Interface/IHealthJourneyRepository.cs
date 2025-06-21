@@ -6,5 +6,6 @@ namespace GentleBlossom_BE.Data.Repositories.Interface
     {
         Task<List<HealthJourney>> GetAllWithDiaryByUserId(int id);
         Task<List<HealthJourney>> GetAllWithPeriodicByUserId(int id);
+        Task<List<HealthJourney>> GetAllByUserId(int id);
     }
 }

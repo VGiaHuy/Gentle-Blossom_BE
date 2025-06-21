@@ -17,6 +17,8 @@ public partial class Post
 
     public int NumberOfLike { get; set; }
 
+    public bool? Hidden { get; set; }
+
     public virtual PostCategory Category { get; set; } = null!;
 
     public virtual ICollection<CommentPost> CommentPosts { get; set; } = new List<CommentPost>();

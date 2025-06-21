@@ -527,6 +527,9 @@ public partial class GentleBlossomContext : DbContext
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnName("createdDate");
+            entity.Property(e => e.Hidden)
+                .HasDefaultValue(false)
+                .HasColumnName("hidden");
             entity.Property(e => e.NumberOfLike).HasColumnName("numberOfLike");
             entity.Property(e => e.PosterId).HasColumnName("posterId");
 
