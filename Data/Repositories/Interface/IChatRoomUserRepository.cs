@@ -9,5 +9,6 @@ namespace GentleBlossom_BE.Data.Repositories.Interface
         Task<List<ChatRoomUser>> GetChatRoomUsersAsync(int userId);
         Task<bool> CheckUserExistInChatRoom(int chatRoom, int userId);
         Task<int> GetUseIdByChatRoomIdAsync(int chatRoomId, int expertId);
+        Task<bool> AreParticipantsInPrivateChatRoomAsync(int participantId1, int participantId2, CancellationToken cancellationToken = default);
     }
 }

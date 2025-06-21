@@ -259,13 +259,14 @@ namespace GentleBlossom_BE.Services.UserServices
                     throw new UnauthorizedException("Bạn không có quyền xóa bài viết này.");
                 }
 
-                await _unitOfWork.PostMedia.DeleteRangeByPostIdAsync(postId);
-                await _unitOfWork.PostAnalysis.DeleteByPostId(postId);
-                await _unitOfWork.PostLike.DeleteRangeByPostIdAsync(postId);
-                await _unitOfWork.CommentPost.DeleteRangeByPostIdAsync(postId);
-                await _unitOfWork.ConnectionMedical.DeleteByPostId(postId);
-                _unitOfWork.Post.Delete(post);
+                //await _unitOfWork.PostMedia.DeleteRangeByPostIdAsync(postId);
+                //await _unitOfWork.PostAnalysis.DeleteByPostId(postId);
+                //await _unitOfWork.PostLike.DeleteRangeByPostIdAsync(postId);
+                //await _unitOfWork.CommentPost.DeleteRangeByPostIdAsync(postId);
+                //await _unitOfWork.ConnectionMedical.DeleteByPostId(postId);
+                //_unitOfWork.Post.Delete(post);
 
+                post.Hidden = true;
                 await _unitOfWork.SaveChangesAsync();
 
                 return true;

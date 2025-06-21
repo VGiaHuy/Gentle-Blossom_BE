@@ -26,51 +26,57 @@ namespace GentleBlossom_BE.Services.AnalysisService
         // Hàm phân tích bài viết và quyết định có cần kết nối chuyên gia hay không
         public async Task AnalyzePostAsync(Post post)
         {
-            // Bước 1: Phân tích Rule-based sử dụng Aho-Corasick
-            var (score, matchedKeywords) = _keywordService.Analyze(post.Content);
-
-            // Bước 2: Nếu điểm >= 15, gọi Hugging Face API để xác nhận
-            if (score >= 15)
+            try
             {
-                // Tạo bản ghi phân tích ban đầu
-                var analysis = new PostAnalysis
-                {
-                    PostId = post.PostId,
-                    Score = score, // Điểm từ Rule-based
-                    RiskLevel = AnalyzePost.RiskLevel_High, // Xác định mức rủi ro ban đầu
-                    AnalysisStatus = AnalyzePost.AnalysisStatus_Pending, // Trạng thái ban đầu
-                };
+                // Bước 1: Phân tích Rule-based sử dụng Aho-Corasick
+                var (score, matchedKeywords) = _keywordService.Analyze(post.Content);
 
-                var nlpResult = await _nlpService.AnalyzeSentiment(post.Content);
-                if (nlpResult.HasValue)
+                // Bước 2: Nếu điểm >= 15, gọi Hugging Face API để xác nhận
+                if (score >= 15)
                 {
-                    // Cập nhật kết quả từ Hugging Face
-                    analysis.SentimentScore = nlpResult.Value.Score; // Lưu điểm số của nhãn
-
-                    // Nếu nhãn là Negative và điểm số > 0.65, đánh dấu HIGH RISK
-                    if (nlpResult.Value.Label == "negative" && nlpResult.Value.Score > 0.65)
+                    // Tạo bản ghi phân tích ban đầu
+                    var analysis = new PostAnalysis
                     {
-                        analysis.RiskLevel = AnalyzePost.RiskLevel_High;
-                        analysis.AnalysisStatus = AnalyzePost.AnalysisStatus_Complete;
+                        PostId = post.PostId,
+                        Score = score, // Điểm từ Rule-based
+                        AnalysisStatus = AnalyzePost.AnalysisStatus_Pending, // Trạng thái ban đầu
+                    };
 
-                        // Đẩy yêu cầu kết nối vào queue để Background Service xử lý
-                        await _expertService.QueueExpertConnection(post.PostId, post.PosterId);
+                    var nlpResult = await _nlpService.AnalyzeSentiment(post.Content);
+                    if (nlpResult.HasValue)
+                    {
+                        // Cập nhật kết quả từ Hugging Face
+                        analysis.SentimentScore = nlpResult.Value.Score; // Lưu điểm số của nhãn
+
+                        // Nếu nhãn là Negative và điểm số > 0.65, đánh dấu HIGH RISK
+                        if (nlpResult.Value.Label == "negative" && nlpResult.Value.Score > 0.65)
+                        {
+                            analysis.RiskLevel = AnalyzePost.RiskLevel_High;
+                            analysis.AnalysisStatus = AnalyzePost.AnalysisStatus_Complete;
+
+                            // Đẩy yêu cầu kết nối vào queue để Background Service xử lý
+                            await _expertService.QueueExpertConnection(post.PostId, post.PosterId, analysis.SentimentScore);
+                        }
+                        else
+                        {
+                            analysis.RiskLevel = AnalyzePost.RiskLevel_Low;
+                            analysis.AnalysisStatus = AnalyzePost.AnalysisStatus_Complete;
+                        }
                     }
                     else
                     {
-                        analysis.RiskLevel = AnalyzePost.RiskLevel_Low;
-                        analysis.AnalysisStatus = AnalyzePost.AnalysisStatus_Complete;
+                        // Nếu gọi Hugging Face API thất bại, đánh dấu trạng thái FAILED
+                        analysis.AnalysisStatus = AnalyzePost.AnalysisStatus_Failed;
                     }
-                }
-                else
-                {
-                    // Nếu gọi Hugging Face API thất bại, đánh dấu trạng thái FAILED
-                    analysis.AnalysisStatus = AnalyzePost.AnalysisStatus_Failed;
-                }
 
-                // Lưu kết quả phân tích vào database
-                _dbContext.PostAnalyses.Add(analysis);
-                await _dbContext.SaveChangesAsync();
+                    // Lưu kết quả phân tích vào database
+                    _dbContext.PostAnalyses.Add(analysis);
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Đã xảy ra lỗi trong quá trình phân tích tâm lý bài viết: {ex.Message}");
             }
         }
     }

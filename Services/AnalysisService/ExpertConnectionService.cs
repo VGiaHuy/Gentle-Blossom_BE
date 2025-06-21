@@ -9,12 +9,16 @@ namespace GentleBlossom_BE.Services.AnalysisService
     public class ExpertConnectionRequest
     {
         public int PostId { get; set; }
+
         public int PosterId { get; set; }
+
+        public double? SentimentScore { get; set; }
     }
 
     public class ExpertConnectionService : BackgroundService
     {
         private readonly IServiceProvider _serviceProvider;
+
         private readonly InMemoryQueue<ExpertConnectionRequest> _queue;// Hàng đợi lưu trữ yêu cầu
 
         public ExpertConnectionService(IServiceProvider serviceProvider, InMemoryQueue<ExpertConnectionRequest> queue)
@@ -24,10 +28,10 @@ namespace GentleBlossom_BE.Services.AnalysisService
         }
 
         // Hàm để đẩy yêu cầu kết nối vào hàng đợi
-        public async Task QueueExpertConnection(int postId, int posterId)
+        public async Task QueueExpertConnection(int postId, int posterId, double? sentimentScore)
         {
             // Tạo yêu cầu mới với PostId
-            var request = new ExpertConnectionRequest { PostId = postId, PosterId = posterId };
+            var request = new ExpertConnectionRequest { PostId = postId, PosterId = posterId, SentimentScore = sentimentScore };
             // Đẩy yêu cầu vào queue
             await _queue.EnqueueAsync(request);
         }
@@ -35,30 +39,39 @@ namespace GentleBlossom_BE.Services.AnalysisService
         // Hàm chính của Background Service, chạy liên tục để xử lý queue
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            // Vòng lặp chạy cho đến khi ứng dụng dừng
             while (!stoppingToken.IsCancellationRequested)
             {
-                // Chờ và lấy yêu cầu từ queue
-                var request = await _queue.DequeueAsync(stoppingToken);
-
-                // Tạo scope mới để sử dụng DbContext (tránh lỗi lifetime)
-                using var scope = _serviceProvider.CreateScope();
-                var dbContext = scope.ServiceProvider.GetRequiredService<GentleBlossomContext>();
-
-                // Ẩn bài viết
-                var post = await dbContext.Posts.FindAsync(request.PostId);
-                if (post != null)
+                try
                 {
-                    post.Hidden = true;
-                }
+                    // Chờ và lấy yêu cầu từ queue
+                    var request = await _queue.DequeueAsync(stoppingToken);
 
-                // Tìm chuyên gia khả dụng (Chuyên môn là Tâm lý học)
-                var expert = await dbContext.Experts
-                    .Where(e => e.Specialization == SpecializationExpert.Psychology)
-                    .FirstOrDefaultAsync(stoppingToken);
+                    // Tạo scope mới để sử dụng DbContext (tránh lỗi lifetime)
+                    using var scope = _serviceProvider.CreateScope();
+                    var dbContext = scope.ServiceProvider.GetRequiredService<GentleBlossomContext>();
+                    Expert expert;
 
-                if (expert != null)
-                {
+                    // Tìm kiếm người dùng có đang trong quá trình điều trị nào không?
+                    var checkConnectionExists = await dbContext.ConnectionMedicals
+                            .Where(cm => cm.UserId == request.PosterId && cm.Status == 0)
+                            .FirstOrDefaultAsync();
+
+                    if (checkConnectionExists != null)
+                    {
+                        expert = await dbContext.Experts
+                            .Where(e => e.ExpertId == checkConnectionExists.ExpertId)
+                            .FirstAsync();
+                    }
+                    else
+                    {
+                        expert = await dbContext.Experts
+                            .AsNoTracking()
+                            .Where(e => e.Specialization == SpecializationExpert.Psychology)
+                            .OrderBy(e => Guid.NewGuid())
+                            .FirstAsync(stoppingToken);
+                    }
+
+                    // lấy ra thông tin chuyên gia và thai phụ
                     var expertInfo = await dbContext.UserProfiles
                         .Where(u => u.UserId == expert.UserId)
                         .Select(e => e.FullName)
@@ -69,7 +82,6 @@ namespace GentleBlossom_BE.Services.AnalysisService
                         .Select(u => u.FullName)
                         .FirstOrDefaultAsync(stoppingToken);
 
-                    // Tạo bản ghi kết nối trong bảng ExpertConnections
                     var connection = new ConnectionMedical
                     {
                         PostId = request.PostId,
@@ -83,7 +95,7 @@ namespace GentleBlossom_BE.Services.AnalysisService
                         UserId = request.PosterId,
                         Content = $"Chúng tôi nhận thấy bạn đang có vấn đề về tâm lý. Chuyên gia {expert.Specialization} {expert.AcademicTitle} {expertInfo} sẽ được kết nối đến bạn.",
                         CreateAt = DateTime.UtcNow,
-                        Url = $"/PregnancyCare/ConnectPost/{request.PostId}" // Đường dẫn đến bài viết
+                        Url = $"/PregnancyCare/ConnectPost/{request.PostId}"
                     };
 
                     var notificationExpert = new Notification
@@ -91,11 +103,10 @@ namespace GentleBlossom_BE.Services.AnalysisService
                         UserId = expert.UserId,
                         Content = $"PHÁT HIỆN BỆNH NHÂN!!! Bạn đang được kết nối với người dùng {userInfo} đang có dâu hiệu tâm lý không ổn định",
                         CreateAt = DateTime.UtcNow,
-                        Url = $"/PregnancyCare/ConnectPost/{request.PostId}" // Đường dẫn đến bài viết
-                        
+                        Url = $"/PregnancyCare/ConnectPost/{request.PostId}"
+
                     };
 
-                    // Lưu vào database
                     dbContext.ConnectionMedicals.Add(connection);
                     dbContext.Notifications.Add(notificationUser);
                     dbContext.Notifications.Add(notificationExpert);
@@ -104,19 +115,17 @@ namespace GentleBlossom_BE.Services.AnalysisService
                     // Gửi thông báo đến chuyên gia (giả lập hoặc tích hợp email/SMS)
                     await NotifyExpertAsync(expert, request.PostId);
                 }
-                else
+                catch (Exception ex)
                 {
-                    // Log trường hợp không tìm thấy chuyên gia (có thể thêm retry logic)
-                    Console.WriteLine($"No available expert for post {request.PostId}");
+                    Console.WriteLine("Lỗi khi xử lý ExpertConnectionRequest" + ex);
                 }
             }
         }
 
-        // Hàm gửi thông báo đến chuyên gia (giả lập, có thể mở rộng)
         private async Task NotifyExpertAsync(Expert expert, long postId)
         {
-            // Giả lập gửi thông báo (thay bằng email/SMS thực tế nếu cần)
-            await Task.CompletedTask; // Đảm bảo async
+
+            await Task.CompletedTask;
         }
     }
 }

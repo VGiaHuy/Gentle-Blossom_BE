@@ -7,6 +7,7 @@ using GentleBlossom_BE.Exceptions;
 using GentleBlossom_BE.Services.GoogleService;
 using GentleBlossom_BE.Services.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 
 namespace GentleBlossom_BE.Services.UserServices
 {
@@ -28,17 +29,25 @@ namespace GentleBlossom_BE.Services.UserServices
         {
             try
             {
-                var chatRoomName = "Tư vấn sức khỏe";
-
                 var post = await _unitOfWork.Post.GetByIdAsync(connectMessage.PostId);
                 if (post == null)
                 {
                     throw new BadRequestException("Không tìm thấy bài viết");
                 }
 
-                var chatRoom = await _chatService.CreateChatRoomAsync(chatRoomName, false, connectMessage.ExpertId);
+                post.Hidden = true;
 
-                await _chatService.AddUserToChatRoomAsync(chatRoom.ChatRoomId, post.PosterId);
+                // kiểm tra nếu cuộc trò chuyện đã tồn tại thì không tạo cuộc trò chuyện mới
+                var connection = await _unitOfWork.ChatRoomUser.AreParticipantsInPrivateChatRoomAsync(connectMessage.ExpertId, post.PosterId);
+
+                if (!connection)
+                {
+                    var chatRoomName = "Tư vấn sức khỏe";
+                    var chatRoom = await _chatService.CreateChatRoomAsync(chatRoomName, false, connectMessage.ExpertId);
+                    await _chatService.AddUserToChatRoomAsync(chatRoom.ChatRoomId, post.PosterId);
+                }
+
+                await _unitOfWork.SaveChangesAsync();
 
                 return true;
             }

@@ -20,5 +20,17 @@ namespace GentleBlossom_BE.Data.Repositories
             }
             return false;
         }
+
+        public async Task<bool> CheckExist(int expertId, int userId)
+        {
+            var connectionMedical = await _context.ConnectionMedicals
+                .FirstOrDefaultAsync(pa => pa.ExpertId == expertId && pa.UserId == userId);
+
+            if (connectionMedical != null)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

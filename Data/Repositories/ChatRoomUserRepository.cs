@@ -40,5 +40,25 @@ namespace GentleBlossom_BE.Data.Repositories
                 .Select(cru => cru.ParticipantId)
                 .FirstAsync();
         }
+
+        public async Task<bool> AreParticipantsInPrivateChatRoomAsync(int participantId1, int participantId2, CancellationToken cancellationToken = default)
+        {
+            var hasPrivateChatRoom = await _context.ChatRoomUsers
+                .AsNoTracking()
+                .Where(cru => cru.ParticipantId == participantId1)
+                .Join(_context.ChatRoomUsers
+                        .Where(cru => cru.ParticipantId == participantId2),
+                      cru1 => cru1.ChatRoomId,
+                      cru2 => cru2.ChatRoomId,
+                      (cru1, cru2) => cru1.ChatRoomId)
+                .Join(_context.ChatRooms
+                        .Where(cr => cr.IsGroup == false),
+                      cru => cru,
+                      cr => cr.ChatRoomId,
+                      (cru, cr) => cr.ChatRoomId)
+                .AnyAsync(cancellationToken);
+
+            return hasPrivateChatRoom;
+        }
     }
 }
