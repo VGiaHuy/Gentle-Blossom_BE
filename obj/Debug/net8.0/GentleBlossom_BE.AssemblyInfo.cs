@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GentleBlossom_BE")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+028a4f4059ae05ac989f1186094505758cd216b8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dd25770f500646e2e848b5a42b286a891fcb6409")]
 [assembly: System.Reflection.AssemblyProductAttribute("GentleBlossom_BE")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GentleBlossom_BE")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

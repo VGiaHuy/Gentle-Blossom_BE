@@ -5,6 +5,7 @@ using GentleBlossom_BE.Data.Repositories.Interface;
 using GentleBlossom_BE.Exceptions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using System.Numerics;
 
 namespace GentleBlossom_BE.Services.UserServices
 {
@@ -30,7 +31,7 @@ namespace GentleBlossom_BE.Services.UserServices
             if (!BCrypt.Net.BCrypt.Verify(request.Password, hashedPassword))
                 throw new UnauthorizedException("Mật khẩu không chính xác!");
 
-            var userInfo = await _unitOfWork.UserProfile.GetByIdAsync(user.LoginId);
+            var userInfo = await _unitOfWork.UserProfile.GetByIdAsync(user.UserId);
             return _mapper.Map<UserProfileDTO>(userInfo);
         }
 
@@ -49,26 +50,33 @@ namespace GentleBlossom_BE.Services.UserServices
                 throw new BadRequestException("Số điện thoại đã được sử dụng!");
             }
 
-            bool checkExitsUsn = await _unitOfWork.LoginUser.CheckUsnExistAsync(register.Username);
+            bool checkExitsUsn = await _unitOfWork.LoginUser.CheckUsnExistAsync(register.UserName);
             if (checkExitsUsn)
             {
                 throw new BadRequestException("Tên đăng nhập đã được sử dụng!");
             }
 
-            // Mapping
-            var userInfo = _mapper.Map<UserProfile>(register);
-            var login = _mapper.Map<LoginUser>(register);
+            try
+            {
+                var userInfo = _mapper.Map<UserProfile>(register);
+                var login = _mapper.Map<LoginUser>(register);
 
-            // Save data
-            userInfo.UserTypeId = 3;
-            await _unitOfWork.UserProfile.AddAsync(userInfo);
-            var result_profile = await _unitOfWork.SaveChangesAsync(useTransaction: false);
+                // Save data
+                userInfo.UserTypeId = 3;
+                await _unitOfWork.UserProfile.AddAsync(userInfo);
+                var result_profile = await _unitOfWork.SaveChangesAsync(useTransaction: false);
 
-            login.UserId = userInfo.UserId;
-            await _unitOfWork.LoginUser.AddAsync(login);
-            var result_login = await _unitOfWork.SaveChangesAsync(useTransaction: false);
+                login.UserId = userInfo.UserId;
+                login.Password = BCrypt.Net.BCrypt.HashPassword(login.Password);
+                await _unitOfWork.LoginUser.AddAsync(login);
+                var result_login = await _unitOfWork.SaveChangesAsync(useTransaction: false);
 
-            return true;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new InternalServerException(ex.Message);
+            }
         }
 
 

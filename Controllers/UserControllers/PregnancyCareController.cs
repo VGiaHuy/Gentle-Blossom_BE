@@ -150,5 +150,90 @@ namespace GentleBlossom_BE.Controllers.UserControllers
                 Data = null
             });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPeriodicDetails([FromQuery] int journeyId)
+        {
+            var response = await _pregnancyCareService.GetAllPeriodicByHeathId(journeyId);
+
+            return Ok(new API_Response<List<PeriodicHealthDTO>>
+            {
+                Success = true,
+                Message = "Lấy dữ liệu thành công!",
+                Data = response
+            });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPsychologyDiaryDetails([FromQuery] int journeyId)
+        {
+            var response = await _pregnancyCareService.GetAllPsychologyByHeathId(journeyId);
+
+            return Ok(new API_Response<List<PsychologyDiaryDTO>>
+            {
+                Success = true,
+                Message = "Lấy dữ liệu thành công!",
+                Data = response
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreatePeriodic([FromBody] PeriodicHealthDTO periodicHealth)
+        {
+            if (periodicHealth == null)
+            {
+                return BadRequest(new API_Response<object>
+                {
+                    Success = false,
+                    Message = "Dữ liệu không hợp lệ!",
+                    Data = null
+                });
+            }
+
+            await _pregnancyCareService.CreatePeriodic(periodicHealth);
+
+            return Ok(new API_Response<object>
+            {
+                Success = true,
+                Message = "Tạo hành trình sức khỏe thành công!",
+                Data = null
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreatePsychologyDiary([FromBody] PsychologyDiaryDTO periodicHealth)
+        {
+            if (periodicHealth == null)
+            {
+                return BadRequest(new API_Response<object>
+                {
+                    Success = false,
+                    Message = "Dữ liệu không hợp lệ!",
+                    Data = null
+                });
+            }
+
+            await _pregnancyCareService.CreatePsychologyDiary(periodicHealth);
+
+            return Ok(new API_Response<object>
+            {
+                Success = true,
+                Message = "Tạo hành trình sức khỏe thành công!",
+                Data = null
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CompleteJourney([FromBody] int journeyId)
+        {
+            await _pregnancyCareService.CompleteJourney(journeyId);
+
+            return Ok(new API_Response<object>
+            {
+                Success = true,
+                Message = "Cập nhật thành công!",
+                Data = null
+            });
+        }
     }
 }

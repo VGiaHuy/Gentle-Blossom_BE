@@ -86,10 +86,14 @@ namespace GentleBlossom_BE.Services.UserServices
                 }
             }
 
+            var healthJourney = await _unitOfWork.HealthJourney.GetAllByUserId(id);
+
+
             var data = new UserProfileViewModel();
             data.PeriodicHealths = allPeriodic;
             data.UserProfile = userInfo;
             data.PsychologyDiaries = allDiary;
+            data.HealthJourneys = _mapper.Map<List<HealthJourneyDTO>>(healthJourney);
 
             return data;
         }

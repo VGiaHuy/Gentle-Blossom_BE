@@ -219,5 +219,71 @@ namespace GentleBlossom_BE.Services.UserServices
             }
         }
 
+        public async Task CreatePeriodic(PeriodicHealthDTO periodicHealth)
+        {
+            try
+            {
+                var periodic = new PeriodicHealth()
+                {
+                    Mood = periodicHealth.Mood,
+                    GenderBaby = periodicHealth.GenderBaby,
+                    BloodPressure = periodicHealth.BloodPressure,
+                    WaistCircumference = periodicHealth.WaistCircumference,
+                    Weight = periodicHealth.Weight,
+                    WeeksPregnant = periodicHealth.WeeksPregnant,
+                    Notes = periodicHealth.Notes,
+                    JourneyId = periodicHealth.JourneyId,
+                };
+
+                await _unitOfWork.PeriodicHealth.AddAsync(periodic);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while creating the health journey.", ex);
+            }
+        }
+
+        public async Task CreatePsychologyDiary(PsychologyDiaryDTO psychologyDiary)
+        {
+            try
+            {
+                var psychology = new PsychologyDiary()
+                {
+                    Content = psychologyDiary.Content,
+                    Mood = psychologyDiary.Mood,
+                    JourneyId = psychologyDiary.JourneyId,
+                };
+
+                await _unitOfWork.PsychologyDiary.AddAsync(psychology);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while creating the health journey.", ex);
+            }
+        }
+
+        public async Task CompleteJourney(int journeyId)
+        {
+            try
+            {
+                var healthJourney = await _unitOfWork.HealthJourney.GetByIdAsync(journeyId);
+
+                if (healthJourney == null)
+                {
+                    throw new BadRequestException("Không tìm thấy hành trình!");
+                }
+
+                healthJourney.Status = true;
+
+                _unitOfWork.HealthJourney.Update(healthJourney);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
