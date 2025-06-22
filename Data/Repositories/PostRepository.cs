@@ -23,6 +23,7 @@ namespace GentleBlossom_BE.Data.Repositories
                 .Select(post => new PostDTO
                 {
                     PostId = post.PostId,
+                    PosterId = post.PosterId,
                     Content = post.Content,
                     CreatedDate = post.CreatedDate,
                     NumberOfLike = post.NumberOfLike,
