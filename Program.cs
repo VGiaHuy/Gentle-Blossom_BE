@@ -4,6 +4,7 @@ using GentleBlossom_BE.Data.Repositories;
 using GentleBlossom_BE.Data.Repositories.Interface;
 using GentleBlossom_BE.Infrastructure;
 using GentleBlossom_BE.Middleware;
+using GentleBlossom_BE.Services.AdminServices;
 using GentleBlossom_BE.Services.AnalysisService;
 using GentleBlossom_BE.Services.GoogleService;
 using GentleBlossom_BE.Services.Hubs;
@@ -122,6 +123,8 @@ builder.Services.AddScoped<HealthJourneyService>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<ChatService>();
 builder.Services.AddScoped<PregnancyCareService>();
+builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<MentalHealthKeywordService>();
 
 builder.Services.AddScoped<ILoginUserRepository, LoginUserRepository>();
 builder.Services.AddScoped<ICommentPostRepository, CommentPostRepository>();

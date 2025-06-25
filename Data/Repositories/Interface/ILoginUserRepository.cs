@@ -8,6 +8,6 @@ namespace GentleBlossom_BE.Data.Repositories.Interface
         Task<LoginUser?> GetUsnLoginAsync(string usn);
         Task<string?> GetPwLoginAsync(int loginId);
         Task<bool> CheckUsnExistAsync(string sđt);
-
+        Task<LoginUser?> GetUsnLoginAdminAsync(string usn);
     }
 }

@@ -31,5 +31,14 @@ namespace GentleBlossom_BE.Data.Repositories
 
             return data != null;
         }
+
+        public async Task<UserProfile> GetAdminProfile(int userId)
+        {
+            return await _context.UserProfiles
+                .Where(u => u.UserId == userId)
+                .Include(u => u.Administrator)
+                    .ThenInclude(a => a.Role)
+                .FirstAsync();
+        }
     }
 }

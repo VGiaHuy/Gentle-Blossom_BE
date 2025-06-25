@@ -25,7 +25,7 @@ public partial class UserProfile
 
     public string? AvatarFileName { get; set; }
 
-    public virtual ICollection<Administrator> Administrators { get; set; } = new List<Administrator>();
+    public virtual Administrator? Administrator { get; set; }
 
     public virtual ICollection<ChatRoomUser> ChatRoomUsers { get; set; } = new List<ChatRoomUser>();
 
@@ -46,8 +46,6 @@ public partial class UserProfile
     public virtual ICollection<PostLike> PostLikes { get; set; } = new List<PostLike>();
 
     public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
-
-    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
     public virtual UserType UserType { get; set; } = null!;
 }

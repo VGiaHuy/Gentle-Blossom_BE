@@ -34,6 +34,7 @@ namespace GentleBlossom_BE.Data.Repositories
         public IGenericRepository<UserType> UserType { get; }
         public IPostLikeRepository PostLike { get;}
         public IPostAnalysisRepository PostAnalysis { get; }
+        public IMentalHealthKeyworRepository MentalHealthKeyword { get; }
 
         public UnitOfWork(GentleBlossomContext context)
         {
@@ -63,6 +64,7 @@ namespace GentleBlossom_BE.Data.Repositories
             UserType = new GenericRepository<UserType>(_context);
             PostLike = new PostLikeRepository(_context);
             PostAnalysis = new PostAnalysisRepository(_context);
+            MentalHealthKeyword = new MentalHealthKeywordRepository(_context);
         }
 
         public async Task<int> SaveChangesAsync(bool useTransaction = true)

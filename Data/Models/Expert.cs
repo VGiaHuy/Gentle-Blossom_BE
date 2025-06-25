@@ -21,7 +21,5 @@ public partial class Expert
 
     public virtual ICollection<MonitoringForm> MonitoringForms { get; set; } = new List<MonitoringForm>();
 
-    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
-
     public virtual UserProfile User { get; set; } = null!;
 }

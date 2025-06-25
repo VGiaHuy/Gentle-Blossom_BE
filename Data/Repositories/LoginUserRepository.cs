@@ -28,5 +28,13 @@ namespace GentleBlossom_BE.Data.Repositories
 
             return data != null;
         }
+
+        public async Task<LoginUser?> GetUsnLoginAdminAsync(string usn)
+        {
+            return await _context.LoginUsers
+                .Include(u => u.User)
+                .Where(u => u.User.UserTypeId == 1)
+                .FirstOrDefaultAsync(u => u.UserName == usn);
+        }
     }
 }

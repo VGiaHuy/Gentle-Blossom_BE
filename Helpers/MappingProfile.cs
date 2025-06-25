@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GentleBlossom_BE.Data.DTOs.AminDTOs;
 using GentleBlossom_BE.Data.DTOs.UserDTOs;
 using GentleBlossom_BE.Data.Models;
 
@@ -12,6 +13,10 @@ namespace GentleBlossom_BE.Helpers
 
             CreateMap<LoginUser, RegisterViewModel>().ReverseMap();
             CreateMap<UserProfile, RegisterViewModel>().ReverseMap();
+            CreateMap<UserProfile, AdminProfileDTO>()
+                .ForMember(dest => dest.AdminId, opt => opt.MapFrom(src => src.Administrator.AdminId))
+                .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Administrator.Role.RoleName))
+                .ReverseMap();
 
             CreateMap<Post, PostDTO>().ForMember(dest => dest.MediaList, opt => opt.MapFrom(src => src.PostMedia));
             CreateMap<PostMedium, PostMediaDTO>();

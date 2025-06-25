@@ -55,10 +55,6 @@ public partial class GentleBlossomContext : DbContext
 
     public virtual DbSet<PsychologyDiary> PsychologyDiaries { get; set; }
 
-    public virtual DbSet<Review> Reviews { get; set; }
-
-    public virtual DbSet<ReviewImage> ReviewImages { get; set; }
-
     public virtual DbSet<RoleAdmin> RoleAdmins { get; set; }
 
     public virtual DbSet<Treatment> Treatments { get; set; }
@@ -79,6 +75,8 @@ public partial class GentleBlossomContext : DbContext
 
             entity.ToTable("Administrator");
 
+            entity.HasIndex(e => e.UserId, "UQ_Administrator_userId").IsUnique();
+
             entity.Property(e => e.AdminId).HasColumnName("adminId");
             entity.Property(e => e.RoleId).HasColumnName("roleId");
             entity.Property(e => e.UserId).HasColumnName("userId");
@@ -88,8 +86,8 @@ public partial class GentleBlossomContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Administr__roleI__2A164134");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Administrators)
-                .HasForeignKey(d => d.UserId)
+            entity.HasOne(d => d.User).WithOne(p => p.Administrator)
+                .HasForeignKey<Administrator>(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Administr__userI__29221CFB");
         });
@@ -651,53 +649,6 @@ public partial class GentleBlossomContext : DbContext
                 .HasForeignKey(d => d.JourneyId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Psycholog__journ__37703C52");
-        });
-
-        modelBuilder.Entity<Review>(entity =>
-        {
-            entity.HasKey(e => e.ReviewId).HasName("PK__Review__2ECD6E047967878B");
-
-            entity.ToTable("Review");
-
-            entity.Property(e => e.ReviewId).HasColumnName("reviewId");
-            entity.Property(e => e.CreatedDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime")
-                .HasColumnName("createdDate");
-            entity.Property(e => e.ExpertId).HasColumnName("expertId");
-            entity.Property(e => e.Feedback)
-                .HasMaxLength(4000)
-                .HasColumnName("feedback");
-            entity.Property(e => e.Rating).HasColumnName("rating");
-            entity.Property(e => e.UserId).HasColumnName("userId");
-
-            entity.HasOne(d => d.Expert).WithMany(p => p.Reviews)
-                .HasForeignKey(d => d.ExpertId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Review__expertId__59C55456");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Reviews)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Review__userId__5AB9788F");
-        });
-
-        modelBuilder.Entity<ReviewImage>(entity =>
-        {
-            entity.HasKey(e => e.ImageId).HasName("PK__ReviewIm__336E9B557CD494A2");
-
-            entity.ToTable("ReviewImage");
-
-            entity.Property(e => e.ImageId).HasColumnName("imageId");
-            entity.Property(e => e.Image)
-                .HasMaxLength(1000)
-                .HasColumnName("image");
-            entity.Property(e => e.ReviewId).HasColumnName("reviewId");
-
-            entity.HasOne(d => d.Review).WithMany(p => p.ReviewImages)
-                .HasForeignKey(d => d.ReviewId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ReviewIma__revie__5F7E2DAC");
         });
 
         modelBuilder.Entity<RoleAdmin>(entity =>

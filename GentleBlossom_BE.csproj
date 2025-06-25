@@ -11,18 +11,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Remove="Controllers\AdminControllers\**" />
 		<Compile Remove="Data\DTOs\AdminDTOs\**" />
-		<Compile Remove="Services\AdminServices\**" />
-		<Content Remove="Controllers\AdminControllers\**" />
 		<Content Remove="Data\DTOs\AdminDTOs\**" />
-		<Content Remove="Services\AdminServices\**" />
-		<EmbeddedResource Remove="Controllers\AdminControllers\**" />
 		<EmbeddedResource Remove="Data\DTOs\AdminDTOs\**" />
-		<EmbeddedResource Remove="Services\AdminServices\**" />
-		<None Remove="Controllers\AdminControllers\**" />
 		<None Remove="Data\DTOs\AdminDTOs\**" />
-		<None Remove="Services\AdminServices\**" />
 	</ItemGroup>
 
 	<ItemGroup>

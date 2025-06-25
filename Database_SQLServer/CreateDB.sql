@@ -66,6 +66,10 @@ CREATE TABLE Administrator (
 );
 GO
 
+ALTER TABLE Administrator
+ADD CONSTRAINT UQ_Administrator_userId UNIQUE (userId);
+GO
+
 -- Bảng danh mục loại điều trị
 CREATE TABLE Treatments (
 	treatmentId INT PRIMARY KEY IDENTITY,

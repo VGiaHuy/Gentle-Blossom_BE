@@ -1771,4 +1771,4 @@ VALUES
     (N'khó ngủ', N'Căng thẳng', 8, N'TRUNG BÌNH', 1, GETDATE(), NULL),
     (N'chóng mặt', N'Căng thẳng', 7, N'NHẸ', 1, GETDATE(), NULL),
     (N'đau vai', N'Căng thẳng', 7, N'NHẸ', 1, GETDATE(), NULL),
-    (N'tức tối', N'Căng thẳng', 7, N'NHẸ', 1, GETDATE(), NULL),
+    (N'tức tối', N'Căng thẳng', 7, N'NHẸ', 1, GETDATE(), NULL);

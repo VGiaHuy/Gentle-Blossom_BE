@@ -29,6 +29,7 @@ namespace GentleBlossom_BE.Data.Repositories.Interface
         IGenericRepository<UserType> UserType { get; }
         IPostLikeRepository PostLike { get; }
         IPostAnalysisRepository PostAnalysis { get; }
+        IMentalHealthKeyworRepository MentalHealthKeyword { get; }
 
 
         Task<int> SaveChangesAsync(bool useTransaction = true);
