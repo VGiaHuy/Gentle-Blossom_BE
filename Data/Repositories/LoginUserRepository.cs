@@ -14,6 +14,7 @@ namespace GentleBlossom_BE.Data.Repositories
         public async Task<LoginUser?> GetUsnLoginAsync(string userName)
         {
             return await _context.LoginUsers
+                .Where(u => u.User.UserTypeId != 1)
                 .FirstOrDefaultAsync(u => u.UserName == userName);
         }
 

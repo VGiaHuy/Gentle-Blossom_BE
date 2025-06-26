@@ -342,5 +342,38 @@ namespace GentleBlossom_BE.Services.UserServices
             }
 
         }
+
+        public async Task<List<UsersInChatRoomDTO>> GetUsersInChatRoom(int chatRoomId)
+        {
+            if (chatRoomId < 0)
+            {
+                throw new BadRequestException("Phòng chat không hợp lệ");
+            }
+
+            // Lấy danh sách người dùng từ cơ sở dữ liệu
+            List<UsersInChatRoomDTO> usersInChat = await _unitOfWork.ChatRoomUser.GetUsersInChatRoom(chatRoomId);
+
+            // Lấy danh sách connectionId từ SignalR
+            var roomParticipants = GetRoomParticipants(chatRoomId.ToString());
+
+            // Kết hợp connectionId vào usersInChat
+            foreach (var user in usersInChat)
+            {
+                var participant = roomParticipants.FirstOrDefault(p => p.UserId == user.Id);
+                user.ConnectionId = participant.ConnectionId; // Gán connectionId nếu tìm thấy
+            }
+
+            return usersInChat;
+        }
+
+        public List<(int UserId, string ConnectionId)> GetRoomParticipants(string roomId)
+        {
+            // Truy cập biến tĩnh RoomParticipants từ VideoCallHub
+            if (!VideoCallHub.RoomParticipants.ContainsKey(roomId))
+            {
+                return new List<(int, string)>();
+            }
+            return VideoCallHub.RoomParticipants[roomId];
+        }
     }
 }

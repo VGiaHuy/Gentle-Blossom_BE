@@ -172,6 +172,19 @@ namespace GentleBlossom_BE.Controllers.UserControllers
             });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetUsersInChatRoom([FromQuery] int chatRoomId)
+        {
+            var usersInChats = await _chatService.GetUsersInChatRoom(chatRoomId);
+
+            return Ok(new API_Response<List<UsersInChatRoomDTO>>
+            {
+                Success = true,
+                Message = "Lấy danh sách phòng chat thành công!",
+                Data = usersInChats
+            });
+        }
+
         //[HttpGet]
         //public IActionResult GetChatCode(string chatroomname, int chatroomid)
         //{

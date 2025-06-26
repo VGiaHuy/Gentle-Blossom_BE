@@ -1,4 +1,5 @@
-﻿using GentleBlossom_BE.Data.Models;
+﻿using GentleBlossom_BE.Data.DTOs.UserDTOs;
+using GentleBlossom_BE.Data.Models;
 using GentleBlossom_BE.Data.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -59,6 +60,20 @@ namespace GentleBlossom_BE.Data.Repositories
                 .AnyAsync(cancellationToken);
 
             return hasPrivateChatRoom;
+        }
+
+        public async Task<List<UsersInChatRoomDTO>> GetUsersInChatRoom(int chatRoomId)
+        {
+            return await _context.ChatRoomUsers
+                .AsNoTracking()
+                .Where(cru => cru.ChatRoomId == chatRoomId)
+                .Select(users => new UsersInChatRoomDTO
+                {
+                    Id = users.ParticipantId,
+                    Name = users.Participant.FullName,
+                    ConnectionId = null // Sẽ được điền bởi service
+                })
+                .ToListAsync();
         }
     }
 }
