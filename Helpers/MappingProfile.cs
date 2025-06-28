@@ -10,6 +10,7 @@ namespace GentleBlossom_BE.Helpers
         public MappingProfile() 
         {
             CreateMap<UserProfile, UserProfileDTO>().ReverseMap();
+            CreateMap<UserProfile, PostDTO>().ReverseMap();
 
             CreateMap<LoginUser, RegisterViewModel>().ReverseMap();
             CreateMap<UserProfile, RegisterViewModel>().ReverseMap();
@@ -22,19 +23,27 @@ namespace GentleBlossom_BE.Helpers
             CreateMap<PostMedium, PostMediaDTO>();
             CreateMap<CommentPost, CommentPostDTOs>().ReverseMap();
 
-            CreateMap<UserProfile, PostDTO>().ReverseMap();
-
             CreateMap<HealthJourney, PsychologyDiaryDTO>().ReverseMap();
             CreateMap<HealthJourney, PeriodicHealthDTO>().ReverseMap();
+            CreateMap<HealthJourney, HealthJourneyDTO>()
+                .ForMember(dest => dest.TreatmentName, opt => opt.MapFrom(src => src.Treatment.TreatmentName))
+                .ReverseMap();
 
             CreateMap<PeriodicHealth, PeriodicHealthDTO>()
                 .ForMember(dest => dest.TreatmentName, opt => opt.MapFrom(src => src.Journey.Treatment.TreatmentName))
                 .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.Journey.DueDate))
                 .ReverseMap();
+            CreateMap<PeriodicHealth, CreateNewJourneyWithDataDTO>()
+                .ForMember(dest => dest.MoodPeriodicHealth, opt => opt.MapFrom(src => src.Mood))
+                .ReverseMap();
 
             CreateMap<PsychologyDiary, PsychologyDiaryDTO>()
                 .ForMember(dest => dest.TreatmentName, opt => opt.MapFrom(src => src.Journey.Treatment.TreatmentName))
                 .ReverseMap();
+            CreateMap<PsychologyDiary, CreateNewJourneyWithDataDTO>()
+                .ForMember(dest => dest.MoodPsychologyDiary, opt => opt.MapFrom(src => src.Mood))
+                .ReverseMap();
+
 
             CreateMap<Notification, NotificationDTO>()
                 //.ForMember(dest => dest.UserProfile, opt => opt.MapFrom(src => src.User))
@@ -42,10 +51,6 @@ namespace GentleBlossom_BE.Helpers
 
             CreateMap<ChatRoom, ChatRoomDTO>().ReverseMap();
             CreateMap<Message, MessageDTO>().ReverseMap();
-
-            CreateMap<HealthJourney, HealthJourneyDTO>()
-                .ForMember(dest => dest.TreatmentName, opt => opt.MapFrom(src => src.Treatment.TreatmentName))
-                .ReverseMap();
 
             CreateMap<MonitoringForm, MonitoringFormDTO>()
                 .ForMember(dest => dest.ExpertName, opt => opt.MapFrom(src => src.Expert.User.FullName))

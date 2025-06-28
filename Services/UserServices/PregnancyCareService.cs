@@ -168,6 +168,7 @@ namespace GentleBlossom_BE.Services.UserServices
                 {
                     UserId = userId,
                     TreatmentId = createHealth.TreatmentId,
+                    JourneyName = createHealth.JourneyName,
                     DueDate = createHealth.DueDate,
                     Status = false
                 };
@@ -282,8 +283,59 @@ namespace GentleBlossom_BE.Services.UserServices
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new InternalServerException(ex.Message);
             }
         }
+
+        public async Task CreateNewJourneyWithData(CreateNewJourneyWithDataDTO requets)
+        {
+            try
+            {
+                if (requets == null)
+                    throw new BadRequestException("Dữ liệu không hợp lệ");
+
+                if (requets.TreatmentId == Treatments.Periodic)
+                {
+                    var healthJourney = new HealthJourney()
+                    {
+                        UserId = requets.UserId,
+                        TreatmentId = Treatments.Periodic,
+                        JourneyName = requets.JourneyName,
+                        Status = true,
+                    };
+                    await _unitOfWork.HealthJourney.AddAsync(healthJourney);
+                    await _unitOfWork.SaveChangesAsync();
+
+                    var periodicHealth = _mapper.Map<PeriodicHealth>(requets);
+                    periodicHealth.JourneyId = healthJourney.JourneyId;
+
+                    await _unitOfWork.PeriodicHealth.AddAsync(periodicHealth);
+                }
+                else
+                {
+                    var healthJourney = new HealthJourney()
+                    {
+                        UserId = requets.UserId,
+                        TreatmentId = Treatments.Periodic,
+                        JourneyName = requets.JourneyName,
+                        Status = true,
+                    };
+                    await _unitOfWork.HealthJourney.AddAsync(healthJourney);
+                    await _unitOfWork.SaveChangesAsync();
+
+                    var psychologyDiary = _mapper.Map<PsychologyDiary>(requets);
+                    psychologyDiary.JourneyId = healthJourney.JourneyId;
+
+                    await _unitOfWork.PsychologyDiary.AddAsync(psychologyDiary);
+                }
+
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new InternalServerException(ex.Message);
+            }
+        }
+
     }
 }

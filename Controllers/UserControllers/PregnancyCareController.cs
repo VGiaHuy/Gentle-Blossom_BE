@@ -235,5 +235,18 @@ namespace GentleBlossom_BE.Controllers.UserControllers
                 Data = null
             });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateNewJourneyWithData([FromBody] CreateNewJourneyWithDataDTO request)
+        {
+            await _pregnancyCareService.CreateNewJourneyWithData(request);
+
+            return Ok(new API_Response<object>
+            {
+                Success = true,
+                Message = "Cập nhật thành công!",
+                Data = null
+            });
+        }
     }
 }

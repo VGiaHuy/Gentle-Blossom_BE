@@ -6,64 +6,88 @@ INSERT INTO UserTypes (typeName) VALUES
 (N'Admin'), (N'Chuyên gia'), (N'Người dùng');
 
 -- Bảng thông tin người dùng - Role Người dùng
-INSERT INTO UserProfiles (fullName, birthDate, phoneNumber, email, avatar, gender, userTypeId) VALUES
-(N'Nguyễn Thị Anh', '1990-05-20', '0901234567', 'nguyenthianh@gmail.com', NULL, 0, 3),
-(N'Đỗ Ngọc Hân', '1995-11-29', '0934455778', 'ngochan@gmail.com', NULL, 0, 3),
-(N'Hoàng Xuân Mai', '1993-08-12', '0923456789', 'hoangxuanmai@gmail.com', NULL, 0, 3),
-(N'Lê Thị Ánh Đào', '2000-01-05', '0934567890', 'anhdao@gmail.com', NULL, 0, 3),
-(N'Phạm Hoàng Xuân', '1982-03-21', '0945678901', 'hoangxuan@gmail.com', NULL, 0, 3),
-(N'Bùi Thị Mỹ Lê', '1995-07-18', '0956789012', 'myle@gmail.com', NULL, 0, 3),
-(N'Ngô Tuyết Sang', '1988-06-25', '0967890123', 'tuyetsang@gmail.com', NULL, 0, 3),
-(N'Võ Thị Hoàng', '1991-04-14', '0978901234', 'thihoang@gmail.com', NULL, 0, 3),
-(N'Hoàng Thị Mỹ Linh', '1991-07-11', '0912233556', 'mylinh@gmail.com', NULL, 0, 3),
-(N'Hồ Thị Mai', '1997-09-08', '0990123456', 'thimai@gmail.com', NULL, 0, 3),
-(N'Trương Mỹ Tú', '1997-09-08', '0990123451', 'truongmytu@gmail.com', NULL, 0, 3),
+-- Bảng thông tin người dùng - Role Người dùng
+INSERT INTO UserProfiles (fullName, birthDate, phoneNumber, email, avatarUrl, avatarType, avatarFileName, gender, userTypeId) VALUES
+(N'Nguyễn Thị Anh', '1990-05-20', '0901234567', 'nguyenthianh@gmail.com', NULL, NULL, NULL, 0, 3),
+(N'Đỗ Ngọc Hân', '1995-11-29', '0934455778', 'ngochan@gmail.com',  NULL, NULL, NULL, 0, 3),
+(N'Hoàng Xuân Mai', '1993-08-12', '0923456789', 'hoangxuanmai@gmail.com',  NULL, NULL, NULL, 0, 3),
+(N'Lê Thị Ánh Đào', '2000-01-05', '0934567890', 'anhdao@gmail.com',  NULL, NULL, NULL, 0, 3),
+(N'Phạm Hoàng Xuân', '1982-03-21', '0945678901', 'hoangxuan@gmail.com',  NULL, NULL, NULL, 0, 3),
+(N'Bùi Thị Mỹ Lê', '1995-07-18', '0956789012', 'myle@gmail.com',  NULL, NULL, NULL, 0, 3),
+(N'Ngô Tuyết Sang', '1988-06-25', '0967890123', 'tuyetsang@gmail.com',  NULL, NULL, NULL, 0, 3),
+(N'Võ Thị Hoàng', '1991-04-14', '0978901234', 'thihoang@gmail.com',  NULL, NULL, NULL, 0, 3),
+(N'Hoàng Thị Mỹ Linh', '1991-07-11', '0912233556', 'mylinh@gmail.com',  NULL, NULL, NULL, 0, 3),
+(N'Hồ Thị Mai', '1997-09-08', '0990123456', 'thimai@gmail.com',  NULL, NULL, NULL, 0, 3),
+(N'Trương Mỹ Tú', '1997-09-08', '0990123451', 'truongmytu@gmail.com',  NULL, NULL, NULL, 0, 3),
 
 -- Bảng thông tin người dùng - Role Chuyên gia
-(N'Nguyễn Hoàng Bảo', '1992-11-22', '0901122334', 'hoangbao@gmail.com', NULL, 1, 2),
-(N'Phạm Thị Kim Ngân', '1994-03-15', '0912233445', 'kimngan@gmail.com', NULL, 0, 2),
-(N'Lê Văn Thành', '1989-06-10', '0923344556', 'vanthanh@gmail.com', NULL, 1, 2),
-(N'Trần Thị Thu Hương', '1991-07-18', '0934455667', 'thuhuong@gmail.com', NULL, 0, 2),
-(N'Bùi Minh Khang', '1987-02-28', '0945566778', 'minhkhang@gmail.com', NULL, 1, 2),
-(N'Đặng Thị Thanh Trúc', '1988-05-05', '0956677889', 'thanhtruc@gmail.com', NULL, 0, 2),
-(N'Nguyễn Nhật Hào', '1993-09-12', '0967788990', 'nhathao@gmail.com', NULL, 1, 2),
-(N'Võ Thanh Phương', '1985-01-20', '0978899001', 'thanhphuong@gmail.com', NULL, 1, 2),
-(N'Trịnh Hoàng Lan', '1990-12-03', '0989900112', 'hoanglan@gmail.com', NULL, 0, 2),
-(N'Lý Thị Thanh Mai', '1995-08-21', '0990011223', 'thanhmai@gmail.com', NULL, 0, 2),
+(N'Nguyễn Hoàng Bảo', '1992-11-22', '0901122334', 'hoangbao@gmail.com',  NULL, NULL, NULL, 1, 2),
+(N'Phạm Thị Kim Ngân', '1994-03-15', '0912233445', 'kimngan@gmail.com',  NULL, NULL, NULL, 0, 2),
+(N'Lê Văn Thành', '1989-06-10', '0923344556', 'vanthanh@gmail.com',  NULL, NULL, NULL, 1, 2),
+(N'Trần Thị Thu Hương', '1991-07-18', '0934455667', 'thuhuong@gmail.com',  NULL, NULL, NULL, 0, 2),
+(N'Bùi Minh Khang', '1987-02-28', '0945566778', 'minhkhang@gmail.com',  NULL, NULL, NULL, 1, 2),
+(N'Đặng Thị Thanh Trúc', '1988-05-05', '0956677889', 'thanhtruc@gmail.com',  NULL, NULL, NULL, 0, 2),
+(N'Nguyễn Nhật Hào', '1993-09-12', '0967788990', 'nhathao@gmail.com',  NULL, NULL, NULL, 1, 2),
+(N'Võ Thanh Phương', '1985-01-20', '0978899001', 'thanhphuong@gmail.com',  NULL, NULL, NULL, 1, 2),
+(N'Trịnh Hoàng Lan', '1990-12-03', '0989900112', 'hoanglan@gmail.com',  NULL, NULL, NULL, 0, 2),
+(N'Lý Thị Thanh Mai', '1995-08-21', '0990011223', 'thanhmai@gmail.com',  NULL, NULL, NULL, 0, 2),
 
 -- Bảng thông tin người dùng - Role Admin
-(N'Hà Thị Như Quỳnh', '1998-03-22', '0978899112', 'nhuquynh@gmail.com', NULL, 0, 1),
-(N'Phạm Hoài Nam', '1984-05-19', '0989900223', 'hoainam@gmail.com', NULL, 1, 1),
-(N'Cao Thị Thanh Hà', '1996-10-27', '0990011334', 'thanhha@gmail.com', NULL, 0, 1);
+(N'Hà Thị Như Quỳnh', '1998-03-22', '0978899112', 'nhuquynh@gmail.com',  NULL, NULL, NULL, 0, 1),
+(N'Phạm Hoài Nam', '1984-05-19', '0989900223', 'hoainam@gmail.com',  NULL, NULL, NULL, 1, 1),
+(N'Cao Thị Thanh Hà', '1996-10-27', '0990011334', 'thanhha@gmail.com',  NULL, NULL, NULL, 0, 1);
+
+UPDATE LoginUser SET password = '$2a$11$TRwDGWltYO45ocHwH1cezOH0hUY0XRHYoViBN2DUPjGK9kV6V91E2' where userId = 1
 
 -- Bảng lưu thông tin tài khoản đăng nhập
---INSERT INTO LoginUser (userName, password, userId) VALUES
---('0901234567', HASHBYTES('SHA2_256', '0901234567'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0901234567')),
---('0934455778', HASHBYTES('SHA2_256', '0934455778'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0934455778')),
---('0923456789', HASHBYTES('SHA2_256', '0923456789'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0923456789')),
---('0934567890', HASHBYTES('SHA2_256', '0934567890'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0934567890')),
---('0945678901', HASHBYTES('SHA2_256', '0945678901'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0945678901')),
---('0956789012', HASHBYTES('SHA2_256', '0956789012'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0956789012')),
---('0967890123', HASHBYTES('SHA2_256', '0967890123'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0967890123')),
---('0978901234', HASHBYTES('SHA2_256', '0978901234'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0978901234')),
---('0912233556', HASHBYTES('SHA2_256', '0912233556'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0912233556')),
---('0990123456', HASHBYTES('SHA2_256', '0990123456'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0990123456')),
---('0990123451', HASHBYTES('SHA2_256', '0990123451'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0990123451')),
+INSERT INTO LoginUser (userId, userName, password) VALUES
+(1, '0901234567', '$2a$11$St4t8gfc2ez2KtwFrtlTme2NDPrf9Kdui0usAgI/OAZ/hViq18V6W'),
+(2, '0934455778', '$2a$11$0eMa73RBB8EFxfyAYv9I6.rXaz5KSFZyo8t0guoGSyHJBkDo5.g72'),
+(3, '0923456789', '$2a$11$Zck4xphDC9gbpsYo7UuMmO00B6W/F2QjjpgKH8Qw55NQzgbnEwLDO'),
+(4, '0934567890', '$2a$11$tHOrD0A90x5D.yxMsdeVVeHQFx3z2b2vIuMxsbXNnnxweExyDRDKK'),
+(5, '0945678901', '$2a$11$rq09xNlPvY2cN94EocUv9Og3cdeN1yBIKrTETPQe/MntLbUMw51S2'),
+(6, '0956789012', '$2a$11$i2pr0U4MYZGl4Z.Ck82JHUBgbokj7A4hrvQSfrjc8.UTnbd2FLc2a'),
+(7, '0967890123', '$2a$11$N2tSmMRiUzUZ3nhCg5EK7.s9mfv41Bkp/HWqMe4Bywwz4LmnFMsoK'),
+(8, '0978901234', '$2a$11$yTva13PfM5WIFvRUdHqip.yj5CjQML4E5odC9evdnHdQ7M2Ybjiha'),
+(9, '0912233556', '$2a$11$aCXtOP7KYMgKfLBCor8U2OaDqQeZ2l7EImfFy5NPEayx5MzzyWrSu'),
+(10, '0990123456', '$2a$11$CKuRLs2/N8Ak6osS3hMvveGBnGT7VNdO7gTzzAcUjHqyzZSlcOJhW'),
+(11, '0990123451', '$2a$11$pFHP32XvZWWo3DmoXJ.CROD3hG2oYPmZKmFpa4Tm4Z1IaaUcu3wz6'),
+(12, '0901122334', '$2a$11$tKrFiDDqumMH1B6sfrL9NOXEu6hC6depyZ.Q5r01sfR2FlIn6PbKq'),
+(13, '0912233445', '$2a$11$l2UDIPK2XUQWyMkNwRM79uhwXpJevQeRfB6NDDhYkhxBdmiDR8PAy'),
+(14, '0923344556', '$2a$11$RvjauXTijhVW4QozUWTb/OzixBPgzA7/0QIz4Qu/7Y0R8bFZKOKtS'),
+(15, '0934455667', '$2a$11$KfsxC2RzxEm7C6jvIrxjmOYohk45E6b.8KTqOQiE4qmb6JeyDkTkK'),
+(16, '0945566778', '$2a$11$npCt8lbe3GCvOUHYqbmWeu/PIUhO1n7FLvYmwVOoB/Bd7LDY5b0EO'),
+(17, '0956677889', '$2a$11$O3rETbEgn6g7xsb7toSh5OjUciVa3IxyUpSG7vgX2eBHyRVLt0YSS'),
+(18, '0967788990', '$2a$11$bbau8fZXJzVZHe7EZyZ0XehKtCQOaCW5NsdJGeATq/mMnPbqdAGg2'),
+(19, '0978899001', '$2a$11$z/MZ8ZBFzYqINz1pufyTrOnpQ7WWfQpE0gxGiHcz9AHPRfP/Vz.6a'),
+(20, '0989900112', '$2a$11$IrE/hCaZ3aNWLKpZfIxGOeW.y2HZKSkqPaHOqZtwXRRvKy/Zo1IQ6'),
+(21, '0990011223', '$2a$11$8mKcMlQzrtfSwMCJ.F92yO//hIT/aY93sOO0v8AfWjLFFZxpIPe8S'),
+(22, '0978899112', '$2a$11$82T.hMGdiYIbMcKyGj9.VurRxY18uEHwwGggVSkLRsyc3f7RRnDaW'),
+(23, '0989900223', '$2a$11$jHz5ABHRZYyTh6.YWZdLfu3IoQLo.0p1GznoZaP3NGB9jo7tXZaG6'),
+(24, '0990011334', '$2a$11$K2UdflCGepnA6UuCgh3ZQeRmEDhaqI4UF5c2qDgs5AZ5mKxhWJMUe');
 
---('0901122334', HASHBYTES('SHA2_256', '0901122334'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0901122334')),
---('0912233445', HASHBYTES('SHA2_256', '0912233445'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0912233445')),
---('0923344556', HASHBYTES('SHA2_256', '0923344556'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0923344556')),
---('0934455667', HASHBYTES('SHA2_256', '0934455667'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0934455667')),
---('0945566778', HASHBYTES('SHA2_256', '0945566778'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0945566778')),
---('0956677889', HASHBYTES('SHA2_256', '0956677889'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0956677889')),
---('0967788990', HASHBYTES('SHA2_256', '0967788990'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0967788990')),
---('0978899001', HASHBYTES('SHA2_256', '0978899001'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0978899001')),
---('0989900112', HASHBYTES('SHA2_256', '0989900112'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0989900112')),
---('0990011223', HASHBYTES('SHA2_256', '0990011223'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0990011223')),
-
---('0978899112', HASHBYTES('SHA2_256', '0978899112'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0978899112')),
---('0989900223', HASHBYTES('SHA2_256', '0989900223'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0989900223')),
---('0990011334', HASHBYTES('SHA2_256', '0990011334'), (SELECT userId FROM UserProfiles WHERE phoneNumber = '0990011334'));
+UPDATE LoginUser SET password = '$2a$11$js9xClDdi.Jyqj2TPXQJve.HBhaR3SQbMR6FP51Bb18QBov4AqQvO' where userId = 3
+UPDATE LoginUser SET password = '$2a$11$JQ77z.0Rl71JdOriBt2EL.f4p.NfW50hffLSrCFJ9FJIR4/HGn/1O' where userId = 4
+UPDATE LoginUser SET password = '$2a$11$J6Jjz2HnNlwWxS3zaiyOSOmUMeW4C6K3x1vM36gS7lhbFnLpOvvou' where userId =5 
+UPDATE LoginUser SET password = '$2a$11$6G.iga4/qIkwAJwVQ7fzZeoXKZh43pL1cj6KxsRJLMRk92YBLwD46' where userId = 6
+UPDATE LoginUser SET password = '$2a$11$Nd4SdlXMZ7y..qn4WCmZ3Ou4QTXAAeAa9hXbQGuccWVuRmiOg2JS6' where userId = 7
+UPDATE LoginUser SET password = '$2a$11$xucrdVlzOAm5drRA3JZYk.1IjX4bkmoWj//JnYnzTQisFehDmXcwO' where userId = 8
+UPDATE LoginUser SET password = '$2a$11$7xjeIknGFYWblw3CSb1JpeAL2IIV9SJIKoyqr.suyClrdTzmQgH2O' where userId = 9
+UPDATE LoginUser SET password = '$2a$11$NzR0brkxUu3a2GpqXJca1eLKFyIUCFMfRxvUyI2c8TskL79DRhPWO' where userId = 10
+UPDATE LoginUser SET password = '$2a$11$QJYdDeY8vOViuzKiwHx9p.aN/rpTmn8y7ard6OBPgyz8DimijJz36' where userId = 11
+UPDATE LoginUser SET password = '$2a$11$eYP8MfPYCnRyvexfYuN6gORk/L6KcaZmVk3H9vxuGknf5Qhy2syfm' where userId = 12
+UPDATE LoginUser SET password = '$2a$11$czvfWsqIoPzVcTsyV9LiPumM/wZmR3GqyqPgxWzdIs3UArzUtU34O' where userId = 13
+UPDATE LoginUser SET password = '$2a$11$561PW.IFqhmwjqLXAsvq6uYIfgNWM/X.9eRx7zwtknqk46oZOI7Qi' where userId = 14
+UPDATE LoginUser SET password = '$2a$11$bFKzd.ek.BplG6tB6uke3uEjJqFSlxWFOFqN4I7BZCuojxJV6JXj.' where userId = 15
+UPDATE LoginUser SET password = '$2a$11$Xd7Z5kLaz4gsVHbqICFmI.xBhWQiO37oBDYUs8eudiYB9lK.e1Hse' where userId = 16
+UPDATE LoginUser SET password = '$2a$11$W//kchZVKBhXHTntx4DRWu418wAeST04BPvhCmidyLtN1iJxcFrtW' where userId = 17
+UPDATE LoginUser SET password = '$2a$11$8qPZDasrRASfDNAeVwNyouP02/ET6iaRt2VYd68Xvp6KgXdFD56mm' where userId = 18
+UPDATE LoginUser SET password = '$2a$11$ErcbgUZ6yMH6MTrrRf.W0uqvrVrYqQHPbfE/9K/UoU3obEXkhpNce' where userId = 19
+UPDATE LoginUser SET password = '$2a$11$McoxYgzkz47CAFSPTOqQpux0gRyxldYekXa7Odo92d5BkClgGEQ6a' where userId = 20
+UPDATE LoginUser SET password = '$2a$11$mTTRq7lXvCw/gUwXpKPWw.R/3LiJbebHrf8KgvQ4yD3Y4y.IPm.kK' where userId = 21
+UPDATE LoginUser SET password = '$2a$11$awRYAxkqnmEOFW.6HCKt/ONkbdX8NGAOuJUFpnycViKEyipG/m//u' where userId = 22
+UPDATE LoginUser SET password = '$2a$11$hO2TowD33kLkxZIj2efpQe0OmFrn2un0lwku1h5rwHBxx2DSqRASe' where userId = 23
+UPDATE LoginUser SET password = '$2a$11$jcbJJL.8h8AUZAPjPvdD5uEK8PoXykXGUm2kACrbCCw8mB5ewlPlu' where userId = 24
 
 
 -- Bảng thông tin chuyên gia
@@ -328,82 +352,3 @@ INSERT INTO CommentPost (postId, posterId, parentCommentId, content, image, comm
 (19, 2, 1, N'Dùng kem chống nắng mỗi ngày và uống đủ nước rất quan trọng.', NULL, '2025-03-07');
 INSERT INTO CommentPost (postId, posterId, parentCommentId, content, image, commentDate) VALUES
 (19, 3, 1, N'Bổ sung vitamin C từ cam, chanh giúp da sáng hơn.', NULL, '2025-03-07');
-
-
--- Thêm dữ liệu vào bảng Review
-INSERT INTO Review (expertId, userId, rating, feedback, createdDate) VALUES
-(1, 3, 5, N'Bác sĩ rất tận tâm và tư vấn rất chi tiết!', '2025-02-25 10:15:00'),
-(2, 5, 4, N'Bác sĩ tư vấn tốt, nhưng cần giải thích rõ hơn.', '2025-02-25 11:30:00'),
-(3, 7, 5, N'Tư vấn về chế độ dinh dưỡng rất hữu ích.', '2025-02-25 13:45:00'),
-(4, 9, 3, N'Cảm thấy chưa hài lòng lắm về buổi tư vấn.', '2025-02-25 14:20:00'),
-(5, 1, 5, N'Chuyên gia có nhiều kinh nghiệm, rất đáng tin cậy.', '2025-02-25 15:10:00'),
-
-(6, 4, 4, N'Tư vấn hay nhưng thời gian hơi ngắn.', '2025-02-26 09:05:00'),
-(7, 6, 5, N'Bác sĩ rất chu đáo và nhiệt tình.', '2025-02-26 10:30:00'),
-(8, 8, 4, N'Rất hài lòng với cách tư vấn của bác sĩ.', '2025-02-26 11:40:00'),
-(9, 10, 3, N'Cần cải thiện dịch vụ tư vấn trực tuyến.', '2025-02-26 12:50:00'),
-(10, 2, 5, N'Tư vấn chính xác, chi tiết và rất dễ hiểu.', '2025-02-26 14:00:00'),
-
-(1, 5, 5, N'Chuyên gia giải đáp mọi thắc mắc của mình.', '2025-02-27 08:20:00'),
-(2, 7, 4, N'Nội dung tư vấn rất thực tế, dễ áp dụng.', '2025-02-27 09:35:00'),
-(3, 9, 5, N'Nhờ tư vấn mà mình đã biết cách chăm sóc tốt hơn.', '2025-02-27 10:50:00'),
-(4, 1, 2, N'Dịch vụ chưa được như kỳ vọng.', '2025-02-27 12:05:00'),
-(5, 3, 5, N'Tư vấn tận tâm, thái độ rất chuyên nghiệp.', '2025-02-27 14:15:00'),
-
-(6, 6, 4, N'Rất hữu ích cho mẹ bầu lần đầu như mình.', '2025-02-28 08:00:00'),
-(7, 8, 5, N'Bác sĩ đã giúp mình hiểu rõ hơn về thai kỳ.', '2025-02-28 09:20:00'),
-(8, 10, 4, N'Dịch vụ tốt nhưng thời gian chờ hơi lâu.', '2025-02-28 10:40:00'),
-(9, 2, 3, N'Chất lượng tư vấn ở mức trung bình.', '2025-02-28 12:10:00'),
-(10, 4, 5, N'Cảm thấy rất an tâm khi được tư vấn.', '2025-02-28 13:30:00'),
-
-(1, 7, 5, N'Bác sĩ rất nhiệt tình và cẩn thận.', '2025-03-01 09:00:00'),
-(2, 9, 4, N'Tư vấn phù hợp với từng giai đoạn thai kỳ.', '2025-03-01 10:30:00'),
-(3, 1, 3, N'Không quá hài lòng với dịch vụ.', '2025-03-01 12:00:00'),
-(4, 3, 5, N'Mình rất hài lòng với buổi tư vấn.', '2025-03-01 13:45:00'),
-(5, 5, 5, N'Những kiến thức bác sĩ chia sẻ rất thực tế.', '2025-03-01 15:20:00'),
-
-(6, 8, 4, N'Một trải nghiệm tư vấn tốt.', '2025-03-02 09:15:00'),
-(7, 10, 5, N'Bác sĩ tư vấn chuyên sâu, rất dễ hiểu.', '2025-03-02 10:45:00'),
-(8, 2, 3, N'Mình cảm thấy buổi tư vấn hơi chung chung.', '2025-03-02 12:30:00'),
-(9, 4, 5, N'Tư vấn chuyên nghiệp, nhiều thông tin bổ ích.', '2025-03-02 14:00:00'),
-(10, 6, 4, N'Có nhiều lời khuyên hữu ích cho thai phụ.', '2025-03-02 15:30:00');
-
-
--- Thêm dữ liệu vào bảng ReviewImage (một số đánh giá có hình ảnh)
-INSERT INTO ReviewImage (reviewId, image) VALUES
-(1, 'review_img1.jpg'),
-(3, 'review_img2.jpg'),
-(5, 'review_img3.jpg'),
-(7, 'review_img4.jpg'),
-(10, 'review_img5.jpg'),
-
-(12, 'review_img6.jpg'),
-(15, 'review_img7.jpg'),
-(18, 'review_img8.jpg'),
-(21, 'review_img9.jpg'),
-(24, 'review_img10.jpg'),
-
-(27, 'review_img11.jpg'),
-(30, 'review_img12.jpg');
-
-
--- Thêm dữ liệu vào bảng Review
-INSERT INTO Review (expertId, userId, rating, feedback)
-VALUES 
-(1, 2, 5, N'Bác sĩ tư vấn rất tận tình.'),
-(3, 5, 4, N'Chuyên gia có kinh nghiệm, nhưng tư vấn hơi nhanh.'),
-(5, 8, 3, N'Tư vấn ổn, nhưng chưa thực sự chi tiết.'),
-(7, 10, 2, N'Cần cải thiện thái độ khi tư vấn.'),
-(10, 1, 5, N'Tôi rất hài lòng với lời khuyên của bác sĩ.'),
-(4, 6, 4, N'Bác sĩ rất nhiệt tình, nhưng hơi khó đặt lịch.'),
-(2, 3, 5, N'Tư vấn có tâm, hướng dẫn chi tiết.'),
-(9, 9, 3, N'Dịch vụ khá tốt, nhưng vẫn có thể cải thiện.');
-
-
--- Thêm hình ảnh cho một số đánh giá
-INSERT INTO ReviewImage (reviewId, image)
-VALUES 
-(1, N'https://example.com/review1.jpg'),
-(3, N'https://example.com/review3.jpg'),
-(5, N'https://example.com/review5.jpg'),
-(7, N'https://example.com/review7.jpg');

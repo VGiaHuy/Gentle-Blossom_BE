@@ -19,6 +19,8 @@ public partial class HealthJourney
 
     public bool Status { get; set; }
 
+    public string? JourneyName { get; set; }
+
     public virtual ICollection<ConnectionMedical> ConnectionMedicals { get; set; } = new List<ConnectionMedical>();
 
     public virtual ICollection<MonitoringForm> MonitoringForms { get; set; } = new List<MonitoringForm>();

@@ -271,6 +271,9 @@ public partial class GentleBlossomContext : DbContext
             entity.Property(e => e.JourneyId).HasColumnName("journeyId");
             entity.Property(e => e.DueDate).HasColumnName("dueDate");
             entity.Property(e => e.EndDate).HasColumnName("endDate");
+            entity.Property(e => e.JourneyName)
+                .HasMaxLength(200)
+                .HasColumnName("journeyName");
             entity.Property(e => e.StartDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnName("startDate");
@@ -318,7 +321,7 @@ public partial class GentleBlossomContext : DbContext
 
         modelBuilder.Entity<MentalHealthKeyword>(entity =>
         {
-            entity.HasKey(e => e.KeywordId).HasName("PK__MentalHe__A6DC9B8A3DD9BF35");
+            entity.HasKey(e => e.KeywordId).HasName("PK__MentalHe__A6DC9B8A2BCC9438");
 
             entity.HasIndex(e => e.IsActive, "IX_Keywords_Active");
 

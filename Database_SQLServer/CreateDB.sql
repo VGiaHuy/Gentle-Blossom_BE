@@ -9,6 +9,11 @@ GO
 --ALTER TABLE Post
 --ALTER COLUMN createdDate DATETIME;
 
+--ALTER TABLE HealthJourney
+--ADD journeyName NVARCHAR(200);
+
+select * from HealthJourney
+
 -- Bảng danh mục loại người dùng
 CREATE TABLE UserTypes (
 	usertypeId TINYINT PRIMARY KEY IDENTITY,
@@ -82,6 +87,7 @@ CREATE TABLE HealthJourney (
     journeyId INT IDENTITY PRIMARY KEY,
     userId INT NOT NULL FOREIGN KEY REFERENCES UserProfiles(userId),
     treatmentId INT NOT NULL FOREIGN KEY REFERENCES Treatments(treatmentId),
+	journeyName NVARCHAR(200),
     startDate DATE NOT NULL DEFAULT GETDATE(),
     dueDate DATE NULL,		-- Chỉ dành cho thai phụ
     endDate DATE NULL,		-- Ngày kết thúc điều trị
@@ -130,34 +136,6 @@ CREATE TABLE MentalHealthKeywords (
 );
 GO
 
--- Bảng lưu kết quả phân tích bài viết
-CREATE TABLE PostAnalysis (
-    postAnalysisId BIGINT IDENTITY(1,1) PRIMARY KEY,
-    postId INT NOT NULL,             -- FK đến Post
-    score INT NOT NULL,                 -- Điểm rủi ro từ Rule-based
-    sentimentScore FLOAT,               -- Điểm cảm xúc từ API
-    riskLevel NVARCHAR(20),             -- Mức độ rủi ro tâm lý của bài viết, có thể là LOW hoặc HIGH
-    analysisStatus NVARCHAR(20),        -- PENDING, COMPLETED, FAILED
-    FOREIGN KEY (postId) REFERENCES Post(postId),
-    INDEX IX_PostAnalysis_PostId (PostId)
-);
-GO
-
--- Bảng thông tin kết nối giữa Người dùng và chuyên gia
-CREATE TABLE ConnectionMedical (
-    connectId INT IDENTITY PRIMARY KEY,
-    expertId INT NOT NULL FOREIGN KEY REFERENCES Expert(expertId),
-    userId INT NOT NULL FOREIGN KEY REFERENCES UserProfiles(userId),
-    journeyId INT FOREIGN KEY REFERENCES HealthJourney(journeyId),
-	postId INT,
-	status TINYINT NOT NULL DEFAULT 0,	-- 0: Chờ, 1: Đang tư vấn, 2: Hoàn thành, 3: Hủy bỏ
-	createdAt DATETIME DEFAULT GETDATE(),
-    updatedAt DATETIME,
-	FOREIGN KEY (PostId) REFERENCES Post(postId),
-    INDEX IX_ExpertConnections_PostId (PostId)
-);
-GO
-
 -- Bảng phiếu theo dõi
 CREATE TABLE MonitoringForm (
     formId INT IDENTITY PRIMARY KEY,
@@ -182,7 +160,7 @@ CREATE TABLE Post (
     posterId INT NOT NULL FOREIGN KEY REFERENCES UserProfiles(userId),
     categoryId INT NOT NULL FOREIGN KEY REFERENCES PostCategories(categoryId),
     content NVARCHAR(4000) NOT NULL,
-    createdDate DATETIME DEFAULT GETDATE(),
+    createdDate DATE DEFAULT GETDATE(),
 	numberOfLike INT NOT NULL DEFAULT 0,
 	hidden BIT DEFAULT 0
 );
@@ -222,6 +200,34 @@ CREATE TABLE CommentPost (
 	mediaUrl NVARCHAR(1000),         -- Link Google Drive public
     mediaType NVARCHAR(20),          -- 'image', 'video', 'audio', 'pdf',...
     fileName NVARCHAR(255)                   -- Tên gốc của file (tùy chọn)
+);
+GO
+
+-- Bảng lưu kết quả phân tích bài viết
+CREATE TABLE PostAnalysis (
+    postAnalysisId BIGINT IDENTITY(1,1) PRIMARY KEY,
+    postId INT NOT NULL,             -- FK đến Post
+    score INT NOT NULL,                 -- Điểm rủi ro từ Rule-based
+    sentimentScore FLOAT,               -- Điểm cảm xúc từ API
+    riskLevel NVARCHAR(20),             -- Mức độ rủi ro tâm lý của bài viết, có thể là LOW hoặc HIGH
+    analysisStatus NVARCHAR(20),        -- PENDING, COMPLETED, FAILED
+    FOREIGN KEY (postId) REFERENCES Post(postId),
+    INDEX IX_PostAnalysis_PostId (PostId)
+);
+GO
+
+-- Bảng thông tin kết nối giữa Người dùng và chuyên gia
+CREATE TABLE ConnectionMedical (
+    connectId INT IDENTITY PRIMARY KEY,
+    expertId INT NOT NULL FOREIGN KEY REFERENCES Expert(expertId),
+    userId INT NOT NULL FOREIGN KEY REFERENCES UserProfiles(userId),
+    journeyId INT FOREIGN KEY REFERENCES HealthJourney(journeyId),
+	postId INT,
+	status TINYINT NOT NULL DEFAULT 0,	-- 0: Chờ, 1: Đang tư vấn, 2: Hoàn thành, 3: Hủy bỏ
+	createdAt DATETIME DEFAULT GETDATE(),
+    updatedAt DATETIME,
+	FOREIGN KEY (PostId) REFERENCES Post(postId),
+    INDEX IX_ExpertConnections_PostId (PostId)
 );
 GO
 

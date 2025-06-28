@@ -85,10 +85,12 @@ namespace GentleBlossom_BE.Services.Hubs
                 if (userId <= 0)
                     throw new ArgumentException("Invalid userId");
 
+                var user = await _unitOfWork.UserProfile.GetByIdAsync(userId);
+
                 // Thêm client vào nhóm
                 await Groups.AddToGroupAsync(Context.ConnectionId, $"Room_{chatRoomId}");
                 // Gửi thông báo đến tất cả client trong nhóm
-                await Clients.OthersInGroup($"Room_{chatRoomId}").SendAsync("UserJoined", userId);
+                await Clients.OthersInGroup($"Room_{chatRoomId}").SendAsync("UserJoined", user.FullName);
             }
             catch (Exception ex)
             {
