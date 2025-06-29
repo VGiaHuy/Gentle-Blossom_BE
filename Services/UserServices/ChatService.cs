@@ -64,7 +64,6 @@ namespace GentleBlossom_BE.Services.UserServices
                     ChatRoomId = createdRoom.ChatRoomId,
                     ChatRoomName = createdRoom.ChatRoomName,
                     IsGroup = createdRoom.IsGroup,
-                    CreatedAt = createdRoom.CreatedAt,
                 };
 
                 await _unitOfWork.SaveChangesAsync();
@@ -168,7 +167,6 @@ namespace GentleBlossom_BE.Services.UserServices
                     SenderId = senderId,
                     Content = content,
                     HasAttachment = attachments != null && attachments.Any(file => file.Length > 0),
-                    SentAt = DateTime.UtcNow
                 };
 
                 // Lưu tin nhắn

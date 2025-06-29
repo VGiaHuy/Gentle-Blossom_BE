@@ -75,5 +75,29 @@ namespace GentleBlossom_BE.Data.Repositories
                 })
                 .ToListAsync();
         }
+
+        public async Task<int?> GetExistingPrivateChatRoomIdAsync(int userId1, int userId2)
+        {
+            // Lấy danh sách các ChatRoomUser có liên quan 2 người
+            var chatRoomUsers = await _context.ChatRoomUsers
+                .Where(c => c.ParticipantId == userId1 || c.ParticipantId == userId2)
+                .ToListAsync();
+
+            // Lấy danh sách các phòng có 2 người dùng cùng tham gia
+            var chatRoomIds = chatRoomUsers
+                .GroupBy(c => c.ChatRoomId)
+                .Where(g => g.Count() == 2)
+                .Select(g => g.Key)
+                .ToList();
+
+            // Lấy ra phòng có isGroup = false
+            var privateRoomId = await _context.ChatRooms
+                .Where(r => chatRoomIds.Contains(r.ChatRoomId) && !r.IsGroup)
+                .Select(r => r.ChatRoomId)
+                .FirstOrDefaultAsync();
+
+            return privateRoomId == 0 ? (int?)null : privateRoomId;
+        }
+
     }
 }

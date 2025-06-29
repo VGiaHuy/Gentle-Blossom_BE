@@ -241,6 +241,9 @@ public partial class GentleBlossomContext : DbContext
             entity.Property(e => e.AcademicTitle)
                 .HasMaxLength(50)
                 .HasColumnName("academicTitle");
+            entity.Property(e => e.Description)
+                .HasMaxLength(500)
+                .HasColumnName("description");
             entity.Property(e => e.Organization)
                 .HasMaxLength(200)
                 .HasColumnName("organization");

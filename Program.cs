@@ -122,6 +122,7 @@ builder.Services.AddScoped<ChatService>();
 builder.Services.AddScoped<PregnancyCareService>();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<MentalHealthKeywordService>();
+builder.Services.AddScoped<FriendsService>();
 
 builder.Services.AddScoped<ILoginUserRepository, LoginUserRepository>();
 builder.Services.AddScoped<ICommentPostRepository, CommentPostRepository>();

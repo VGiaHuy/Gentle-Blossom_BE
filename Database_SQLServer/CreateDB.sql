@@ -53,6 +53,7 @@ CREATE TABLE Expert (
     position NVARCHAR(50) NOT NULL,				-- Chức vụ
     specialization NVARCHAR(100) NOT NULL,		-- Chuyên môn
     organization NVARCHAR(200) NOT NULL,		-- Đơn vị công tác
+	description NVARCHAR(500)
 );
 GO
 

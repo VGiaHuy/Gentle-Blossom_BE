@@ -17,6 +17,8 @@ public partial class Expert
 
     public string Organization { get; set; } = null!;
 
+    public string? Description { get; set; }
+
     public virtual ICollection<ConnectionMedical> ConnectionMedicals { get; set; } = new List<ConnectionMedical>();
 
     public virtual ICollection<MonitoringForm> MonitoringForms { get; set; } = new List<MonitoringForm>();
