@@ -130,8 +130,13 @@ namespace GentleBlossom_BE.Services.UserServices
                 await _unitOfWork.SaveChangesAsync();
             }
 
-            // Khởi động phân tích bài viết bất đồng bộ
-            await _postAnalysisService.AnalyzePostAsync(post);
+            var poster = await _unitOfWork.UserProfile.GetByIdAsync(posterId);
+            // Nếu người dùng là Thai phụ
+            if (poster.UserTypeId == 3)
+            {
+                // Khởi động phân tích bài viết bất đồng bộ
+                await _postAnalysisService.AnalyzePostAsync(post);
+            }
         }
 
         public async Task CreateCommentAsync(CreateCommentDTOs request)
@@ -259,15 +264,86 @@ namespace GentleBlossom_BE.Services.UserServices
                     throw new UnauthorizedException("Bạn không có quyền xóa bài viết này.");
                 }
 
-                //await _unitOfWork.PostMedia.DeleteRangeByPostIdAsync(postId);
-                //await _unitOfWork.PostAnalysis.DeleteByPostId(postId);
-                //await _unitOfWork.PostLike.DeleteRangeByPostIdAsync(postId);
-                //await _unitOfWork.CommentPost.DeleteRangeByPostIdAsync(postId);
-                //await _unitOfWork.ConnectionMedical.DeleteByPostId(postId);
-                //_unitOfWork.Post.Delete(post);
-
                 post.Hidden = true;
                 await _unitOfWork.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new InternalServerException(ex.Message);
+            }
+        }
+
+        public async Task<bool> UpdatePostDTO(UpdatePostDTO updatePost)
+        {
+            try
+            {
+                if (updatePost.RemovedMediaUrls != null)
+                {
+                    foreach(string mediaUrl in updatePost.RemovedMediaUrls)
+                    {
+                        await _unitOfWork.PostMedia.DeleteRangeByMediaUrlAsync(mediaUrl, updatePost.PostId);
+                    }
+                }
+
+                var post = await _unitOfWork.Post.GetByIdAsync(updatePost.PostId);
+
+                if (post == null) throw new BadRequestException("Bài viết không tồn tại");
+
+                post.Content = updatePost.Content;
+                await _unitOfWork.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new InternalServerException(ex.Message);
+            }
+        }
+
+        public async Task<bool> UpdatePostImageDTO(UpdateImagePost updatePost)
+        {
+            try
+            {
+                if (!int.TryParse(updatePost.PostId, out var postId))
+                    throw new BadRequestException("Invalid UserId.");
+
+                if (updatePost.MediaFiles != null && updatePost.MediaFiles.Count > 0)
+                {
+                    var uploadTasks = updatePost.MediaFiles.Select(async file =>
+                    {
+                        try
+                        {
+                            var fileUrl = await _googleDriveService.UploadFileAsync(file, MediaType.Post);
+
+                            var mediaType = string.IsNullOrEmpty(file.ContentType) ? throw new BadRequestException("Missing ContentType") :
+                                            file.ContentType.StartsWith("image/") ? "Image" :
+                                            file.ContentType.StartsWith("video/") ? "Video" :
+                                            throw new BadRequestException($"Unsupported media type: {file.ContentType}");
+
+                            return new PostMedium
+                            {
+                                PostId = postId,
+                                FileName = file.FileName,
+                                MediaUrl = fileUrl,
+                                MediaType = mediaType
+                            };
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new InternalServerException($"Lỗi upload file: {file.FileName}: {ex.Message}");
+                        }
+                    }).ToList();
+
+                    var mediaItems = await Task.WhenAll(uploadTasks);
+                    foreach (var media in mediaItems.Where(m => m != null))
+                    {
+                        await _unitOfWork.PostMedia.AddAsync(media);
+                    }
+
+                    await _unitOfWork.SaveChangesAsync();
+                }
 
                 return true;
             }

@@ -228,5 +228,61 @@ namespace GentleBlossom_BE.Controllers.UserControllers
                 Data = null
             });
         }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> UpdatePost([FromBody] UpdatePostDTO updatePost)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage);
+
+                return BadRequest(new API_Response<object>
+                {
+                    Success = false,
+                    Message = string.Join(" ", errors),
+                    Data = null
+                });
+            }
+
+            await _postService.UpdatePostDTO(updatePost);
+
+            return Ok(new API_Response<object>
+            {
+                Success = true,
+                Message = "Cập nhật bài viết thành công!",
+                Data = null
+            });
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> UpdateImagePost([FromForm] UpdateImagePost request)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage);
+
+                return BadRequest(new API_Response<object>
+                {
+                    Success = false,
+                    Message = string.Join(" ", errors),
+                    Data = null
+                });
+            }
+
+            await _postService.UpdatePostImageDTO(request);
+
+            return Ok(new API_Response<object>
+            {
+                Success = true,
+                Message = "Cập nhật bài viết thành công!",
+                Data = null
+            });
+        }
     }
 }

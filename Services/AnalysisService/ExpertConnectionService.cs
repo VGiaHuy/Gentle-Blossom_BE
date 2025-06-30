@@ -30,9 +30,7 @@ namespace GentleBlossom_BE.Services.AnalysisService
         // Hàm để đẩy yêu cầu kết nối vào hàng đợi
         public async Task QueueExpertConnection(int postId, int posterId, double? sentimentScore)
         {
-            // Tạo yêu cầu mới với PostId
             var request = new ExpertConnectionRequest { PostId = postId, PosterId = posterId, SentimentScore = sentimentScore };
-            // Đẩy yêu cầu vào queue
             await _queue.EnqueueAsync(request);
         }
 
@@ -43,10 +41,7 @@ namespace GentleBlossom_BE.Services.AnalysisService
             {
                 try
                 {
-                    // Chờ và lấy yêu cầu từ queue
                     var request = await _queue.DequeueAsync(stoppingToken);
-
-                    // Tạo scope mới để sử dụng DbContext (tránh lỗi lifetime)
                     using var scope = _serviceProvider.CreateScope();
                     var dbContext = scope.ServiceProvider.GetRequiredService<GentleBlossomContext>();
                     Expert expert;
