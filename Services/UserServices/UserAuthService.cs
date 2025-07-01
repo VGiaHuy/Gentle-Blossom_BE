@@ -13,11 +13,13 @@ namespace GentleBlossom_BE.Services.UserServices
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly GentleBlossomContext _context;
 
         public UserAuthService(IUnitOfWork unitOfWork, IMapper mapper, GentleBlossomContext context)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _context = context;
         }
 
         public async Task<UserProfileDTO> Login(LoginRequestDTO request)
@@ -97,41 +99,41 @@ namespace GentleBlossom_BE.Services.UserServices
         //    }
         //}
 
-        //public async Task InsertPassword()
-        //{
-        //    var phoneNumbers = new List<string>
-        //    {
-        //        "0901234567", "0934455778", "0923456789", "0934567890", "0945678901",
-        //        "0956789012", "0967890123", "0978901234", "0912233556", "0990123456",
-        //        "0990123451", "0901122334", "0912233445", "0923344556", "0934455667",
-        //        "0945566778", "0956677889", "0967788990", "0978899001", "0989900112",
-        //        "0990011223", "0978899112", "0989900223", "0990011334"
-        //    };
+        public async Task InsertPassword()
+        {
+            var phoneNumbers = new List<string>
+            {
+                "0901234567", "0934455778", "0923456789", "0934567890", "0945678901",
+                "0956789012", "0967890123", "0978901234", "0912233556", "0990123456",
+                "0990123451", "0901122334", "0912233445", "0923344556", "0934455667",
+                "0945566778", "0956677889", "0967788990", "0978899001", "0989900112",
+                "0990011223", "0978899112", "0989900223", "0990011334"
+            };
 
-        //    foreach (var phone in phoneNumbers)
-        //    {
-        //        var userId = await _context.UserProfiles
-        //                                   .Where(up => up.PhoneNumber == phone)
-        //                                   .Select(up => up.UserId)
-        //                                   .FirstOrDefaultAsync();
+            foreach (var phone in phoneNumbers)
+            {
+                var userId = await _context.UserProfiles
+                                           .Where(up => up.PhoneNumber == phone)
+                                           .Select(up => up.UserId)
+                                           .FirstOrDefaultAsync();
 
-        //        if (userId != 0)
-        //        {
-        //            string bcryptPassword = BCrypt.Net.BCrypt.HashPassword(phone);
+                if (userId != 0)
+                {
+                    string bcryptPassword = BCrypt.Net.BCrypt.HashPassword(phone);
 
-        //            var loginUser = new LoginUser
-        //            {
-        //                UserName = phone,
-        //                Password = bcryptPassword,
-        //                UserId = userId
-        //            };
+                    var loginUser = new LoginUser
+                    {
+                        UserName = phone,
+                        Password = bcryptPassword,
+                        UserId = userId
+                    };
 
-        //            _context.LoginUsers.Add(loginUser);
-        //        }
-        //    }
+                    _context.LoginUsers.Add(loginUser);
+                }
+            }
 
-        //    await _context.SaveChangesAsync();
-        //}
+            await _context.SaveChangesAsync();
+        }
 
 
     }

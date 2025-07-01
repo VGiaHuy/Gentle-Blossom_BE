@@ -31,6 +31,38 @@ namespace GentleBlossom_BE.Data.Repositories
                 .ToListAsync();
         }
 
+        public async Task<(List<ExpertProfileDTO>, int)> GetAllExpertsAsync(int page, int pageSize)
+        {
+            if (page < 1) page = 1;
+            if (pageSize < 1) pageSize = 10;
+            int skip = (page - 1) * pageSize;
+
+            var query = _context.Experts
+                .AsNoTracking()
+                .Include(user => user.User)
+                .Select(x => new ExpertProfileDTO
+                {
+                    ExpertId = x.ExpertId,
+                    FullName = x.User.FullName,
+                    Gender = x.User.Gender,
+                    Organization = x.Organization,
+                    Position = x.Position,
+                    Specialization = x.Specialization,
+                    AcademicTitle = x.AcademicTitle,
+                    Description = x.Description,
+                    AvatarUrl = x.User.AvatarUrl,
+                })
+                .OrderBy(k => k.ExpertId);
+
+            int totalCount = await query.CountAsync();
+            var experts = await query
+                .Skip(skip)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (experts, totalCount);
+        }
+
         public async Task<Expert> GetExpertByUserIdAsync(int expertId)
         {
             return await _context.Experts.FirstAsync(e => e.UserId == expertId);

@@ -31,17 +31,27 @@ namespace GentleBlossom_BE.Services.AnalysisService
                 // Bước 1: Phân tích Rule-based sử dụng Aho-Corasick
                 var (score, matchedKeywords) = _keywordService.Analyze(post.Content);
 
-                // Bước 2: Nếu điểm >= 15, gọi Hugging Face API để xác nhận
-                if (score >= 15)
+                // Bước 2: Nếu điểm >= 15, gọi Hugging Face API để xác nhận || Nếu điểm >= 20, xác định ngay lập tức
+                // Tạo bản ghi phân tích ban đầu
+                var analysis = new PostAnalysis
                 {
-                    // Tạo bản ghi phân tích ban đầu
-                    var analysis = new PostAnalysis
-                    {
-                        PostId = post.PostId,
-                        Score = score, // Điểm từ Rule-based
-                        AnalysisStatus = AnalyzePost.AnalysisStatus_Pending, // Trạng thái ban đầu
-                    };
+                    PostId = post.PostId,
+                    Score = score, // Điểm từ Rule-based
+                    AnalysisStatus = AnalyzePost.AnalysisStatus_Pending, // Trạng thái ban đầu
+                };
 
+                if (score >= 25)
+                {
+                    analysis.SentimentScore = null;
+
+                    analysis.RiskLevel = AnalyzePost.RiskLevel_High;
+                    analysis.AnalysisStatus = AnalyzePost.AnalysisStatus_Complete;
+
+                    // Đẩy yêu cầu kết nối vào queue để Background Service xử lý
+                    await _expertService.QueueExpertConnection(post.PostId, post.PosterId, analysis.SentimentScore);
+                }
+                else if (score >= 15)
+                {
                     var nlpResult = await _nlpService.AnalyzeSentiment(post.Content);
                     if (nlpResult.HasValue)
                     {
@@ -68,11 +78,11 @@ namespace GentleBlossom_BE.Services.AnalysisService
                         // Nếu gọi Hugging Face API thất bại, đánh dấu trạng thái FAILED
                         analysis.AnalysisStatus = AnalyzePost.AnalysisStatus_Failed;
                     }
-
-                    // Lưu kết quả phân tích vào database
-                    _dbContext.PostAnalyses.Add(analysis);
-                    await _dbContext.SaveChangesAsync();
                 }
+
+                // Lưu kết quả phân tích vào database
+                _dbContext.PostAnalyses.Add(analysis);
+                await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {

@@ -62,7 +62,13 @@ namespace GentleBlossom_BE.Services.AnalysisService
                         expert = await dbContext.Experts
                             .AsNoTracking()
                             .Where(e => e.Specialization == SpecializationExpert.Psychology)
-                            .OrderBy(e => Guid.NewGuid())
+                            .GroupJoin(
+                                dbContext.ConnectionMedicals,
+                                expert => expert.ExpertId,
+                                connection => connection.ExpertId,
+                                (expert, connections) => new { Expert = expert, ConnectionCount = connections.Count() })
+                            .OrderBy(x => x.ConnectionCount)
+                            .Select(x => x.Expert)
                             .FirstAsync(stoppingToken);
                     }
 
@@ -82,14 +88,12 @@ namespace GentleBlossom_BE.Services.AnalysisService
                         PostId = request.PostId,
                         UserId = request.PosterId,
                         ExpertId = expert.ExpertId,
-                        CreatedAt = DateTime.UtcNow
                     };
 
                     var notificationUser = new Notification
                     {
                         UserId = request.PosterId,
                         Content = $"Chúng tôi nhận thấy bạn đang có vấn đề về tâm lý. Chuyên gia {expert.Specialization} {expert.AcademicTitle} {expertInfo} sẽ được kết nối đến bạn.",
-                        CreateAt = DateTime.UtcNow,
                         Url = $"/PregnancyCare/ConnectPost/{request.PostId}"
                     };
 
@@ -97,7 +101,6 @@ namespace GentleBlossom_BE.Services.AnalysisService
                     {
                         UserId = expert.UserId,
                         Content = $"PHÁT HIỆN BỆNH NHÂN!!! Bạn đang được kết nối với người dùng {userInfo} đang có dâu hiệu tâm lý không ổn định",
-                        CreateAt = DateTime.UtcNow,
                         Url = $"/PregnancyCare/ConnectPost/{request.PostId}"
 
                     };

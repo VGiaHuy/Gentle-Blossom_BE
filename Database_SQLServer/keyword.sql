@@ -1,4 +1,58 @@
-﻿INSERT INTO MentalHealthKeywords (Keyword, Category, Weight, SeverityLevel, IsActive, CreatedAt, UpdatedAt)
+﻿-- Lệnh xóa tất cả các bản ghi trùng lặp
+;WITH RankedKeywords AS (
+    SELECT 
+        Keyword,
+        Category,
+        Weight,
+        SeverityLevel,
+        IsActive,
+        CreatedAt,
+        UpdatedAt,
+        ROW_NUMBER() OVER (
+            PARTITION BY Keyword 
+            ORDER BY Weight DESC, 
+                     CASE SeverityLevel 
+                         WHEN N'NẶNG' THEN 1 
+                         WHEN N'TRUNG BÌNH' THEN 2 
+                         WHEN N'NHẸ' THEN 3 
+                         ELSE 4 
+                     END ASC
+        ) AS RowNum
+    FROM MentalHealthKeywords
+)
+DELETE FROM RankedKeywords
+WHERE RowNum > 1;
+
+
+-- Lệnh xem các bản ghi trùng lặp
+;WITH RankedKeywords AS (
+    SELECT 
+        Keyword,
+        Category,
+        Weight,
+        SeverityLevel,
+        IsActive,
+        CreatedAt,
+        UpdatedAt,
+        ROW_NUMBER() OVER (
+            PARTITION BY Keyword 
+            ORDER BY Weight DESC, 
+                     CASE SeverityLevel 
+                         WHEN N'NẶNG' THEN 1 
+                         WHEN N'TRUNG BÌNH' THEN 2 
+                         WHEN N'NHẸ' THEN 3 
+                         ELSE 4 
+                     END ASC
+        ) AS RowNum
+    FROM MentalHealthKeywords
+)
+SELECT * FROM RankedKeywords
+WHERE RowNum > 1;
+
+
+
+
+INSERT INTO MentalHealthKeywords (Keyword, Category, Weight, SeverityLevel, IsActive, CreatedAt, UpdatedAt)
 VALUES
     (N'buồn bã', N'Trầm cảm', 6, N'TRUNG BÌNH', 1, GETDATE(), NULL),
     (N'mất ngủ', N'Trầm cảm', 7, N'TRUNG BÌNH', 1, GETDATE(), NULL),
@@ -247,12 +301,6 @@ VALUES
     (N'vô hồn', N'Trầm cảm', 8, N'NẶNG', 1, GETDATE(), NULL),
     (N'thở dài', N'Trầm cảm', 5, N'NHẸ', 1, GETDATE(), NULL),
     (N'tâm trạng', N'Trầm cảm', 5, N'NHẸ', 1, GETDATE(), NULL),
-    (N'buồn bã', N'Trầm cảm', 6, N'TRUNG BÌNH', 1, GETDATE(),
- NULL),
-    (N'mất ngủ', N'Trầm cảm', 7, N'TRUNG BÌNH', 1, GETDATE(),
- NULL),
-    (N'cô đơn', N'Trầm cảm', 6, N'TRUNG BÌNH', 1, GETDATE(),
- NULL),
     (N'chán nản', N'Trầm cảm', 7, N'TRUNG BÌNH', 1, GETDATE(),
  NULL),
     (N'tuyệt vọng', N'Trầm cảm', 9, N'NẶNG', 1, GETDATE(),
@@ -369,8 +417,7 @@ VALUES
  NULL),
     (N'tối sầm', N'Trầm cảm', 7, N'TRUNG BÌNH', 1, GETDATE(),
  NULL),
-    (N'tủi túc', N'Trầm cảm', 6, N'TRUNG BÌNH', 1, GETDATE(),
- NULL),
+    (N'tủi túc', N'Trầm cảm', 6, N'TRUNG BÌNH', 1, GETDATE(), NULL),
     (N'âm u', N'Trầm cảm', 6, N'TRUNG BÌNH', 1, GETDATE(), NULL),
     (N'rã rời', N'Trầm cảm', 7, N'TRUNG BÌNH', 1, GETDATE(),
  NULL),
@@ -448,15 +495,6 @@ VALUES
     (N'vô hồn', N'Trầm cảm', 8, N'NẶNG', 1, GETDATE(), NULL),
     (N'thở dài', N'Trầm cảm', 5, N'NHẸ', 1, GETDATE(), NULL),
     (N'tâm trạng', N'Trầm cảm', 5, N'NHẸ', 1, GETDATE(), NULL),
-    (N'buồn bã', N'Trầm cảm', 6, N'TRUNG BÌNH', 1, GETDATE(),
- NULL),
-    (N'mất ngủ', N'Trầm cảm', 7, N'TRUNG BÌNH', 1, GETDATE(),
- NULL),
-    (N'cô đơn', N'Trầm cảm', 6, N'TRUNG BÌNH', 1, GETDATE(),
- NULL),
-    (N'chán nản', N'Trầm cảm', 7, N'TRUNG BÌNH', 1, GETDATE(),
- NULL),
-    (N'tuyệt vọng', N'Trầm cảm', 9, N'NẶNG', 1, GETDATE(), NULL),
     (N'vô dụng', N'Trầm cảm', 8, N'NẶNG', 1, GETDATE(), NULL),
     (N'khóc lóc', N'Trầm cảm', 6, N'TRUNG BÌNH', 1, GETDATE(),
  NULL),
@@ -625,16 +663,6 @@ VALUES
     (N'vô hồn', N'Trầm cảm', 8, N'NẶNG', 1, GETDATE(), NULL),
     (N'thở dài', N'Trầm cảm', 5, N'NHẸ', 1, GETDATE(), NULL),
     (N'tâm trạng', N'Trầm cảm', 5, N'NHẸ', 1, GETDATE(), NULL),
-    (N'buồn bã', N'Trầm cảm', 6, N'TRUNG BÌNH', 1, GETDATE(),
- NULL),
-    (N'mất ngủ', N'Trầm cảm', 7, N'TRUNG BÌNH', 1, GETDATE(),
- NULL),
-    (N'cô đơn', N'Trầm cảm', 6, N'TRUNG BÌNH', 1, GETDATE(),
- NULL),
-    (N'chán nản', N'Trầm cảm', 7, N'TRUNG BÌNH', 1, GETDATE(),
- NULL),
-    (N'tuyệt vọng', N'Trầm cảm', 9, N'NẶNG', 1, GETDATE(),
- NULL),
     (N'vô dụng', N'Trầm cảm', 8, N'NẶNG', 1, GETDATE(), NULL),
     (N'khóc lóc', N'Trầm cảm', 6, N'TRUNG BÌNH', 1, GETDATE(),
  NULL),
@@ -669,6 +697,9 @@ VALUES
     (N'chán đời', N'Trầm cảm', 8, N'NẶNG', 1, GETDATE(), NULL),
     (N'thẫn thờ', N'Trầm cảm', 6, N'TRUNG BÌNH', 1, GETDATE(),
  NULL);
+
+
+
 
  INSERT INTO MentalHealthKeywords (Keyword, Category, Weight, SeverityLevel, IsActive, CreatedAt, UpdatedAt)
 VALUES

@@ -8,6 +8,6 @@ namespace GentleBlossom_BE.Data.Repositories.Interface
         Task<Expert> GetExpertByUserIdAsync(int expertId);
         Task<List<ExpertProfileDTO>> GetAllExperts();
         Task<ExpertProfileDTO> GetExpertsProfile(int expertId);
-
+        Task<(List<ExpertProfileDTO>, int)> GetAllExpertsAsync(int page, int pageSize);
     }
 }
