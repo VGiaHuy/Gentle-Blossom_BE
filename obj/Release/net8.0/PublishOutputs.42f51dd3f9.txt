@@ -12,6 +12,14 @@ D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Azure
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Azure.Identity.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\BCrypt.Net-Next.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\BouncyCastle.Cryptography.dll
+D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\ClosedXML.dll
+D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\ClosedXML.Parser.dll
+D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\DocumentFormat.OpenXml.dll
+D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\DocumentFormat.OpenXml.Framework.dll
+D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\EPPlus.dll
+D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\EPPlus.Interfaces.dll
+D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\EPPlus.System.Drawing.dll
+D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\ExcelNumberFormat.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Google.Apis.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Google.Apis.Auth.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Google.Apis.Core.dll
@@ -28,6 +36,8 @@ D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Micro
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Microsoft.Extensions.Caching.Abstractions.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Microsoft.Extensions.Caching.Memory.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Microsoft.Extensions.Configuration.Abstractions.dll
+D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Microsoft.Extensions.Configuration.FileExtensions.dll
+D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Microsoft.Extensions.Configuration.Json.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Microsoft.Extensions.DependencyInjection.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Microsoft.Extensions.Logging.dll
@@ -42,11 +52,14 @@ D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Micro
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Microsoft.IdentityModel.Protocols.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Microsoft.IdentityModel.Tokens.dll
+D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Microsoft.IO.RecyclableMemoryStream.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Microsoft.OpenApi.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Microsoft.SqlServer.Server.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Microsoft.Win32.SystemEvents.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\MimeKit.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Newtonsoft.Json.dll
+D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\RBush.dll
+D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\SixLabors.Fonts.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Swashbuckle.AspNetCore.Swagger.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -57,6 +70,7 @@ D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\Syste
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\System.Drawing.Common.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\System.Formats.Asn1.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\System.IdentityModel.Tokens.Jwt.dll
+D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\System.IO.Packaging.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\System.IO.Pipelines.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\System.Management.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\System.Memory.Data.dll
@@ -73,9 +87,7 @@ D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\runti
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
-D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
-D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
-D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\runtimes\win\lib\net7.0\System.Management.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 D:\Code\.NET\GentleBlossom\Gentle-Blossom_BE\obj\Release\net8.0\PubTmp\Out\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
