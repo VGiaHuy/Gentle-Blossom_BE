@@ -43,12 +43,15 @@ namespace GentleBlossom_BE.Services.AdminServices
             try
             {
                 var expert = await _unitOfWork.Expert.GetByIdAsync(expertId);
-                if (expert == null)
+                var expertInfo = await _unitOfWork.UserProfile.GetByIdAsync(expert.UserId);
+
+                if (expert == null || expertInfo == null)
                 {
                     throw new BadRequestException("Không tìm thấy Chuyên gia");
                 }
-
+                
                 _unitOfWork.Expert.Delete(expert);
+                _unitOfWork.UserProfile.Delete(expertInfo);
                 await _unitOfWork.SaveChangesAsync();
 
                 return true;
