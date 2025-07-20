@@ -87,6 +87,13 @@ namespace GentleBlossom_BE.Services.AdminServices
         {
             try
             {
+                bool existingKeyword = await _unitOfWork.MentalHealthKeyword.GetByKeywordAsync(newKeyword.Keyword);
+
+                if( existingKeyword)
+                {
+                    throw new BadRequestException("Từ khóa đã tồn tại");
+                }
+
                 await _unitOfWork.MentalHealthKeyword.AddAsync(newKeyword);
                 await _unitOfWork.SaveChangesAsync();
 

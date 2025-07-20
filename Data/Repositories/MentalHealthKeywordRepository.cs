@@ -27,5 +27,15 @@ namespace GentleBlossom_BE.Data.Repositories
 
             return (keywords, totalCount);
         }
+
+        public async Task<bool> GetByKeywordAsync(string keyword)
+        {
+            var query = await _context.MentalHealthKeywords
+                .AsNoTracking()
+                .Where(k => k.Keyword == keyword)
+                .FirstOrDefaultAsync();
+
+            return query != null;
+        }
     }
 }
