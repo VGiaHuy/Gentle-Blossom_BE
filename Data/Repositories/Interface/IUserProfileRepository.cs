@@ -9,6 +9,6 @@ namespace GentleBlossom_BE.Data.Repositories.Interface
         Task<bool> CheckEmailExistAsync(string email);
         Task<bool> CheckPhoneNumbExistAsync(string sđt);
         Task<UserProfile> GetAdminProfile(int userId);
-
+        Task<UserProfile?> CheckLoginGgExistAsync(string email);
     }
 }

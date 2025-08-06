@@ -1,10 +1,16 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.Spreadsheet;
+using GentleBlossom_BE.Data.Constants;
 using GentleBlossom_BE.Data.DTOs.UserDTOs;
 using GentleBlossom_BE.Data.Models;
 using GentleBlossom_BE.Data.Repositories.Interface;
 using GentleBlossom_BE.Exceptions;
+using GentleBlossom_BE.Services.EmailServices;
+using GentleBlossom_BE.Services.JWTService;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
+using System.IdentityModel.Tokens.Jwt;
 using System.Numerics;
 
 namespace GentleBlossom_BE.Services.UserServices
@@ -14,12 +20,17 @@ namespace GentleBlossom_BE.Services.UserServices
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly GentleBlossomContext _context;
+        private readonly JwtService _jwtService;
+        private readonly EmailService _emailService;
 
-        public UserAuthService(IUnitOfWork unitOfWork, IMapper mapper, GentleBlossomContext context)
+
+        public UserAuthService(IUnitOfWork unitOfWork, IMapper mapper, GentleBlossomContext context, JwtService jwtService, EmailService emailService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _context = context;
+            _jwtService = jwtService;
+            _emailService = emailService;
         }
 
         public async Task<UserProfileDTO> Login(LoginRequestDTO request)
@@ -35,6 +46,75 @@ namespace GentleBlossom_BE.Services.UserServices
 
             var userInfo = await _unitOfWork.UserProfile.GetByIdAsync(user.UserId);
             return _mapper.Map<UserProfileDTO>(userInfo);
+        }
+
+        public async Task<UserProfileDTO> CheckLoggedWithGoogle(LoginWithGoogle request)
+        {
+            try
+            {
+                var checkLoginGg = await _unitOfWork.UserProfile.CheckLoginGgExistAsync(request.email);
+
+                if (checkLoginGg != null)
+                {
+                    return _mapper.Map<UserProfileDTO>(checkLoginGg);
+                }
+
+                bool checkExistEmail = await _unitOfWork.UserProfile.CheckEmailExistAsync(request.email);
+                if (checkExistEmail)
+                {
+                    throw new BadRequestException("Email đã được sử dụng đăng ký một tài khoản khác!");
+                }
+
+                throw new NotFoundException("Không tìm thấy thông tin!");
+            }
+            catch (Exception ex)
+            {
+                throw new InternalServerException(ex.Message);
+            }
+        }
+
+        public async Task<UserProfileDTO> RegisterForLoginGoogle(CompleteProfile data)
+        {
+            try
+            {
+                bool checkExistPhoneNumb = await _unitOfWork.UserProfile.CheckPhoneNumbExistAsync(data.PhoneNumber);
+                if (checkExistPhoneNumb)
+                {
+                    throw new BadRequestException("Số điện thoại đã được sử dụng!");
+                }
+
+                var login = new LoginUser
+                {
+                    UserName = data.GoogleId,
+                    Password = data.GoogleId,
+                    TypeLogin = LoginType.Google,
+                };
+
+                var userInfo = new UserProfile
+                {
+                    FullName = data.FullName,
+                    BirthDate = data.DateOfBirth,
+                    Email = data.Email,
+                    Gender = false,
+                    PhoneNumber = data.PhoneNumber,
+                    UserTypeId = UserTypeName.User,
+                };
+
+                // Save data
+                await _unitOfWork.UserProfile.AddAsync(userInfo);
+                var result_profile = await _unitOfWork.SaveChangesAsync(useTransaction: false);
+
+                login.UserId = userInfo.UserId;
+                login.Password = BCrypt.Net.BCrypt.HashPassword(login.Password);
+                await _unitOfWork.LoginUser.AddAsync(login);
+                var result_login = await _unitOfWork.SaveChangesAsync(useTransaction: false);
+
+                return new UserProfileDTO { UserId = userInfo.UserId};
+            }
+            catch (Exception ex)
+            {
+                throw new InternalServerException(ex.Message);
+            }
         }
 
         public async Task<bool> Register(RegisterViewModel register)
@@ -81,60 +161,81 @@ namespace GentleBlossom_BE.Services.UserServices
             }
         }
 
-
-        //public async Task<API_Response<RegisterRequestDTO>> register(RegisterRequestDTO request)
-        //{
-        //    try
-        //    {
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new API_Response<RegisterRequestDTO>()
-        //        {
-        //            Success = false,
-        //            Message= ex.Message,
-        //            Data = null
-        //        };
-        //    }
-        //}
-
-        public async Task InsertPassword()
+        public async Task<string> ForgotPasswordRequest(string username)
         {
-            var phoneNumbers = new List<string>
+            try
             {
-                "0901234567", "0934455778", "0923456789", "0934567890", "0945678901",
-                "0956789012", "0967890123", "0978901234", "0912233556", "0990123456",
-                "0990123451", "0901122334", "0912233445", "0923344556", "0934455667",
-                "0945566778", "0956677889", "0967788990", "0978899001", "0989900112",
-                "0990011223", "0978899112", "0989900223", "0990011334"
-            };
-
-            foreach (var phone in phoneNumbers)
-            {
-                var userId = await _context.UserProfiles
-                                           .Where(up => up.PhoneNumber == phone)
-                                           .Select(up => up.UserId)
-                                           .FirstOrDefaultAsync();
-
-                if (userId != 0)
+                var email = await _unitOfWork.LoginUser.ForgotPasswordRequest(username);
+                if (!email.Success)
                 {
-                    string bcryptPassword = BCrypt.Net.BCrypt.HashPassword(phone);
-
-                    var loginUser = new LoginUser
-                    {
-                        UserName = phone,
-                        Password = bcryptPassword,
-                        UserId = userId
-                    };
-
-                    _context.LoginUsers.Add(loginUser);
+                    throw new BadRequestException(email.ErrorMessage!);
                 }
-            }
 
-            await _context.SaveChangesAsync();
+                return email.Email!;
+            }
+            catch (Exception ex)
+            {
+                throw new InternalServerException(ex.Message);
+            }
+        }
+
+        public async Task<(string, string)> SendOtpToEmail(string username)
+        {
+            var email = await ForgotPasswordRequest(username);
+            var otpToken = await _jwtService.CreateOtpToken(email);
+
+            // Giải mã OTP từ token để gửi email
+            var handler = new JwtSecurityTokenHandler();
+            var jwt = handler.ReadJwtToken(otpToken);
+            var otp = jwt.Claims.First(c => c.Type == "otp").Value;
+
+            string templatePath = Path.Combine(AppContext.BaseDirectory, "Content", "OtpTemplate.html");
+            string htmlBody = await File.ReadAllTextAsync(templatePath);
+
+            htmlBody = htmlBody.Replace("{EMAIL}", email).Replace("{OTP}", otp);
+
+            // Gửi email
+            await _emailService.SendEmailAsync(email, "OTP Verification", htmlBody);
+
+            return (otpToken, email);
         }
 
 
+
+        //public async Task InsertPassword()
+        //{
+        //    var phoneNumbers = new List<string>
+        //    {
+        //        "0901234567", "0934455778", "0923456789", "0934567890", "0945678901",
+        //        "0956789012", "0967890123", "0978901234", "0912233556", "0990123456",
+        //        "0990123451", "0901122334", "0912233445", "0923344556", "0934455667",
+        //        "0945566778", "0956677889", "0967788990", "0978899001", "0989900112",
+        //        "0990011223", "0978899112", "0989900223", "0990011334"
+        //    };
+
+        //    foreach (var phone in phoneNumbers)
+        //    {
+        //        var userId = await _context.UserProfiles
+        //                                   .Where(up => up.PhoneNumber == phone)
+        //                                   .Select(up => up.UserId)
+        //                                   .FirstOrDefaultAsync();
+
+        //        if (userId != 0)
+        //        {
+        //            string bcryptPassword = BCrypt.Net.BCrypt.HashPassword(phone);
+
+        //            var loginUser = new LoginUser
+        //            {
+        //                UserName = phone,
+        //                Password = bcryptPassword,
+        //                UserId = userId
+        //            };
+
+        //            _context.LoginUsers.Add(loginUser);
+        //        }
+        //    }
+
+        //    await _context.SaveChangesAsync();
+        //}
     }
 }

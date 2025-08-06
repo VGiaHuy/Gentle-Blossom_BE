@@ -7,6 +7,7 @@ using GentleBlossom_BE.Infrastructure;
 using GentleBlossom_BE.Middleware;
 using GentleBlossom_BE.Services.AdminServices;
 using GentleBlossom_BE.Services.AnalysisService;
+using GentleBlossom_BE.Services.EmailServices;
 using GentleBlossom_BE.Services.GoogleService;
 using GentleBlossom_BE.Services.Hubs;
 using GentleBlossom_BE.Services.JWTService;
@@ -30,6 +31,8 @@ var apiSettings = builder.Configuration.GetSection("ApiSettings").Get<ApiSetting
 // Đăng ký database
 builder.Services.AddDbContext<GentleBlossomContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("GentleBlossom")),
     ServiceLifetime.Transient);
+// Đăng ký dịch vụ gửi mail
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
 // Tắt tự động validate dữ liệu nhận từ BE
 builder.Services.Configure<ApiBehaviorOptions>(options =>
@@ -124,6 +127,7 @@ builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<MentalHealthKeywordService>();
 builder.Services.AddScoped<FriendsService>();
 builder.Services.AddScoped<ExpertService>();
+builder.Services.AddTransient<EmailService>();
 
 builder.Services.AddScoped<ILoginUserRepository, LoginUserRepository>();
 builder.Services.AddScoped<ICommentPostRepository, CommentPostRepository>();

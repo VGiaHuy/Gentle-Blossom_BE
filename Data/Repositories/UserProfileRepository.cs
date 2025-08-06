@@ -1,4 +1,6 @@
-﻿using GentleBlossom_BE.Data.Models;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using GentleBlossom_BE.Data.Constants;
+using GentleBlossom_BE.Data.Models;
 using GentleBlossom_BE.Data.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,6 +41,13 @@ namespace GentleBlossom_BE.Data.Repositories
                 .Include(u => u.Administrator)
                     .ThenInclude(a => a.Role)
                 .FirstAsync();
+        }
+
+        public async Task<UserProfile?> CheckLoginGgExistAsync(string email)
+        {
+            return await _context.UserProfiles
+                .Include(u => u.LoginUser)
+                .FirstOrDefaultAsync(u => u.Email == email && u.LoginUser.TypeLogin == LoginType.Google);
         }
     }
 }

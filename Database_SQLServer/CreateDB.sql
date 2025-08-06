@@ -6,13 +6,18 @@ GO
 USE GentleBlossom;
 GO
 
+---- Rename
 --ALTER TABLE Post
 --ALTER COLUMN createdDate DATETIME;
 
---ALTER TABLE HealthJourney
---ADD journeyName NVARCHAR(200);
+---- Add column
+--ALTER TABLE LoginUser
+--ADD typeLogin VARCHAR(20) CHECK (typeLogin IN ('manual', 'google'));
 
-select * from HealthJourney
+---- drop column
+--ALTER TABLE LoginUser
+--ADD typeLogin VARCHAR(20) NOT NULL DEFAULT 'manual' CHECK (typeLogin IN ('manual', 'google'));
+
 
 -- Bảng danh mục loại người dùng
 CREATE TABLE UserTypes (
@@ -41,7 +46,8 @@ CREATE TABLE LoginUser (
     loginId INT IDENTITY PRIMARY KEY,
 	userId INT UNIQUE NOT NULL FOREIGN KEY REFERENCES UserProfiles(userId),
     userName NVARCHAR(100) NOT NULL UNIQUE,
-    password NVARCHAR(100) NOT NULL
+    password NVARCHAR(100) NOT NULL,
+	typeLogin VARCHAR(20) NOT NULL DEFAULT 'manual' CHECK (typeLogin IN ('manual', 'google'))
 );
 GO
 

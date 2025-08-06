@@ -13,5 +13,7 @@ public partial class LoginUser
 
     public string Password { get; set; } = null!;
 
+    public string TypeLogin { get; set; } = null!;
+
     public virtual UserProfile User { get; set; } = null!;
 }

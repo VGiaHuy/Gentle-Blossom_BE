@@ -1,8 +1,8 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using GentleBlossom_BE.Data.DTOs.UserDTOs;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using GentleBlossom_BE.Data.DTOs.UserDTOs;
 
 namespace GentleBlossom_BE.Services.JWTService
 {
@@ -95,5 +95,63 @@ namespace GentleBlossom_BE.Services.JWTService
         //        throw new InvalidOperationException("Error creating JWT token", ex);
         //    }
         //}
+
+        public async Task<string> CreateOtpToken(string email)
+        {
+            var otp = new Random().Next(100000, 999999).ToString();
+            var issuer = _configuration["JwtConfig:Issuer"];
+            var audience = _configuration["JwtConfig:Audience"];
+            var key = _configuration["JwtConfig:Key"];
+            var otpValidityMins = 5; // OTP hết hạn sau 5 phút
+            var tokenExpiryTimeStamp = DateTime.UtcNow.AddMinutes(otpValidityMins);
+
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Email, email),
+                new Claim("otp", otp)
+            };
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = tokenExpiryTimeStamp,
+                Issuer = issuer,
+                Audience = audience,
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!)), SecurityAlgorithms.HmacSha256Signature),
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var securityToken = tokenHandler.CreateToken(tokenDescriptor);
+            var otpToken = tokenHandler.WriteToken(securityToken);
+
+            return otpToken;
+        }
+
+        public bool ValidateOtpToken(string token, string inputEmail, string inputOtp)
+        {
+            var key = _configuration["JwtConfig:Key"];
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var parameters = new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!)),
+                ValidateLifetime = true
+            };
+
+            try
+            {
+                var principal = tokenHandler.ValidateToken(token, parameters, out var validatedToken);
+                var email = principal.FindFirst(ClaimTypes.Email)?.Value;
+                var otp = principal.FindFirst("otp")?.Value;
+
+                return email == inputEmail && otp == inputOtp;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
     }
 }
