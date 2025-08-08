@@ -1,5 +1,6 @@
 ﻿using GentleBlossom_BE.Data.Models;
 using GentleBlossom_BE.Data.Repositories.Interface;
+using GentleBlossom_BE.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 
@@ -51,6 +52,21 @@ namespace GentleBlossom_BE.Data.Repositories
             }
 
             return (true, email, null);
+        }
+
+        public async Task<bool> ChangePassword(string password, int userId)
+        {
+            var user = await _context.LoginUsers.Where(u => u.UserId == userId).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                throw new BadRequestException("Thông tin tài khoản không tồn tại!");
+            }
+
+            user.Password = password;
+            _context.SaveChanges();
+
+            return true;
         }
     }
 }

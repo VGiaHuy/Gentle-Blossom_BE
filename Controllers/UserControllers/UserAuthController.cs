@@ -158,13 +158,13 @@ namespace GentleBlossom_BE.Controllers.UserControllers
         {
             var (otpToken, userEmail) = await _userAuthService.SendOtpToEmail(request.Username);
 
-            var maskedEmail = MaskEmail(userEmail);
+            var maskedEmail = _userAuthService.MaskEmail(userEmail);
 
             return Ok(new API_Response<object>
             {
                 Success = true,
                 Message = $"Email xác thực đã được gửi tới {maskedEmail}",
-                Data = new { OtpToken = otpToken, Email = userEmail }
+                Data = new ForgotPasswordResponse { OtpToken = otpToken, Email = userEmail }
             });
         }
 
@@ -173,24 +173,17 @@ namespace GentleBlossom_BE.Controllers.UserControllers
         {
             var isValid = _jwtService.ValidateOtpToken(request.OtpToken, request.Email, request.Otp);
             if (!isValid)
-                return BadRequest(new API_Response<object> { Success = false, Message = "OTP không hợp lệ hoặc đã hết hạn.", Data = null });
+                return BadRequest("OTP không hợp lệ hoặc đã hết hạn");
 
-            return Ok(new API_Response<object> { Success = true, Message = "OTP hợp lệ.", Data = null });
+            return Ok(new API_Response<string> { Success = true, Message = "OTP hợp lệ.", Data = request.Email });
         }
 
-        private string MaskEmail(string email)
+        [HttpPost]
+        public IActionResult ChangePassword([FromBody] ChangePasswordRequest request)
         {
-            if (string.IsNullOrEmpty(email) || !email.Contains("@"))
-                return email;
+            var changePassword = _userAuthService.ChangePassword(request.Password, request.Email);
 
-            var parts = email.Split('@');
-            var name = parts[0];
-            var domain = parts[1];
-
-            if (name.Length <= 2)
-                return $"{name.Substring(0, 1)}*@{domain}";
-
-            return $"{name.Substring(0, 2)}{new string('*', name.Length - 2)}@{domain}";
+            return Ok(new API_Response<object> { Success = true, Message = "Đổi mật khẩu thành công", Data = null });
         }
 
         //[HttpPost]

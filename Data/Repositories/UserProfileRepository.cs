@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using GentleBlossom_BE.Data.Constants;
+﻿using GentleBlossom_BE.Data.Constants;
 using GentleBlossom_BE.Data.Models;
 using GentleBlossom_BE.Data.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +47,14 @@ namespace GentleBlossom_BE.Data.Repositories
             return await _context.UserProfiles
                 .Include(u => u.LoginUser)
                 .FirstOrDefaultAsync(u => u.Email == email && u.LoginUser.TypeLogin == LoginType.Google);
+        }
+
+        public async Task<int> GetUserIdByEmail(string email)
+        {
+            return await _context.UserProfiles
+                .Where(e => e.Email == email)
+                .Select(u => u.UserId)
+                .FirstOrDefaultAsync();
         }
     }
 }
